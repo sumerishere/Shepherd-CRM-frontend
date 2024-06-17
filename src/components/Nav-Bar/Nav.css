@@ -1,0 +1,135 @@
+.nav-div-root {
+  width: 100%;
+  height: 80px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  border: 1px solid #c9c8c8;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+
+.menu-div {
+  /* background-color: red; */
+  height: 50px;
+  padding: 10px;
+  width: 50%;
+}
+
+.menu-btn-div {
+  height: 50px;
+  padding: 3px;
+  margin-left: 5%;
+  /* background-color: aqua; */
+  width: 30%;
+
+}
+
+#btn-id {
+  height: 48px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2969ff;
+  color: white;
+  margin: 4px;
+}
+
+#hamburger-custom {
+  height: 20px;
+  width: 30px;
+}
+
+
+.profile-div {
+  width: 50%;
+  height: 50px;
+  padding: 10px;
+  /* background-color: aqua; */
+}
+
+.profile-details-div {
+  width: 30%;
+  height: 50px;
+  padding-top: 10px;
+  /* background-color: burlywood; */
+  margin-left: 67%;
+}
+
+.profile-img-div {
+  height: 30px;
+  width: 40%;
+}
+
+#logo-img {
+  object-fit: contain;
+  /* height: 100%; */
+  width: 43%;
+  padding: 3px;
+  border: 1px solid rgba(169, 168, 168, 0.582);
+  border-radius: 100%;
+  background-color: white;
+}
+
+#profile-name {
+  margin-top: -26px;
+  margin-left: 58px;
+  font-size: 18px;
+}
+
+#admin-name {
+  margin-top: -14px;
+  margin-left: 58px;
+  font-size: 12px;
+  /* font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+  color: rgb(116, 117, 118);
+}
+
+
+/* ----- Responsive adjustments ------- */
+
+@media (max-width: 768px) {
+  .nav-div-root {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+  }
+
+  .menu-div, .profile-div {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .profile-details-div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-img-div {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  #profile-name, #admin-name {
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  #btn-id {
+    width: 80px;
+    height: 40px;
+  }
+
+  #profile-name {
+    font-size: 16px;
+  }
+
+  #admin-name {
+    font-size: 10px;
+  }
+}

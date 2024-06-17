@@ -1,0 +1,50 @@
+.lead-comp{
+  background-color: rgba(231, 226, 226, 0.592);
+  height: 130px;
+  width: 730px;
+  margin-top: 12%;
+  margin-left: 49%;
+  /* z-index: 1; */
+  position: absolute;
+  top: 0;
+  border-radius: 4px;
+  border: 1px solid rgba(222, 216, 216, 0.799);
+  box-shadow: 0px 2px 3px rgb(0,0,0,0.5);
+
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#item-alignment{
+  margin-top: 10px; 
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.all-lead{
+  text-align: center;
+  height: 90px;
+  width: 150px;
+  /* background-color: aqua; */
+}
+
+.deal-done{
+  text-align: center;
+  height: 90px;
+  width: 150px;
+  /* background-color: aqua; */
+}
+
+.closed{
+  text-align: center;
+  height: 90px;
+  width: 150px;
+  /* background-color: aqua; */
+}
+#number{
+  margin-top: -8px;
+  font-size: 25px;
+  font-weight: 700;
+  color:blue;
+}

@@ -1,0 +1,20 @@
+.follow-up-div{
+  margin-top: 100px;
+  margin-bottom: 80px;
+  margin-left: 3%;
+  height: 120px;
+  width: 96%;
+  background-color: rgb(214, 211, 211);
+  border: 1px solid rgba(188, 183, 183, 0.799);
+  box-shadow: 0px 2px 3px rgb(0,0,0,0.5);
+}
+
+#followUp-text{
+  padding-top: 1px;
+  margin-left: 18px;
+  font-size: 18px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100px;
+  /* background-color: aqua; */
+
+}

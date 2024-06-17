@@ -1,0 +1,26 @@
+.chart-div{
+  height: 380px;
+  width: 550px;
+  background-color: rgb(255, 254, 254);
+  border-radius: 10px;
+  z-index: 1;
+  position: absolute;
+  top : 0;
+  margin-top: 22%;
+  margin-left: 54%;
+  box-shadow: 1px 3px 4px #00000080;
+}
+
+.chart-child-div{
+  height: 350px;
+  width: 430px;
+  /* background-color: rgb(154, 196, 196); */
+  margin-left: 95px;
+  margin-top: 16px;
+  /* margin: 25px; */
+}
+
+.DoughnutChart {
+  /* width: 50%;
+  margin: auto; */
+}
