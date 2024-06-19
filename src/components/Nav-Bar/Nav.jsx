@@ -1,22 +1,27 @@
 import "./Nav.css";
-import { useState } from "react";
+// import { useState } from "react";
 import Hamburger from "hamburger-react";
+import PropTypes from 'prop-types';
 
-const Nav = () => {
+const Nav = ({ toggleAsideBar, isOpen }) => {
 
-  const [isOpen, setOpen] = useState(false);
+  // const [isOpen, setOpen] = useState(false);
   
 
   return (
     <div className="nav-div-root">
       <div className="menu-div">
         <div className="menu-btn-div">
-          <button id="btn-id">
-            <Hamburger
+
+          {/* <button id="btn-id">
+              <Hamburger
               toggled={isOpen}
               toggle={setOpen}
-              id="hamburger-custom"
-            />
+              id="hamburger-custom"/>
+            </button> */}
+
+          <button id="btn-id" onClick={toggleAsideBar}>
+            <Hamburger toggled={isOpen} toggle={toggleAsideBar} id="hamburger-custom" />
           </button>
         </div>
       </div>
@@ -32,6 +37,11 @@ const Nav = () => {
       </div>
     </div>
   );
+};
+
+Nav.propTypes = {
+  toggleAsideBar: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired
 };
 
 export default Nav;

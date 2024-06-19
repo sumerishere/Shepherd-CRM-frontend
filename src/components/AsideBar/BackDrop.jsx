@@ -1,12 +1,18 @@
 import "./BackDrop.css";
+import PropTypes from "prop-types";
 
-// const BackDrop = ({ click, open }) => {
-//   return (
-//     <div
-//       className={open ? "backdrop  backdrop-open" : "backdrop"}
-//       onClick={click}>
-//     </div>
-//   );
-// };
+const BackDrop = ({ click, open }) => {
+  return (
+    <div
+      className={open ? "backdrop  backdrop-open" : "backdrop"}
+      onClick={click}
+    ></div>
+  );
+};
 
-// export default BackDrop;
+BackDrop.propTypes = {
+  click: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+};
+
+export default BackDrop;
