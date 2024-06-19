@@ -46,7 +46,7 @@ body {
 }
 
 .welcome-text{
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   height: 50px;
   font-weight: 400;
   width: 200px;
@@ -54,6 +54,6 @@ body {
   margin-top: -5%;
   margin-left: 3%;
   position: absolute;
-  color: rgb(82, 80, 80);
-  text-shadow: 1px 1px 2px rgb(0,0,0,0.3);
+  color: rgb(76, 74, 74);
+  text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
 }

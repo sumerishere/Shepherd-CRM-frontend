@@ -6,6 +6,7 @@
   border: 1px solid #c9c8c8;
   position: fixed;
   top: 0;
+  left: 0;
   z-index: 1000;
 }
 
@@ -20,20 +21,33 @@
 .menu-btn-div {
   height: 50px;
   padding: 3px;
-  margin-left: 5%;
+  margin-left: 4%;
   /* background-color: aqua; */
   width: 30%;
 
 }
 
 #btn-id {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   height: 48px;
-  width: 100px;
+  width: 124px;
   border-radius: 10px;
   border: none;
   background-color: #2969ff;
   color: white;
   margin: 4px;
+  cursor: pointer;
+}
+
+#menu-title{
+  width: 35px;
+  height: 15px;
+  margin-left: -10px;
+  /* margin-top: 10px; */
+  /* background-color: rebeccapurple; */
+  font-size: 16px;
 }
 
 #hamburger-custom {

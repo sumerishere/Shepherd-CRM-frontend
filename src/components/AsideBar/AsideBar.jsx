@@ -1,19 +1,47 @@
 import "./AsideBar.css";
 import PropTypes from "prop-types";
-import {FundProjectionScreenOutlined,FileDoneOutlined, UserAddOutlined,UsergroupAddOutlined,SolutionOutlined,SettingFilled} from "@ant-design/icons";
-import { Colors } from "chart.js";
+import {
+  FundProjectionScreenOutlined,
+  FileDoneOutlined,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+  SolutionOutlined,
+  SettingFilled,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const AsideBar = ({ open }) => {
   return (
     <div>
       <div className={open ? "aside-bar collapse" : "aside-bar"}>
         <ul>
-          <li><FundProjectionScreenOutlined/> Dashboard</li>
-          <li><UserAddOutlined /> Add Lead</li>
-          <li><UsergroupAddOutlined /> Lead List</li>
-          <li><FileDoneOutlined /> Invoice</li>
-          <li><SolutionOutlined /> Subscribers</li>
-          <li><SettingFilled /> Business Panel</li>
+          <Link to={'/'} style={{ textDecoration: "none", color: "black" }}>
+            <li>
+              <FundProjectionScreenOutlined /> Dashboard
+            </li>
+          </Link>
+
+          <Link
+            to={'./LeadForm'}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <li>
+              <UserAddOutlined /> Add Lead
+            </li>
+          </Link>
+
+          <li>
+            <UsergroupAddOutlined /> Lead List
+          </li>
+          <li>
+            <FileDoneOutlined /> Invoice
+          </li>
+          <li>
+            <SolutionOutlined /> Subscribers
+          </li>
+          <li>
+            <SettingFilled /> Business Panel
+          </li>
         </ul>
       </div>
     </div>

@@ -4,16 +4,13 @@
   height: 100vh;
   background-color: rgb(255, 255, 255);
   position: absolute;
-  /* margin-top: 12px; */
-  /* top: 0; */
   left: 0;
   transform: translateX(-100%);
   transition: all 0.4s ease-in-out;
   border: 1px solid rgb(52, 50, 50);
-
   /* background-color: #ddd;  */
   position: fixed;
-  top: 84px;
+  top: 81.5px;
   bottom: 0;
   left: 0;
   z-index: 999;

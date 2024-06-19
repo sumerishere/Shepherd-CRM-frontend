@@ -22,6 +22,7 @@ const Nav = ({ toggleAsideBar, isOpen }) => {
 
           <button id="btn-id" onClick={toggleAsideBar}>
             <Hamburger toggled={isOpen} toggle={toggleAsideBar} id="hamburger-custom" />
+            <div id ="menu-title">Menu</div>
           </button>
         </div>
       </div>
