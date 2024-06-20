@@ -11,6 +11,8 @@ import BackDrop from "./components/AsideBar/BackDrop";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import LeadForm from "./components/Lead-Form/LeadForm";
+import LeadList from "./components/Lead-List/LeadList";
+import BusinessPanel from "./components/Business-Panel/BusinessPanel";
 
 // import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -29,8 +31,8 @@ function App() {
       <ChartComp />
       <FollowUp /> */}
 
-      <AsideBar open={isOpen} />
-      {isOpen && <BackDrop click={toggleAsideBar} open={isOpen} />}
+      <AsideBar open={isOpen} toggleAsideBar={toggleAsideBar} />
+      {isOpen && <BackDrop click={toggleAsideBar}  open={isOpen} />}
 
       <Routes>
         <Route
@@ -50,7 +52,11 @@ function App() {
             </>
           }
         />
+        <Route path = "/" element={<ChartComp/>}/>
         <Route path="/LeadForm" element={<LeadForm />} />
+        <Route path = "/LeadList" element={<LeadList/>}/>
+        <Route path = "BusinessPanel" element={<BusinessPanel/>}/>
+
       </Routes>
 
       {/* <Routes>

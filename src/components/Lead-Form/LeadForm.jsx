@@ -15,7 +15,7 @@ const LeadForm = () => {
 
   const [formErrors, setFormErrors] = useState({}); // Error messages state
   const [formData, setFormData] = useState(initialFormData); // Form data state
-  const [showPassword, setShowPassword] = useState(false); // Password visibility state
+  // const [showPassword, setShowPassword] = useState(false); // Password visibility state
 
   // const [loading, setLoading] = useState(false); // State to manage loading spinner
 
@@ -49,20 +49,29 @@ const LeadForm = () => {
     });
   };
 
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
+  // const handleTogglePassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
 
   return (
     <div className="sign-up-root-div">
       {/* <ToastContainer /> */}
       {/* <h2>Lead Registration Form</h2> */}
       {/* <p id="heading-form-text">
-        Note : Please!!! Fill The All Necessary Details Carefully.
+        Note : Please!!! Fill 
+        The All Necessary Details Carefully.
       </p> */}
+
+      <div className="create-lead">
+        <p>Create Lead</p>
+      </div>
+
       <form className="form-container">
+
+        <label id="form-title" htmlFor="Personal Details">Personal Details</label>
+
         <label htmlFor="name">
-          Investor Name<span className="required">*</span>
+          Lead Name<span className="required">*</span>
         </label>
         <input
           type="text"
@@ -73,78 +82,125 @@ const LeadForm = () => {
           onChange={handleInputChange}
         />
         {formErrors.name && <p style={{ color: "red" }}>{formErrors.name}</p>}
-        <label htmlFor="countryCode">
-          Country Code<span className="required">*</span>
-        </label>
-        <select
-          name="countryCode"
-          value={formData.countryCode}
-          onChange={handleInputChange}
-        >
-          <option value="">Select Country Code</option>
-          <option value="+1">+91 (India)</option>
-          <option value="+1">+1 (USA)</option>
-          <option value="+44">+44 (UK)</option>
-        </select>
-        {formErrors.countryCode && (
-          <p style={{ color: "red" }}>{formErrors.countryCode}</p>
-        )}
-        <label htmlFor="mobileNo">
-          Investor Mobile No.<span className="required">*</span>
+
+        <label htmlFor="Email">
+          Email<span className="required">*</span>
         </label>
         <input
           type="text"
           required="true"
-          placeholder="Enter Your Mobile No."
+          placeholder="Enter Your Email"
+          name="Email"
+          value={formData.mobileNo}
+          onChange={handleInputChange}
+        />
+        {formErrors.Email && <p style={{ color: "red" }}>{formErrors.Email}</p>}
+        <label htmlFor="mobileNo">
+          Mobile No.<span className="required">*</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Enter Your mobile No."
           name="mobileNo"
+          required="true"
           value={formData.mobileNo}
           onChange={handleInputChange}
         />
         {formErrors.mobileNo && (
           <p style={{ color: "red" }}>{formErrors.mobileNo}</p>
         )}
-        <label htmlFor="mailId">
-          Investor Email<span className="required">*</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Enter Your Email"
-          name="mailId"
-          required="true"
-          value={formData.mailId}
-          onChange={handleInputChange}
-        />
-        {formErrors.mailId && (
-          <p style={{ color: "red" }}>{formErrors.mailId}</p>
-        )}
-        <label htmlFor="username">
-          Create New Username (Unique)<span className="required">*</span>
-          <p id="username-unique">
+        <label htmlFor="Address">
+          Address<span className="required">*</span>
+          {/* <p id="username-unique">
             {`Note : " Username should be start with Capital letter and it's
             mandatory to unique. "`}
-          </p>
+          </p> */}
         </label>
         <input
           type="text"
-          placeholder="Enter New Username"
-          name="username"
+          placeholder="Enter New Address"
+          name="Address"
           required="true"
-          value={formData.username}
+          value={formData.Address}
           onChange={handleInputChange}
         />
-        {formErrors.username && (
-          <p style={{ color: "red" }}>{formErrors.username}</p>
+        {formErrors.Address && (
+          <p style={{ color: "red" }}>{formErrors.Address}</p>
         )}
-        <label htmlFor="password">
-          Create New Password<span className="required">*</span>
-          <p id="username-unique">
+
+        <label htmlFor="course Interested">
+          Course Interested<span className="required">*</span>
+        </label>
+        <select
+          name="Course Interested"
+          value={formData.courseInterested}
+          onChange={handleInputChange}
+        >
+          <option value="">Course Interested</option>
+          <option value="+1">+91 (India)</option>
+          <option value="+1">+1 (USA)</option>
+          <option value="+44">+44 (UK)</option>
+        </select>
+        {formErrors.courseInterested && (
+          <p style={{ color: "red" }}>{formErrors.courseInterested}</p>
+        )}
+
+        <label htmlFor="Mode">
+          Mode<span className="required">*</span>
+        </label>
+        <select name="Mode" value={formData.Mode} onChange={handleInputChange}>
+          <option value="">Select Course</option>
+          <option value="+1">+91 (India)</option>
+          <option value="+1">+1 (USA)</option>
+          <option value="+44">+44 (UK)</option>
+        </select>
+        {formErrors.Mode && <p style={{ color: "red" }}>{formErrors.Mode}</p>}
+
+        <label htmlFor="Course Done In Other Institute">
+          Course Interested<span className="required">*</span>
+        </label>
+        <select
+          name="Course Done"
+          value={formData.courseDone}
+          onChange={handleInputChange}
+        >
+          <option value="">No</option>
+          <option value="+1">+91 (India)</option>
+          <option value="+1">+1 (USA)</option>
+          <option value="+44">+44 (UK)</option>
+        </select>
+        {formErrors.courseDone && (
+          <p style={{ color: "red" }}>{formErrors.courseDone}</p>
+        )}
+
+        <label htmlFor="Interest">
+          Course Interested<span className="required">*</span>
+        </label>
+        <select
+          name="Interest"
+          value={formData.Interest}
+          onChange={handleInputChange}
+        >
+          <option value="">Pending</option>
+          <option value="+1">+91 (India)</option>
+          <option value="+1">+1 (USA)</option>
+          <option value="+44">+44 (UK)</option>
+        </select>
+        {formErrors.Interest && (
+          <p style={{ color: "red" }}>{formErrors.Interest}</p>
+        )}
+
+        {/* <label htmlFor="password">
+          Create New Password<span className="required">*</span> */}
+        {/* <p id="username-unique">
             {`"
             Note : " Password must be at least 8 characters with format - at
             least one uppercase letter/ lowercase letter/ digit and one special
             character. "`}
-          </p>
-        </label>
-        <input
+          </p> 
+        </label>*/}
+
+        {/* <input
           type={showPassword ? "text" : "password"}
           placeholder="Enter New Password"
           name="password"
@@ -161,7 +217,8 @@ const LeadForm = () => {
           id="show-password"
           onChange={handleTogglePassword}
         />
-        <span id="show-pass-text">Click to Show Password</span>
+        <span id="show-pass-text">Click to Show Password</span> */}
+
         {/* <label htmlFor="ProfileImg">
           Upload Profile Image<span className="required">*</span>
         </label>
@@ -172,7 +229,7 @@ const LeadForm = () => {
           accept="image/*"
           onChange={handleFileChange}
         /> */}
-         {/*disabled={loading} */}
+        {/*disabled={loading} */}
       </form>
 
       {/* {loading && (
@@ -181,125 +238,142 @@ const LeadForm = () => {
         </div>
       )} */}
 
+      {/*--------------------Qualification Form--------------- */}
+
       <form className="form-container">
-        <label htmlFor="name">
-          Investor Name<span className="required">*</span>
+
+      <label id="form-title" htmlFor="Qualification">Qualification</label>
+
+        <label htmlFor="Degree">
+          Degree<span className="required">*</span>
         </label>
         <input
           type="text"
-          placeholder="Enter Your Name"
+          placeholder="Degree/Graduation"
           name="name"
           required={true}
           value={formData.name}
           onChange={handleInputChange}
         />
         {formErrors.name && <p style={{ color: "red" }}>{formErrors.name}</p>}
-        <label htmlFor="countryCode">
-          Country Code<span className="required">*</span>
+
+        <label htmlFor="Specialization">
+          Specialization<span className="required">*</span>
+        </label>
+        <input
+          type="text"
+          required="true"
+          placeholder="Specialization/Stream"
+          name="Specialization"
+          value={formData.mobileNo}
+          onChange={handleInputChange}
+        />
+        {formErrors.Specialization && (
+          <p style={{ color: "red" }}>{formErrors.Specialization}</p>
+        )}
+
+        <label htmlFor="Passing year">
+          Passing year<span className="required">*</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Enter Passing year"
+          name="Passing"
+          required="true"
+          value={formData.Passing}
+          onChange={handleInputChange}
+        />
+        {formErrors.Passing && (
+          <p style={{ color: "red" }}>{formErrors.Passing}</p>
+        )}
+
+        <label htmlFor="College Name">
+          College Name<span className="required">*</span>
+          {/* <p id="username-unique">
+            {`Note : " Username should be start with Capital letter and it's
+            mandatory to unique. "`}
+          </p> */}
+        </label>
+        <input
+          type="text"
+          placeholder="Enter College Name"
+          name="College"
+          required="true"
+          value={formData.College}
+          onChange={handleInputChange}
+        />
+        {formErrors.College && (
+          <p style={{ color: "red" }}>{formErrors.College}</p>
+        )}
+
+        <label htmlFor="Experience">
+          Experience<span className="required">*</span>
         </label>
         <select
-          name="countryCode"
-          value={formData.countryCode}
+          name="Experience"
+          value={formData.courseInterested}
           onChange={handleInputChange}
         >
-          <option value="">Select Country Code</option>
+          <option value="">Select Category</option>
           <option value="+1">+91 (India)</option>
           <option value="+1">+1 (USA)</option>
           <option value="+44">+44 (UK)</option>
         </select>
-        {formErrors.countryCode && (
-          <p style={{ color: "red" }}>{formErrors.countryCode}</p>
+        {formErrors.courseInterested && (
+          <p style={{ color: "red" }}>{formErrors.courseInterested}</p>
         )}
-        <label htmlFor="mobileNo">
-          Investor Mobile No.<span className="required">*</span>
+
+        <label htmlFor="Approach">
+          Approach<span className="required">*</span>
         </label>
+        <select
+          name="Approach"
+          value={formData.Approach}
+          onChange={handleInputChange}
+        >
+          <option value="">Select Category</option>
+          <option value="+1">+91 (India)</option>
+          <option value="+1">+1 (USA)</option>
+          <option value="+44">+44 (UK)</option>
+        </select>
+        {/* {formErrors.Approach && (
+          <p style={{ color: "red" }}>{formErrors.Approach}</p>
+        )} */}
+
+        <label htmlFor="Status">
+          Status<span className="required">*</span>
+        </label>
+        <select
+          name="Status"
+          value={formData.Status}
+          onChange={handleInputChange}
+        >
+          <option value="">Select Category</option>
+          <option value="+1">+91 (India)</option>
+          <option value="+1">+1 (USA)</option>
+          <option value="+44">+44 (UK)</option>
+        </select>
+        {formErrors.Status && (
+          <p style={{ color: "red" }}>{formErrors.Status}</p>
+        )}
+
+        <label htmlFor="name">Comments</label>
         <input
           type="text"
-          required="true"
-          placeholder="Enter Your Mobile No."
-          name="mobileNo"
-          value={formData.mobileNo}
+          placeholder="Comment here"
+          name="comment"
+          required={true}
+          value={formData.comment}
           onChange={handleInputChange}
         />
-        {formErrors.mobileNo && (
-          <p style={{ color: "red" }}>{formErrors.mobileNo}</p>
-        )}
-        <label htmlFor="mailId">
-          Investor Email<span className="required">*</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Enter Your Email"
-          name="mailId"
-          required="true"
-          value={formData.mailId}
-          onChange={handleInputChange}
-        />
-        {formErrors.mailId && (
-          <p style={{ color: "red" }}>{formErrors.mailId}</p>
-        )}
-        <label htmlFor="username">
-          Create New Username (Unique)<span className="required">*</span>
-          <p id="username-unique">
-            {`Note : " Username should be start with Capital letter and it's
-            mandatory to unique. "`}
-          </p>
-        </label>
-        <input
-          type="text"
-          placeholder="Enter New Username"
-          name="username"
-          required="true"
-          value={formData.username}
-          onChange={handleInputChange}
-        />
-        {formErrors.username && (
-          <p style={{ color: "red" }}>{formErrors.username}</p>
-        )}
-        <label htmlFor="password">
-          Create New Password<span className="required">*</span>
-          <p id="username-unique">
-            {`"
-            Note : " Password must be at least 8 characters with format - at
-            least one uppercase letter/ lowercase letter/ digit and one special
-            character. "`}
-          </p>
-        </label>
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Enter New Password"
-          name="password"
-          required="true"
-          id="pass-id"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-        {formErrors.password && (
-          <p style={{ color: "red" }}>{formErrors.password}</p>
-        )}
-        <input
-          type="checkbox"
-          id="show-password"
-          onChange={handleTogglePassword}
-        />
-        <span id="show-pass-text">Click to Show Password</span>
-        {/* <label htmlFor="ProfileImg">
-          Upload Profile Image<span className="required">*</span>
-        </label>
-        <input
-          className="pro-img"
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleFileChange}
-        /> */}
-         {/*disabled={loading} */}
+        {/* {formErrors.name && <p style={{ color: "red" }}>{formErrors.name}</p>} */}
       </form>
 
       <div id="submit-btn-lead">
-        <p><input id="submit-input" type="submit" value="Add Lead" /></p>
+        <p>
+          <input id="submit-input" type="submit" value="Add Lead" />
+        </p>
       </div>
-      
     </div>
   );
 };

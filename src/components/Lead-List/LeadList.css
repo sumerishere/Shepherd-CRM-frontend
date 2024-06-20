@@ -1,0 +1,25 @@
+.lead-table-root{
+  background-color: rgb(144, 132, 132);
+  height: 500px;
+  margin-top: 9%;
+}
+
+#add-lead{
+  width: 150px;
+  background-color: rgb(26, 26, 255);
+  color: white;
+  border: none;
+  font-size: 17px;
+  height: 50px;
+  border-radius: 8px;
+  margin-left: 85%;
+  cursor: pointer;
+}
+
+#add-lead:hover{
+  background-color:rgba(0, 0, 255, 0.737) ;
+}
+
+.lead-table-root{
+
+}
