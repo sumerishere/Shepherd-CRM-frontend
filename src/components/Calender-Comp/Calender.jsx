@@ -110,7 +110,7 @@ const Calender = () => {
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 'auto', minHeight: '500px', width: '100%' }} 
+        style={{  minHeight: '500px', width: '100%' }} 
         // className="custom-calendar"
       />
     </div>

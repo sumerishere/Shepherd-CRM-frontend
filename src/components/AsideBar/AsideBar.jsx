@@ -14,15 +14,31 @@ const AsideBar = ({ open, toggleAsideBar }) => {
   return (
     <div>
       <div className={open ? "aside-bar collapse" : "aside-bar"}>
+
+        <Link
+          to={"/"}
+          style={{ textDecoration: "none", color: "black" }}
+          onClick={toggleAsideBar} >
+
+         <div id="logo-name">
+           <p>Shepherd </p>
+         </div>
+         <p id="sub-text">by testing shastra</p>
+
+        </Link>
         <ul>
-          <Link to={'/'} style={{ textDecoration: "none", color: "black" }} onClick={toggleAsideBar} >
+          <Link
+            to={"/"}
+            style={{ textDecoration: "none", color: "black" }}
+            onClick={toggleAsideBar}
+          >
             <li>
               <FundProjectionScreenOutlined /> Dashboard
             </li>
           </Link>
 
           <Link
-            to={'./LeadForm'}
+            to={"./LeadForm"}
             style={{ textDecoration: "none", color: "black" }}
             onClick={toggleAsideBar}
           >
@@ -31,9 +47,14 @@ const AsideBar = ({ open, toggleAsideBar }) => {
             </li>
           </Link>
 
-         <Link to={"./LeadList"} style={{textDecoration:"none" ,color:"black"}}> <li onClick={toggleAsideBar}>
-            <UsergroupAddOutlined /> Lead List
-          </li>
+          <Link
+            to={"./LeadList"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            {" "}
+            <li onClick={toggleAsideBar}>
+              <UsergroupAddOutlined /> Lead List
+            </li>
           </Link>
 
           <li onClick={toggleAsideBar}>
@@ -44,12 +65,18 @@ const AsideBar = ({ open, toggleAsideBar }) => {
             <SolutionOutlined /> Subscribers
           </li>
 
-
-         <Link to={"./BusinessPanel"} style={{textDecoration:"none", color:"black"}}> <li onClick={toggleAsideBar}>
-            <SettingFilled /> Business Panel
-          </li>
+          <Link
+            to={"./BusinessPanel"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            {" "}
+            <li onClick={toggleAsideBar}>
+              <SettingFilled /> Business Panel
+            </li>
           </Link>
         </ul>
+        <p id="develop-text-line1">Design and developed by </p>
+        <p id="develop-text-line2">Testing Shastra.</p>
       </div>
     </div>
   );
@@ -57,7 +84,7 @@ const AsideBar = ({ open, toggleAsideBar }) => {
 
 AsideBar.propTypes = {
   open: PropTypes.bool.isRequired,
-  toggleAsideBar : PropTypes.bool.isRequired
+  toggleAsideBar: PropTypes.bool.isRequired,
 };
 
 export default AsideBar;
