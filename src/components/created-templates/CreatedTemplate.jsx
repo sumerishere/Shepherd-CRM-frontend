@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "../created-templates/CreatedTemplate.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const TemplateCreated = () => {
-  const location = useLocation();
-  const username = location.state?.username || "";
+const TemplateCreated = ({username}) => {
+  // const location = useLocation();
+  // const username = location.state?.username || "";
+  
   const [templateData, setTemplateData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({});
@@ -21,21 +23,27 @@ const TemplateCreated = () => {
         );
 
         if (response.ok) {
+
           const data = await response.json();
           console.log("Fetched data:", data); 
+
           if (Array.isArray(data) && data.length > 0) {
             setTemplateData(data);
             setFormTemplateId(data[0].id); // Assuming the ID is available as `id` in the response
-          } else {
+          }
+           else {
             setTemplateData([]);
           }
-        } else {
+        } 
+        else {
           setTemplateData([]);
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Fetch error:", error);
         setTemplateData([]);
-      } finally {
+      } 
+      finally {
         setLoading(false);
       }
     };
@@ -128,15 +136,15 @@ const TemplateCreated = () => {
   return (
     <div className="createdTemplate-root-div">
       <ToastContainer />
-      <h1 id="createdTemplate-h1">Your Created Template</h1>
+      <p id="createdTemplate-h1"> Your Created Template</p>
 
-      <div className="data-table">
+      {/* <div className="data-table">
           <p>
            <Link to="/DataTableComp">
               <button id="check-data-id">check table</button> 
            </Link> 
           </p>
-      </div>
+      </div> */}
 
       <div className="form-div-container">
         <form className="created-template-form" onSubmit={handleSubmit}>
@@ -242,6 +250,12 @@ const TemplateCreated = () => {
       </div>
     </div>
   );
+};
+
+TemplateCreated.propTypes = {
+  open: PropTypes.bool.isRequired,
+  toggleAsideBar: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired, // Add prop type validation for username
 };
 
 export default TemplateCreated;

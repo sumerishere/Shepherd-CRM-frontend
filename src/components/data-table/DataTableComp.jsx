@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './DataTableComp.css';
 import PropTypes from 'prop-types';
 
-const DataTableComp = ({ formTemplateId }) => {
+const DataTableComp = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,7 @@ const DataTableComp = ({ formTemplateId }) => {
     };
 
     fetchData();
-  }, [formTemplateId]);
+  }, []);
 
   if (loading) {
     return <div id="loading-id">Loading...</div>;
