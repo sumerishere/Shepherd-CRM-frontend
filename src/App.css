@@ -45,15 +45,3 @@ body {
   background-color: rgba(232, 238, 240, 0.885);
 }
 
-.welcome-text{
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  height: 50px;
-  font-weight: 400;
-  width: 200px;
-   /* background-color: rebeccapurple; */
-  margin-top: -5%;
-  margin-left: 3%;
-  position: absolute;
-  color: rgb(76, 74, 74);
-  text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
-}

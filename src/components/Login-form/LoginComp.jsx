@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types"; // Import PropTypes for prop type validation
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +10,7 @@ const LoginComponent = ({ onLogin }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -25,7 +25,7 @@ const LoginComponent = ({ onLogin }) => {
       if (response.ok) {
         // const data = await response.json();
         onLogin(username,password);
-        navigate('/TemplateCreated',{state: { username }}); 
+        // navigate('/TemplateCreated',{state: { username }}); 
         
       } else { 
         const errorMessage = await response.text();

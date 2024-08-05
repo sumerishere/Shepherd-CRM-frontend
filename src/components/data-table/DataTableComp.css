@@ -1,5 +1,5 @@
-.data-table-root {
-  /* Add any additional styling if needed */
+/* .data-table-root {
+ 
 }
 
 .data-table-child {
@@ -23,9 +23,8 @@
   border-collapse: collapse; 
 }
 
-/* Header row styling */
 .data-table-child th, .data-table-child td {
-  border: 1px solid rgb(166, 166, 166); /* Add border to header and cells */
+  border: 1px solid rgb(166, 166, 166); 
   padding: 12px;
 }
 
@@ -39,24 +38,23 @@
   z-index: 1;
 }
 
-/* Body row styling */
+
 .data-table-child td {
   text-align: left; 
   color: #353535; 
 }
 
-/* Zebra stripe effect for alternate rows */
+
 .data-table-child tr:nth-child(even) {
   background-color: #f9f9f9; 
 }
 
-/* Hover effect for rows */
 .data-table-child tr:hover {
   cursor: pointer;
   background-color: rgb(251, 227, 196);
 }
 
-/* Responsive design: make table columns stack vertically on small screens */
+
 @media screen and (max-width: 600px) {
   .data-table-child table, .data-table-child th, .data-table-child td {
     display: block;
@@ -84,4 +82,4 @@
     font-weight: bold;
     text-align: left;
   }
-}
+} */

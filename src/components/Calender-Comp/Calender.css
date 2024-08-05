@@ -10,6 +10,19 @@
   /* margin-bottom: 20px; */
 }
 
+.welcome-text{
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  height: 50px;
+  font-weight: 400;
+  width: 200px;
+   /* background-color: rebeccapurple; */
+  margin-top: -5%;
+  margin-left: 3%;
+  position: absolute;
+  color: rgb(52, 48, 48);
+  text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
+}
+
 
 .custom-calendar{
   border-radius: 10px;

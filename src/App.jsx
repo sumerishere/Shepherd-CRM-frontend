@@ -67,18 +67,19 @@ import FollowUp from "./components/Follow-Up/FollowUp";
 import AsideBar from "./components/AsideBar/AsideBar";
 import BackDrop from "./components/AsideBar/BackDrop";
 import { useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes,Navigate } from "react-router-dom";
 import LeadForm from "./components/Lead-Form/LeadForm";
 import LeadList from "./components/Lead-List/LeadList";
 import BusinessPanel from "./components/Business-Panel/BusinessPanel";
 import DynamicForm from "./components/template-fom/TemplateComp";
 import TemplateCreated from "./components/created-templates/CreatedTemplate";
-import LoginComponent from "./components/Login-form/LoginComp"; // Assuming this is the correct import path
+import LoginComponent from "./components/Login-form/LoginComp";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState(""); // Add state for username
+  const [username, setUsername] = useState("");
+  const [templateId, setTemplateId] = useState(null);
 
   const toggleAsideBar = () => {
     setIsOpen(!isOpen);
@@ -86,17 +87,32 @@ function App() {
 
   const handleLogin = (username, password) => {
     fetch(`http://localhost:8080/login?username=${username}&password=${password}`)
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           setIsAuthenticated(true);
-          setUsername(username); 
+          setUsername(username);
+          fetchTemplateData(username);
         } else {
           alert("Login failed. Please check your credentials.");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error during login:", error);
       });
+  };
+
+  const fetchTemplateData = (username) => {
+    fetch(`http://localhost:8080/get-template-username?userName=${username}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          setTemplateId(data[0].id); // Assuming you want the first template's ID
+        } else {
+          console.table(data)
+          console.error("No templates found for this user.");
+        }
+      })
+      .catch((error) => console.error("Error fetching template data:", error));
   };
 
   return (
@@ -115,7 +131,7 @@ function App() {
                   <Calender />
                   <LeadCount />
                   <ChartComp />
-                  <FollowUp />
+                  <FollowUp templateId={templateId} />
                 </>
               }
             />
@@ -129,8 +145,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
-          <Route path="*" element={<Navigate to="/" />} /> 
-          {/* Redirect all other routes to login */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
     </>
@@ -138,3 +153,4 @@ function App() {
 }
 
 export default App;
+
