@@ -8,7 +8,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = () => {
   const data = {
-    labels: ["miss-out", "pending", "deal-done", "cold-lead"],
+    labels: ["Java fullstack", "Automation Testing", "React UI/UX", "MERN Stack"],
     datasets: [
       {
         label: "# of Votes",

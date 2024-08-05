@@ -165,7 +165,8 @@ const FollowUp = ({ templateId }) => {
   }
 
   if (data.length === 0) {
-    return <div>No data available for the selected template.</div>;
+    return <div className="follow-up-div">
+      <p id="followUp-empty-text">No entries are available for the selected template.</p></div>;
   }
 
   const fieldsDataArray = data.map((item) => item.fields_Data);
