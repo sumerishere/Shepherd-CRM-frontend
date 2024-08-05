@@ -5,7 +5,6 @@ import Calender from "./components/Calender-Comp/Calender";
 import LeadCount from "./components/Lead-Comp/LeadCount";
 import ChartComp from "./components/Chart-Comp/ChartComp";
 import FollowUp from "./components/Follow-Up/FollowUp";
-import { SmileOutlined } from "@ant-design/icons";
 import AsideBar from "./components/AsideBar/AsideBar";
 import BackDrop from "./components/AsideBar/BackDrop";
 import { useState } from "react";
@@ -13,8 +12,10 @@ import { Route, Routes } from "react-router-dom";
 import LeadForm from "./components/Lead-Form/LeadForm";
 import LeadList from "./components/Lead-List/LeadList";
 import BusinessPanel from "./components/Business-Panel/BusinessPanel";
+import DynamicForm from "./components/template-fom/TemplateComp";
+import TemplateCreated from "./components/created-templates/CreatedTemplate";
+// import LoginComponent from "./components/Login-form/LoginComp";
 
-// import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +27,6 @@ function App() {
   return (
     <>
       <Nav toggleAsideBar={toggleAsideBar} isOpen={isOpen} />
-      {/* <Calender />
-      <LeadCount />
-      <ChartComp />
-      <FollowUp /> */}
 
       <AsideBar open={isOpen} toggleAsideBar={toggleAsideBar} />
       {isOpen && <BackDrop click={toggleAsideBar}  open={isOpen} />}
@@ -39,12 +36,6 @@ function App() {
           path="/"
           element={
             <>
-              <div className="welcome-text">
-                <h4 id="">
-                  Hello!! Testing Shastra <SmileOutlined />
-                </h4>
-              </div>
-
               <Calender />
               <LeadCount />
               <ChartComp />
@@ -55,14 +46,11 @@ function App() {
         <Route path = "/" element={<ChartComp/>}/>
         <Route path="/LeadForm" element={<LeadForm />} />
         <Route path = "/LeadList" element={<LeadList/>}/>
-        <Route path = "BusinessPanel" element={<BusinessPanel/>}/>
-
+        <Route path = "/BusinessPanel" element={<BusinessPanel/>}/>
+        <Route path = "/DynamicForm" element={<DynamicForm/>}/>
+        <Route path= "/TemplateCreated" element={<TemplateCreated/>}/>
       </Routes>
 
-      {/* <Routes>
-        <Route path = "/" element={<ChartComp/>}/>
-        <Route path="/LeadForm" element= {<LeadForm/>}/>
-      </Routes> */}
     </>
   );
 }

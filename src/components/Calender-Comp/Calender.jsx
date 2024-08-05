@@ -5,6 +5,7 @@ import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { SmileOutlined } from "@ant-design/icons";
 
 // Create the localizer
 const localizer = momentLocalizer(moment);
@@ -105,6 +106,14 @@ const events = [
 const Calender = () => {
   return (
     <div className="calander-div">
+
+
+       <div className="welcome-text">
+                <h4 id="">
+                  Hello!! Testing Shastra <SmileOutlined />
+                </h4>
+        </div>
+
       <Calendar
         localizer={localizer}
         events={events}

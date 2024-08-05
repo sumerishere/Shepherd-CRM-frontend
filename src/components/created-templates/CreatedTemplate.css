@@ -1,0 +1,165 @@
+.createdTemplate-root-div {
+ 
+}
+
+.data-table{
+  position: absolute;
+  margin-left: 84%;
+}
+
+#check-data-id{
+  height: 30px;
+  width: 120px;
+  cursor: pointer;
+  color: white;
+  font-size: 15px;
+  border-radius: 5px;
+  background-color: #007bff;
+  border : 1px solid rgb(157, 157, 157);
+}
+
+#check-data-id:hover{
+  background-color: #0056b3;
+}
+
+
+#createdTemplate-h1{
+  color: black;
+  font-size: 26px;
+  font-weight: 500;
+  margin-top: 20px;
+  text-align: center;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#loading-id{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 30px;
+  margin-top: 20%;
+  margin-left: 45%;
+}
+
+.empty-text-div{
+  /* margin: 20%; */
+  position: relative;
+}
+#empty-text{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 28px;
+  text-align: center;
+  margin-top: 120px;
+  position: absolute;
+  margin-left: 40%;
+  font-weight: 500;
+}
+
+#alert-emoji{
+  position: absolute;
+  margin-top: 28.5%;
+  margin-left: 40.4%;
+  font-size: 40px;
+}
+
+.bg-template-img{
+  height: 460px;
+  width: 47%;
+  margin-top: 145px;
+  margin-left: 27%;
+  position: absolute;
+}
+
+#empty-template-note{
+  position: absolute;
+  font-size: 16px;
+  font-weight: 480;
+  margin-top: 39%;
+  margin-left: 24%;
+  color: rgb(100, 100, 100);
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.form-div-container{
+  width: 500px;
+  margin: 2% auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f7f7f7;
+}
+
+.created-template-form {
+  position: relative;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-input:focus{
+  outline: none;
+  border-color: #007bff;
+}
+
+.submit-button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+#radio-input-1{
+  margin-top: 5px;
+  margin-left: 15px;
+  cursor: pointer;
+  /* margin-top: 10px;
+  margin-left: 14px; */
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+.form-template input{
+  cursor: pointer;
+}
+
+
+#label-radio-1{
+  margin-top: 10px;
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+#label-radio-2{
+  margin-left: 20px;
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+#checkbox-input{
+  margin-top: 10px;
+  margin-left: 14px;
+  display: inline-flex;
+  flex-direction: row-reverse;
+}

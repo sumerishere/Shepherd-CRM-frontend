@@ -7,6 +7,7 @@ import {
   UsergroupAddOutlined,
   SolutionOutlined,
   SettingFilled,
+  FormOutlined 
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -38,7 +39,7 @@ const AsideBar = ({ open, toggleAsideBar }) => {
           </Link>
 
           <Link
-            to={"./LeadForm"}
+            to={"/TemplateCreated"}
             style={{ textDecoration: "none", color: "black" }}
             onClick={toggleAsideBar}
           >
@@ -64,6 +65,12 @@ const AsideBar = ({ open, toggleAsideBar }) => {
           <li onClick={toggleAsideBar}>
             <SolutionOutlined /> Subscribers
           </li>
+
+          <Link to="/DynamicForm" style={{ textDecoration: "none", color: "black" }}>
+            <li onClick={toggleAsideBar}>
+            <FormOutlined /> Create Template
+            </li>
+          </Link>
 
           <Link
             to={"./BusinessPanel"}
