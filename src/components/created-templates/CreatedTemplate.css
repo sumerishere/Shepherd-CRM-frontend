@@ -24,13 +24,18 @@
 
 
 #createdTemplate-h1{
-  color: black;
-  font-size: 26px;
+  border: 1px solid rgb(166, 164, 164);
+  width: 110px;
   font-weight: 500;
-  margin-top: 100px;
-  margin-bottom: -80px;
-  text-align: center;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-left: 10px;
+  color: rgba(111, 107, 107, 0.923);
+  font-size: 24px;
+  margin-top: 117px;
+  margin-bottom: -100px;
+  text-align: start;
+  margin-left: 13%;
+  /* background-color: #b2d4f9; */
+  border-radius: 4px;
 }
 
 #loading-id{

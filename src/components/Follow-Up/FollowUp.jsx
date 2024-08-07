@@ -97,14 +97,18 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const FollowUp = ({ templateId }) => {
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [uidToDelete, setUidToDelete] = useState(null);
 
   useEffect(() => {
+
     if (templateId) {
+
       const fetchData = async () => {
+        
         try {
           const response = await fetch(
             `http://localhost:8080/get-template-data/${templateId}`

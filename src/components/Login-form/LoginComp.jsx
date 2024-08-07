@@ -81,6 +81,8 @@ const LoginComponent = ({ onLogin }) => {
         <button type="submit" className="login-button">
           Login
         </button>
+
+        <p id="sign-up-p"><span id="sign-up-span">Create a new account -</span>SignUp</p>
       </form>
     </div>
   );

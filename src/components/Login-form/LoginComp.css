@@ -17,6 +17,7 @@
 }
 
 .login-form {
+  position: relative;
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -64,6 +65,8 @@ input[type="password"]:focus {
 .login-button {
   background-color: #4CAF50;
   color: white;
+  margin-top: 15px;
+  margin-bottom: -20px;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
@@ -74,4 +77,15 @@ input[type="password"]:focus {
 
 .login-button:hover {
   background-color: #45a049;
+}
+
+#sign-up-p{
+  margin-top: 30px;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+#sign-up-span{
+  padding-left: 46px;
+  padding-right: 5px;
 }
