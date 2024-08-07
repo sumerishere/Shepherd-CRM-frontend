@@ -254,7 +254,7 @@ const TemplateCreated = ({username}) => {
 
 TemplateCreated.propTypes = {
   open: PropTypes.bool.isRequired,
-  toggleAsideBar: PropTypes.func.isRequired,
+  // toggleAsideBar: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired, // Add prop type validation for username
 };
 
