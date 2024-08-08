@@ -1,0 +1,10 @@
+.line-chart-root{
+  height: 285px;
+  width: 655px;
+}
+
+.line-chart-child{
+  margin-left: 50px;
+  width: 100%;
+  height: 100%;
+}

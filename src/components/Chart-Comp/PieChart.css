@@ -1,27 +1,26 @@
-.chart-div{
+.pie-chart-root{
   height: 290px;
-  width: 350px;
+  width: 370px;
   background-color: rgb(255, 254, 254);
   border-radius: 10px;
   z-index: 1;
   position: absolute;
   top : 0;
-  margin-top: 45%;
+  margin-top: 68.5%;
   margin-left: 49%;
   box-shadow: 1px 3px 4px #00000080;
 }
 
-.chart-child-div{
+.pie-chart-child{
   /* background-color: aqua; */
-  padding: 5px;
+  padding: 10px;
   height: 90%;
   width: 260px;
   /* background-color: rgb(154, 196, 196); */
-  margin-left: 10%;
+  margin-left: 7%;
   position: absolute;
 }
 
-.DoughnutChart {
-  /* width: 50%;
-  margin: auto; */
+#lead-activity-h3{
+  text-align: center;
 }

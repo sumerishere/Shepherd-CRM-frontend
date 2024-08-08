@@ -1,5 +1,6 @@
 import "./LeadCount.css";
-
+import MonthsChart from "../Chart-Comp/MonthsChart";
+import PieChartComp from "../Chart-Comp/PieChart";
 
 const LeadCount = () =>{
   return (
@@ -18,6 +19,8 @@ const LeadCount = () =>{
          <p>Closed</p> 
          <p id="number">5</p>
       </div>
+      <MonthsChart/>
+      <PieChartComp/>
     </div>
   )
 }

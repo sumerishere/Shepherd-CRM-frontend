@@ -75,6 +75,8 @@ import DynamicForm from "./components/template-fom/TemplateComp";
 import TemplateCreated from "./components/created-templates/CreatedTemplate";
 import LoginComponent from "./components/Login-form/LoginComp";
 
+
+
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -132,6 +134,7 @@ function App() {
                   <LeadCount />
                   <ChartComp />
                   <FollowUp templateId={templateId} />
+                  
                 </>
               }
             />
