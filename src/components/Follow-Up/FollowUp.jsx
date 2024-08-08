@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 const FollowUp = ({ templateId }) => {
   const [data, setData] = useState([]);
@@ -10,7 +11,10 @@ const FollowUp = ({ templateId }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [uidToDelete, setUidToDelete] = useState(null);
   const [updateFormVisible, setUpdateFormVisible] = useState(false);
-  const [updateFormData, setUpdateFormData] = useState({});
+  const [updateFormData, setUpdateFormData] = useState({
+    uid: null,
+    fieldsData: {},
+  });
 
   useEffect(() => {
     if (templateId) {
@@ -75,42 +79,57 @@ const FollowUp = ({ templateId }) => {
 
   const handleUpdateClick = async (uid) => {
     try {
-      const response = await fetch(`http://localhost:8080/get-user-by-uid/${uid}`);
+      const response = await fetch(
+        `http://localhost:8080/get-user-by-uid/${uid}`
+      );
       if (response.ok) {
         const result = await response.json();
-        setUpdateFormData(result);
+        console.log("Fetched user data:", result);
+
+        // Set the fetched data into the state
+        setUpdateFormData({
+          uid: uid,
+          fieldsData: result, // Assign result directly to fieldsData
+        });
+
+        console.log("Update Form Data State:", {
+          uid: uid,
+          fieldsData: result,
+        });
+
         setUpdateFormVisible(true);
-      } 
-      else {
+      } else {
         console.error("Failed to fetch user data for update");
         toast.error("Failed to fetch user data for update.", {
           position: "top-center",
           autoClose: 3000,
         });
       }
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Fetch error:", error);
-      toast.error("An error occurred while fetching user data. Please try again.", {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(
+        "An error occurred while fetching user data. Please try again.",
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
   const handleUpdateSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       console.log("Update Form Data: ", updateFormData);
-  
+
       const payload = {
         uid: updateFormData.uid,
-        fieldsData: { ...updateFormData.fieldsData },
+        fieldsData: updateFormData.fieldsData,
       };
-  
+
       console.log("Payload: ", payload);
-  
+
       const response = await fetch("http://localhost:8080/update-user", {
         method: "PUT",
         headers: {
@@ -118,16 +137,18 @@ const FollowUp = ({ templateId }) => {
         },
         body: JSON.stringify(payload),
       });
-  
+
       if (response.ok) {
         toast.success("User data updated successfully!", {
-          position: "top-center",
+          position: "bottom-right",
           autoClose: 3000,
         });
-  
+
         setUpdateFormVisible(false);
         const updatedData = data.map((item) =>
-          item.uid === updateFormData.uid ? updateFormData : item
+          item.uid === updateFormData.uid
+            ? { ...item, fieldsData: updateFormData.fieldsData }
+            : item
         );
         setData(updatedData);
       } else {
@@ -139,17 +160,25 @@ const FollowUp = ({ templateId }) => {
       }
     } catch (error) {
       console.error("Update error:", error);
-      toast.error("An error occurred while updating user data. Please try again.", {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(
+        "An error occurred while updating user data. Please try again.",
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
   };
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdateFormData((prevData) => ({ ...prevData, [name]: value }));
+    setUpdateFormData((prevData) => ({
+      ...prevData,
+      fieldsData: {
+        ...prevData.fieldsData,
+        [name]: value,
+      },
+    }));
   };
 
   if (loading) {
@@ -159,19 +188,32 @@ const FollowUp = ({ templateId }) => {
   if (data.length === 0) {
     return (
       <div className="follow-up-div">
-        <p id="followUp-empty-text">No entries are available for the selected template.</p>
+        <p id="followUp-empty-text">
+          No entries are available for the selected template.
+        </p>
       </div>
     );
   }
 
   const fieldsDataArray = data.map((item) => item.fields_Data);
-  const columnHeaders = fieldsDataArray.length > 0 ? Object.keys(fieldsDataArray[0]) : [];
+  const columnHeaders =
+    fieldsDataArray.length > 0 ? Object.keys(fieldsDataArray[0]) : [];
 
   return (
     <div className="follow-up-div">
       <ToastContainer />
       <p id="followUp-text">Follow Up</p>
       <hr />
+
+      <div className="add-lead-btn-div">
+        <Link
+          to={"/TemplateCreated"}
+          style={{ textDecoration: "none", color: "black" }}
+        >
+          <button id="add-lead-btn">Add lead</button>
+        </Link>
+      </div>
+
       <div className="data-table-root">
         <div className="data-table-child">
           <table className="table-class">
@@ -221,7 +263,9 @@ const FollowUp = ({ templateId }) => {
       {showConfirm && (
         <div className="confirm-dialog">
           <div className="confirm-content">
-            <p id="confirm-content-p">Are you sure you want to delete this entry? 🥺</p>
+            <p id="confirm-content-p">
+              Are you sure you want to delete this entry? 🥺
+            </p>
             <button className="confirm-button" onClick={confirmDelete}>
               Yes
             </button>
@@ -243,9 +287,10 @@ const FollowUp = ({ templateId }) => {
                 <label htmlFor={header}>{header}</label>
                 <input
                   type="text"
+                  required={true}
                   id={header}
                   name={header}
-                  value={updateFormData[header] || ""}
+                  value={updateFormData.fieldsData[header] || ""}
                   onChange={handleInputChange}
                 />
               </div>
@@ -254,7 +299,12 @@ const FollowUp = ({ templateId }) => {
               <button type="submit" className="submit-button">
                 Update
               </button>
-              <button type="button" id="form-cancel-btn" className="cancel-button" onClick={() => setUpdateFormVisible(false)}>
+              <button
+                id="form-cancel-btn"
+                type="button"
+                className="cancel-button"
+                onClick={() => setUpdateFormVisible(false)}
+              >
                 Cancel
               </button>
             </div>
@@ -266,7 +316,7 @@ const FollowUp = ({ templateId }) => {
 };
 
 FollowUp.propTypes = {
-  templateId: PropTypes.number.isRequired,
+  templateId: PropTypes.string,
 };
 
 export default FollowUp;
