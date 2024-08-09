@@ -74,6 +74,7 @@ import BusinessPanel from "./components/Business-Panel/BusinessPanel";
 import DynamicForm from "./components/template-fom/TemplateComp";
 import TemplateCreated from "./components/created-templates/CreatedTemplate";
 import LoginComponent from "./components/Login-form/LoginComp";
+import SignUpComp from "./components/SignUp-form/SignUpComp";
 
 
 
@@ -143,13 +144,16 @@ function App() {
             <Route path="/BusinessPanel" element={<BusinessPanel />} />
             <Route path="/DynamicForm" element={<DynamicForm />} />
             <Route path="/TemplateCreated" element={<TemplateCreated username={username} />} />
+            
           </Routes>
         </>
       ) : (
         <Routes>
           <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/SignUpComp" element={<SignUpComp/>}/>
         </Routes>
+        
       )}
     </>
   );

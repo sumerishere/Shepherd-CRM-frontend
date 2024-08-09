@@ -167,11 +167,15 @@
   flex-direction: row-reverse;
 }
 
-#checkbox-input{
-  margin-top: 10px;
-  margin-left: 14px;
-  display: inline-flex;
+#template-checkbox-input{
+  /* display: flex;
+  flex-direction: column-reverse; */
+}
+
+#template-label-checkbox{
+  display: flex;
   flex-direction: row-reverse;
+  align-items: baseline;
 }
 
 

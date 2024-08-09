@@ -9,6 +9,10 @@
   box-shadow: 0px 2px 3px rgb(0,0,0,0.5);
 }
 
+#loading-id{
+  font-weight: 600;
+}
+
 #followUp-text{
   padding-top: 1px;
   margin-left: 18px;

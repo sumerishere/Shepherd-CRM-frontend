@@ -4,7 +4,7 @@ import PropTypes from "prop-types"; // Import PropTypes for prop type validation
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginComp.css";
-
+import { Link } from "react-router-dom";
 
 const LoginComponent = ({ onLogin }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -24,10 +24,9 @@ const LoginComponent = ({ onLogin }) => {
       );
       if (response.ok) {
         // const data = await response.json();
-        onLogin(username,password);
-        // navigate('/TemplateCreated',{state: { username }}); 
-        
-      } else { 
+        onLogin(username, password);
+        // navigate('/TemplateCreated',{state: { username }});
+      } else {
         const errorMessage = await response.text();
         toast.error(errorMessage, {
           position: "top-center",
@@ -48,7 +47,9 @@ const LoginComponent = ({ onLogin }) => {
       <h1 id="login-heading">Login</h1>
       <form className="login-form" onSubmit={handleLogin}>
         <div className="form-group">
-          <label id="login-label" htmlFor="username">Username</label>
+          <label id="login-label" htmlFor="username">
+            Username
+          </label>
           <input
             type="text"
             id="username"
@@ -59,7 +60,9 @@ const LoginComponent = ({ onLogin }) => {
           />
         </div>
         <div className="form-group">
-          <label id="login-label" htmlFor="password">Password</label>
+          <label id="login-label" htmlFor="password">
+            Password
+          </label>
           <div className="password-wrapper">
             <input
               type={passwordVisible ? "text" : "password"}
@@ -82,7 +85,13 @@ const LoginComponent = ({ onLogin }) => {
           Login
         </button>
 
-        <p id="sign-up-p"><span id="sign-up-span">Create a new account -</span>SignUp</p>
+        <p id="sign-up-p">
+          <span id="sign-up-span">Create a new account -</span>
+
+          <Link to="/SignUpComp"
+          >SignUp
+          </Link>
+        </p>
       </form>
     </div>
   );

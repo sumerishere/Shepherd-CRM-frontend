@@ -1,0 +1,82 @@
+.signup-root-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  margin-left: 36%;
+  margin-top: 3.5%;
+  position: absolute;
+  background-color: #f5f5f5;
+}
+
+.signup-form-div {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 380px;
+  position: relative;
+}
+
+#signup-form-h1 {
+  margin-top: 0px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  font-size: 25px;
+}
+
+.form-group-singup{
+  /* position: relative; */
+  margin-bottom: 15px;
+}
+
+.form-group-singup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-input-grp[type="text"],
+.form-input-grp[type="password"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#pass-check-box{
+  margin-top: 10px;
+  margin-left: -28px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+#pass-show-p{
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+#SignUp-submit-btn[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#SignUp-submit-btn[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}

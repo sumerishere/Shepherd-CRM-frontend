@@ -29,6 +29,7 @@ const FollowUp = ({ templateId }) => {
             setData(result);
           } else {
             console.error("Failed to fetch template data");
+            
           }
         } catch (error) {
           console.error("Fetch error:", error);
@@ -66,12 +67,14 @@ const FollowUp = ({ templateId }) => {
           autoClose: 3000,
         });
       }
-    } catch (error) {
+    } 
+    catch (error) {
       toast.error("An error occurred. Please try again.", {
         position: "top-center",
         autoClose: 3000,
       });
-    } finally {
+    } 
+    finally {
       setShowConfirm(false);
       setUidToDelete(null);
     }
@@ -181,10 +184,6 @@ const FollowUp = ({ templateId }) => {
     }));
   };
 
-  if (loading) {
-    return <div id="loading-id">Loading...</div>;
-  }
-
   if (data.length === 0) {
     return (
       <div className="follow-up-div">
@@ -193,6 +192,11 @@ const FollowUp = ({ templateId }) => {
         </p>
       </div>
     );
+  }
+  else{
+    if (loading) {
+      return <div id="loading-id">Loading...</div>;
+    }
   }
 
   const fieldsDataArray = data.map((item) => item.fields_Data);
