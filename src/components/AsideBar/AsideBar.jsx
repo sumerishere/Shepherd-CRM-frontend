@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 const AsideBar = ({ open, toggleAsideBar, username }) => {
   return (
     <div>
-      <div className={open ? "aside-bar collapse" : "aside-bar"}>
+      <div className={open ? "aside-bar collapse" : "aside-bar collapse "}>
         <Link
           to={"/"}
           style={{ textDecoration: "none", color: "black" }}

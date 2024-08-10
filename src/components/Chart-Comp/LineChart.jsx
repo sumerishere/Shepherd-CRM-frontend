@@ -14,8 +14,8 @@ const LineChartComp = () => {
               border: "black",
             },
           ]}
-          width={500}
-          height={300}
+          width={550}
+          height={290}
         />
       </div>
     </div>

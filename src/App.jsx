@@ -61,8 +61,8 @@ import "./App.css";
 import "../src/index.css";
 import Nav from "./components/Nav-Bar/Nav";
 import Calender from "./components/Calender-Comp/Calender";
-import LeadCount from "./components/Lead-Comp/LeadCount";
-import ChartComp from "./components/Chart-Comp/ChartComp";
+import LeadActivity from "./components/Lead-Comp/LeadActivity";
+// import ChartComp from "./components/Chart-Comp/ChartComp";
 import FollowUp from "./components/Follow-Up/FollowUp";
 import AsideBar from "./components/AsideBar/AsideBar";
 import BackDrop from "./components/AsideBar/BackDrop";
@@ -132,8 +132,9 @@ function App() {
               element={
                 <>
                   <Calender />
-                  <LeadCount />
-                  <ChartComp />
+                  
+                  <LeadActivity />
+                  {/* <ChartComp /> */}
                   <FollowUp templateId={templateId} />
                   
                 </>

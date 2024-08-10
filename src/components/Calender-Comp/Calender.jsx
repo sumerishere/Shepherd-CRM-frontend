@@ -5,7 +5,7 @@ import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { SmileOutlined } from "@ant-design/icons";
+// import { SmileOutlined } from "@ant-design/icons";
 import LineChartComp from "../Chart-Comp/LineChart";
 
 // Create the localizer
@@ -108,22 +108,20 @@ const Calender = () => {
   return (
     <div className="calender-root-div">
       <div className="calander-child-1">
-        <div className="welcome-text">
-          <h4 id="">
-            Hello!! Testing Shastra <SmileOutlined />
-          </h4>
-        </div>
 
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
-          style={{ minHeight: "484px", width: "100%" }}/>
+          style={{ minHeight: "400px", width: "100%" }}
+        />
       </div>
 
       <div className="calender-child-2">
-        <LineChartComp/>
+        <div className="line-chart-div">
+          <LineChartComp />
+        </div>
       </div>
     </div>
   );
