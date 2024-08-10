@@ -17,11 +17,11 @@ const PieChartComp = () => {
             
             },
           ]}
-          width={290}
-          height={300}
+          width={240}
+          height={120}
         />
       </div>
-      <h3 id="lead-activity-h3">Lead activity</h3>
+      {/* <h3 id="lead-activity-h3">Lead activity</h3> */}
     </div>
   );
 };

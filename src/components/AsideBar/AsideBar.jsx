@@ -29,7 +29,7 @@ const AsideBar = ({ open, toggleAsideBar, username }) => {
         <ul>
           <Link
             to={"/"}
-            style={{ textDecoration: "none", color: "black" }}
+            style={{ textDecoration: "none", color: "white" }}
             onClick={toggleAsideBar}
           >
             <li>
@@ -39,7 +39,7 @@ const AsideBar = ({ open, toggleAsideBar, username }) => {
           <Link
             to={"/TemplateCreated"}
             state={{ username }} // Pass username here
-            style={{ textDecoration: "none", color: "black" }}
+            style={{ textDecoration: "none", color: "white" }}
             onClick={toggleAsideBar}
           >
             <li>
@@ -48,7 +48,7 @@ const AsideBar = ({ open, toggleAsideBar, username }) => {
           </Link>
           <Link
             to={"/LeadList"}
-            style={{ textDecoration: "none", color: "black" }}
+            style={{ textDecoration: "none", color: "white" }}
           >
             <li>
               <UsergroupAddOutlined /> Lead List
@@ -62,7 +62,7 @@ const AsideBar = ({ open, toggleAsideBar, username }) => {
           </li>
           <Link
             to="/DynamicForm"
-            style={{ textDecoration: "none", color: "black" }}
+            style={{ textDecoration: "none", color: "white" }}
           >
             <li onClick={toggleAsideBar}>
               <FormOutlined /> Create Template
@@ -70,14 +70,14 @@ const AsideBar = ({ open, toggleAsideBar, username }) => {
           </Link>
           <Link
             to={"/BusinessPanel"}
-            style={{ textDecoration: "none", color: "black" }}
+            style={{ textDecoration: "none", color: "white" }}
           >
             <li onClick={toggleAsideBar}>
               <SettingFilled /> Business Panel
             </li>
           </Link>
 
-          <Link to="" style={{ textDecoration: "none", color: "black" }}>
+          <Link to="" style={{ textDecoration: "none", color: "white" }}>
             <li onClick={toggleAsideBar}>
             <LogoutOutlined /> Log-out
             </li>

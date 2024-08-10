@@ -1,21 +1,20 @@
 .calender-root-div{
-  /* position: relative; */
-  height: 450px;
+  height: 500px;
   width: 76.4%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
-  /* background-color: aqua; */
   margin-left: 21.5%;
-  margin-top: 20%;
-  border: 1px solid rgb(140, 137, 137);
-  /* position: absolute; */
+  margin-top: 16.6%;
+  /* border: 1px solid rgb(140, 137, 137); */
 }
 
 .calander-child-1{
-  height: 400px;
-  width: 553px;
+  margin-top: -1%;
+  height: 480px;
+  width: 585px;
+  margin-left: -10px;
   background-color: rgb(248, 249, 249);
   border: 1px solid rgb(140, 137, 137);
   border-radius: 3px;
@@ -25,13 +24,48 @@
 
 .calender-child-2{
   background-color: rgb(249, 247, 247);
-  margin-top: -9.5%;
+  margin-top: -18%;
   height: 285px;
-  width: 530px;
+  width: 538px;
+  margin-left: 5px;
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.799);
-  box-shadow: 1px 2.3px 3px rgb(0, 0, 0, 0.5);
+  box-shadow: 1px 3px 3px rgb(0, 0, 0, 0.5);
   
+}
+
+.calender-child-3{
+  height: 189px;
+  border-radius: 4px;
+  width: 537px;
+  position: absolute;
+  margin-left: 38.8%;
+  margin-top: 18.5%;
+  /* background-color: aquamarine; */
+  /* box-shadow: 1px 3px 3px rgb(0, 0, 0, 0.5); */
+  /* border: 1px solid rgb(140, 137, 137); */
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.calender-child-3-div-1{
+  height: 185px;
+  width: 265px;
+  margin: 1px;
+  border-radius: 5px;
+  background-color: rgb(249, 245, 245);
+  /* border: 1px solid rgb(140, 137, 137); */
+
+}
+
+.calender-child-3-div-2{
+  height: 185px;
+  width: 265px;
+  border-radius: 5px;
+  background-color: rgb(249, 245, 245);
+  /* border: 1px solid rgb(140, 137, 137); */
 }
 
 .line-chart-div{

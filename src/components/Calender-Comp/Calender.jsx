@@ -7,6 +7,8 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 // import { SmileOutlined } from "@ant-design/icons";
 import LineChartComp from "../Chart-Comp/LineChart";
+import DoughnutChart from "../Chart-Comp/ChartComp";
+import PieChart from "../Chart-Comp/PieChart";
 
 // Create the localizer
 const localizer = momentLocalizer(moment);
@@ -122,6 +124,18 @@ const Calender = () => {
         <div className="line-chart-div">
           <LineChartComp />
         </div>
+      </div>
+
+      <div className="calender-child-3">
+        
+        <div className="calender-child-3-div-1">
+           <DoughnutChart/>
+        </div>
+
+        <div className="calender-child-3-div-2">
+           <PieChart/>
+        </div>
+
       </div>
     </div>
   );

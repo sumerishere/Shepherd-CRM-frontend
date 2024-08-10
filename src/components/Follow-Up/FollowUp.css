@@ -1,9 +1,8 @@
 .follow-up-div{
-  margin-top: 8%;
+  margin-top: 0%;
   margin-bottom: 80px;
-  margin-left: 3%;
-  /* height: 120px; */
-  width: 96%;
+  margin-left: 21.5%;
+  width: 78%;
   background-color: rgb(240, 238, 238);
   border: 1px solid rgba(188, 183, 183, 0.799);
   box-shadow: 0px 2px 3px rgb(0,0,0,0.5);
@@ -31,7 +30,7 @@
 
 .add-lead-btn-div{
   position: absolute;
-  margin-left: 11.5%;
+  margin-left: 2.6%;
   margin-top: 15px;
 }
 
@@ -51,16 +50,19 @@
 
 
 .data-table-root {
+  width: 96%;
+  margin-top:5.6%;
+  margin-left: 2%;
   /* Add any additional styling if needed */
 }
 
+
 .data-table-child {
   height: 410px;
-  width: 75%;
+  width: 100%;
   margin-top: 5%;
   margin-bottom: 3%;
-  margin-left: 12%;
-  border-radius: 10px;
+  border-radius: 4px;
   border: 2px solid rgb(158, 158, 158);
   background-color: antiquewhite;
   overflow-y: scroll;
@@ -71,15 +73,21 @@
 }
 
 .table-class {
+  table-layout: fixed;
   width: 100%;
-  border-collapse: collapse; 
+  border-collapse: collapse;
 }
 
-/* Header row styling */
-.data-table-child th, .data-table-child td {
-  border: 1px solid rgb(166, 166, 166); /* Add border to header and cells */
-  padding: 12px;
+.table-class th, .table-class td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
 }
+
+.narrow-column {
+  width: 100px; /* Adjust this value as needed */
+}
+
 
 .data-table-child th {
   background-color: #f4f4f4;
@@ -142,11 +150,11 @@
 /* delete css*/
 
 .remove-button {
-  background-color: rgb(245, 31, 31);
+  background-color: rgb(221, 18, 18);
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 6px 10px;
+  padding: 6px 14px;
   cursor: pointer;
 }
 
@@ -200,7 +208,7 @@
 }
 
 .cancel-button {
-  background-color: rgb(165, 10, 10);
+  background-color: rgba(165, 10, 10, 0.89);
   color: white;
 }
 
@@ -218,7 +226,7 @@
   color: white;
   border: none;
   margin: 5px;
-  padding: 6px 10px;
+  padding: 6px 14px;
   cursor: pointer;
   border-radius: 3px;
   transition: background-color 0.3s;

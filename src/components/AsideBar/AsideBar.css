@@ -1,19 +1,20 @@
 
  .aside-bar {
-  width: 270px;
+  width: 300px;
   height: 100vh;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(41, 38, 38);
   position: absolute;
   left: 0;
   transform: translateX(-100%);
   transition: all 0.4s ease-in-out;
-  border: 1px solid rgb(52, 50, 50);
+  border: 1px solid rgb(160, 158, 158);
   /* background-color: #ddd;  */
   position: fixed;
   top: 81.5px;
   bottom: 0;
   left: 0;
   z-index: 999;
+  margin-left: -3px;
 }
 
 /* #logo-name{
@@ -50,13 +51,14 @@
 }
 
 #sub-text{
+  color: rgb(247, 247, 247);
   position: absolute;
   margin-top: -20px;
   margin-left: 120px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px rgba(132, 129, 129, 0.3);
   
 }
 
@@ -68,6 +70,7 @@
 
 li{
   cursor: pointer;
+  color: white;
 }
 
 #develop-text-line1{

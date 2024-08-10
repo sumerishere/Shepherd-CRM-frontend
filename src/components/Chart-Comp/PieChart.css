@@ -1,24 +1,18 @@
 .pie-chart-root{
-  height: 290px;
-  width: 370px;
+  height: 100%;
+  width: 100%;
   background-color: rgb(255, 254, 254);
-  border-radius: 10px;
-  z-index: 1;
-  position: absolute;
-  top : 0;
-  margin-top: 68.5%;
-  margin-left: 49%;
+  border-radius: 4px;
   box-shadow: 1px 3px 4px #00000080;
+  /* margin-top: -10%; */
 }
 
 .pie-chart-child{
-  /* background-color: aqua; */
-  padding: 10px;
-  height: 90%;
-  width: 260px;
-  /* background-color: rgb(154, 196, 196); */
-  margin-left: 7%;
-  position: absolute;
+  /* padding: 10px; */
+  /* margin-top: -15%; */
+  height: 99%;
+  width: 100%;
+  padding-top: 37px;
 }
 
 #lead-activity-h3{
