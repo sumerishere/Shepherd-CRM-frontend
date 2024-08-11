@@ -8,9 +8,9 @@
 /* Root div for the template */
 .child-template-div {
   position: relative;
-  max-width: 1200px;
+  max-width: 1300px;
   height: 600px;
-  margin: -0.5% 55px 55px 10%;
+  margin: -0.5% 55px 55px 22%;
   background-color: #ccccccc2;
   position: relative;
   border-radius: 10px;
@@ -24,7 +24,7 @@
 
 #heading-h1{
   top:0%;
-  margin: 10px 30px 20px 48px;
+  margin: 9px 30px 20px 22%;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 500;
   color: rgb(128, 128, 128);
@@ -68,7 +68,7 @@
   width: 700px;
   height: 420px;
   margin-top: -0.5%;
-  margin-left: 18%;
+  margin-left: 14%;
   padding: 30px;
   border: 1px solid #ddd;
   border-radius: 5px;

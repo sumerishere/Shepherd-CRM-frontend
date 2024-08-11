@@ -30,10 +30,10 @@
   padding-left: 10px;
   color: rgba(84, 81, 81, 0.923);
   font-size: 24px;
-  margin-top: 117px;
-  margin-bottom: -100px;
+  margin-top: 110px;
+  margin-bottom: -90px;
   text-align: start;
-  margin-left: 23%;
+  margin-left: 30%;
   /* background-color: #b2d4f9; */
   border-radius: 4px;
 }
@@ -88,8 +88,8 @@
   /* position: absolute; */
   
   width: 500px;
-  margin-top: 8%;
-  margin-left: 33%;
+  margin-top: 6%;
+  margin-left: 42%;
 
   padding: 20px;
   border: 1px solid #ccc;

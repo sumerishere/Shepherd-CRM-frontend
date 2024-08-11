@@ -557,6 +557,7 @@ const FollowUp = ({ templateId }) => {
                   <td className="narrow-column">
                     <input
                       type="checkbox"
+                      style={{cursor:"pointer"}}
                       checked={row.fields_Data["fees completed"] === "Yes"}
                       onChange={(e) => handleCheckboxChange(e, row.uid)}
                     />
@@ -641,6 +642,7 @@ const FollowUp = ({ templateId }) => {
               <button
                 type="button"
                 className="cancel-button"
+                id="form-cancel-btn"
                 onClick={() => setUpdateFormVisible(false)}
               >
                 Cancel
