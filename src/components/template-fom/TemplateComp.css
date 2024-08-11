@@ -10,7 +10,7 @@
   position: relative;
   max-width: 1300px;
   height: 600px;
-  margin: -0.5% 55px 55px 22%;
+  margin: -0.5% 55px 55px 23.5%;
   background-color: #ccccccc2;
   position: relative;
   border-radius: 10px;
@@ -67,8 +67,8 @@
 .form-container {
   width: 700px;
   height: 420px;
-  margin-top: -0.5%;
-  margin-left: 14%;
+  margin-top: 1%;
+  margin-left: 13.8%;
   padding: 30px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -167,7 +167,7 @@
   height: 300px;
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: 60%;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   border: 1px solid #929191d7;
@@ -188,6 +188,7 @@
   padding: 50px;
   display: flex;
   flex-direction: column;
+  
 }
 
 .form-row {

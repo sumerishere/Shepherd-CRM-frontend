@@ -1,4 +1,6 @@
 import "./LeadActivity.css";
+import { BsPersonStanding } from "react-icons/bs";
+
 import { GrGroup, GrUserExpert,GrRun } from "react-icons/gr";
 // import PieChart from "../Chart-Comp/PieChart"
 
@@ -28,8 +30,9 @@ const LeadActivity = () => {
       </div>
 
       <div className="lead-container-4">
-        <p id="lead-container-4-p">lead 4</p>
+        <p id="lead-container-4-p"><BsPersonStanding /></p>
         <hr />
+        <p id="open-lead-p">Open-lead <span id="open-lead-span">10</span></p>
       </div>
 
       {/* <PieChart/> */}

@@ -55,22 +55,22 @@
   text-align: center;
   margin-top: 120px;
   position: absolute;
-  margin-left: 40%;
+  margin-left: 48%;
   font-weight: 500;
 }
 
 #alert-emoji{
   position: absolute;
-  margin-top: 28.5%;
-  margin-left: 40.4%;
+  margin-top: 29%;
+  margin-left: 50%;
   font-size: 40px;
 }
 
 .bg-template-img{
   height: 460px;
   width: 47%;
-  margin-top: 145px;
-  margin-left: 27%;
+  margin-top: 155px;
+  margin-left: 36.5%;
   position: absolute;
 }
 
@@ -78,8 +78,8 @@
   position: absolute;
   font-size: 16px;
   font-weight: 480;
-  margin-top: 39%;
-  margin-left: 24%;
+  margin-top: 40%;
+  margin-left: 34%;
   color: rgb(100, 100, 100);
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }

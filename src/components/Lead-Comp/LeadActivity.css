@@ -93,6 +93,11 @@
   font-size: 18px;
 }
 
+#open-lead-p{
+  margin-left: 6px;
+  font-size: 18px;
+}
+
 #total-lead-count-span{
   padding-left: 120px;
   font-weight: 600;
@@ -105,5 +110,10 @@
 
 #miss-out-span{
   padding-left: 130px;
+  font-weight: 600;
+}
+
+#open-lead-span{
+  padding-left: 120px;
   font-weight: 600;
 }

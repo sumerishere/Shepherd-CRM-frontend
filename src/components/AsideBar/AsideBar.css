@@ -3,12 +3,13 @@
   width: 300px;
   height: 100vh;
   background-color: rgb(41, 38, 38);
+
   position: absolute;
   left: 0;
   transform: translateX(-100%);
   transition: all 0.4s ease-in-out;
   border: 1px solid rgb(160, 158, 158);
-  /* background-color: #ddd;  */
+  /* background-color: #212124;  */
   position: fixed;
   top: 81.5px;
   bottom: 0;

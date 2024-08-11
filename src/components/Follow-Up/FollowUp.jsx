@@ -502,19 +502,20 @@ const FollowUp = ({ templateId }) => {
     setData(updatedData);
   };
 
-  if (loading) {
-    return <div id="loading-id">Loading...</div>;
-  }
-
   if (data.length === 0) {
     return (
       <div className="follow-up-div">
         <p id="followUp-empty-text">
-          No entries are available for the selected template.
+          No entries are available.
         </p>
       </div>
     );
+  }else{
+    if (loading) {
+      return <div id="loading-id">Loading...</div>;
+    }
   }
+
 
   const fieldsDataArray = data.map((item) => item.fields_Data);
   const columnHeaders =
