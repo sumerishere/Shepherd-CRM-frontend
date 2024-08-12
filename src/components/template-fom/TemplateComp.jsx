@@ -139,7 +139,7 @@ const DynamicForm = () => {
       } else {
         const errorMessage = await response.text();
         toast.error(errorMessage, {
-          position: "top-center",
+          position: "bottom-right",
           autoClose: 3000,
         });
         console.error("Error saving form template");

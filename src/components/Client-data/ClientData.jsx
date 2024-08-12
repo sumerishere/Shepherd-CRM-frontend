@@ -30,7 +30,7 @@
 //             setData(result);
 //           } else {
 //             console.error("Failed to fetch template data");
-            
+
 //           }
 //         } catch (error) {
 //           console.error("Fetch error:", error);
@@ -68,13 +68,13 @@
 //           autoClose: 3000,
 //         });
 //       }
-//     } 
+//     }
 //     catch (error) {
 //       toast.error("An error occurred. Please try again.", {
 //         position: "top-center",
 //         autoClose: 3000,
 //       });
-//     } 
+//     }
 //     finally {
 //       setShowConfirm(false);
 //       setUidToDelete(null);
@@ -326,15 +326,15 @@
 
 // export default FollowUp;
 
-import "./FollowUp.css";
+import "./ClientData.css";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
+import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const FollowUp = ({ templateId }) => {
+const ClientData = ({ templateId }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -424,10 +424,13 @@ const FollowUp = ({ templateId }) => {
         });
       }
     } catch (error) {
-      toast.error("An error occurred while fetching user data. Please try again.", {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(
+        "An error occurred while fetching user data. Please try again.",
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
@@ -469,10 +472,13 @@ const FollowUp = ({ templateId }) => {
         });
       }
     } catch (error) {
-      toast.error("An error occurred while updating user data. Please try again.", {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(
+        "An error occurred while updating user data. Please try again.",
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
@@ -505,34 +511,31 @@ const FollowUp = ({ templateId }) => {
   if (data.length === 0) {
     return (
       <div className="follow-up-div">
-        <p id="followUp-empty-text">
-          No entries are available.
-        </p>
+        <p id="client-data-empty-text">No entries are available.</p>
       </div>
     );
-  }else{
+  } else {
     if (loading) {
       return <div id="loading-id">Loading...</div>;
     }
   }
-
 
   const fieldsDataArray = data.map((item) => item.fields_Data);
   const columnHeaders =
     fieldsDataArray.length > 0 ? Object.keys(fieldsDataArray[0]) : [];
 
   return (
-    <div className="follow-up-div">
+    <div className="client-data-root">
       <ToastContainer />
-      <p id="followUp-text">Follow Up</p>
+      <p id="client-data-text">Client-Data</p>
       <hr />
 
-      <div className="add-lead-btn-div">
+      <div className="add-client-btn-div">
         <Link
           to={"/TemplateCreated"}
           style={{ textDecoration: "none", color: "black" }}
         >
-          <button id="add-lead-btn">Add lead</button>
+          <button id="add-client-btn">Add Client</button>
         </Link>
       </div>
 
@@ -544,8 +547,7 @@ const FollowUp = ({ templateId }) => {
                 <th className="narrow-column">Lead Status</th>
                 <th className="narrow-column">Fees Completed</th>
                 {columnHeaders.map((header) =>
-                  header !== "lead-status" &&
-                  header !== "fees completed" ? (
+                  header !== "lead-status" && header !== "fees completed" ? (
                     <th key={header}>{header}</th>
                   ) : null
                 )}
@@ -558,7 +560,7 @@ const FollowUp = ({ templateId }) => {
                   <td className="narrow-column">
                     <input
                       type="checkbox"
-                      style={{cursor:"pointer"}}
+                      style={{ cursor: "pointer" }}
                       checked={row.fields_Data["fees completed"] === "Yes"}
                       onChange={(e) => handleCheckboxChange(e, row.uid)}
                     />
@@ -567,8 +569,7 @@ const FollowUp = ({ templateId }) => {
                     {row.fields_Data["fees completed"] || "No"}
                   </td>
                   {columnHeaders.map((header) =>
-                    header !== "lead-status" &&
-                    header !== "fees completed" ? (
+                    header !== "lead-status" && header !== "fees completed" ? (
                       <td key={header}>
                         {typeof row.fields_Data[header] === "boolean"
                           ? row.fields_Data[header]
@@ -621,7 +622,7 @@ const FollowUp = ({ templateId }) => {
       {updateFormVisible && (
         <div className="update-form-container">
           <form onSubmit={handleUpdateSubmit}>
-            {columnHeaders.map((header) => (
+            {columnHeaders.map((header) =>
               header !== "lead-status" && header !== "fees completed" ? (
                 <div key={header} className="form-group">
                   <label htmlFor={header}>{header}</label>
@@ -635,7 +636,7 @@ const FollowUp = ({ templateId }) => {
                   />
                 </div>
               ) : null
-            ))}
+            )}
             <div className="button-group">
               <button type="submit" className="submit-button">
                 Update
@@ -656,8 +657,8 @@ const FollowUp = ({ templateId }) => {
   );
 };
 
-FollowUp.propTypes = {
+ClientData.propTypes = {
   templateId: PropTypes.string.isRequired,
 };
 
-export default FollowUp;
+export default ClientData;

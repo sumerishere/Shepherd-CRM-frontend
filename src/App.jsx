@@ -16,7 +16,6 @@
 // // import TemplateCreated from "./components/created-templates/CreatedTemplate";
 // // // import LoginComponent from "./components/Login-form/LoginComp";
 
-
 // // function App() {
 // //   const [isOpen, setIsOpen] = useState(false);
 
@@ -76,8 +75,6 @@
 // import LoginComponent from "./components/Login-form/LoginComp";
 // import SignUpComp from "./components/SignUp-form/SignUpComp";
 
-
-
 // function App() {
 //   const [isOpen, setIsOpen] = useState(false);
 //   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -134,7 +131,7 @@
 //                   <Calender />
 //                   <LeadActivity/>
 //                   <FollowUp templateId={templateId} />
-                  
+
 //                 </>
 //               }
 //             />
@@ -143,8 +140,7 @@
 //             <Route path="/BusinessPanel" element={<BusinessPanel />} />
 //             <Route path="/DynamicForm" element={<DynamicForm />} />
 //             <Route path="/TemplateCreated" element={<TemplateCreated username={username} />}/>
-           
-            
+
 //           </Routes>
 //         </>
 //       ) : (
@@ -154,7 +150,7 @@
 //           <Route path="/SignUpComp" element={<SignUpComp/>}/>
 //           {/* <Route path = "/LoginComponent " element={<LoginComponent/>}/> */}
 //         </Routes>
-        
+
 //       )}
 //     </>
 //   );
@@ -167,12 +163,12 @@ import "../src/index.css";
 import Nav from "./components/Nav-Bar/Nav";
 import Calender from "./components/Calender-Comp/Calender";
 import LeadActivity from "./components/Lead-Comp/LeadActivity";
-import FollowUp from "./components/Follow-Up/FollowUp";
+import LeadFollowUp from "./components/Lead-Comp/LeadFollowUp";
+import ClientData from "./components/Client-data/ClientData";
 import AsideBar from "./components/AsideBar/AsideBar";
 import BackDrop from "./components/AsideBar/BackDrop";
 import { useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import LeadForm from "./components/Lead-Form/LeadForm";
 import LeadList from "./components/Lead-List/LeadList";
 import BusinessPanel from "./components/Business-Panel/BusinessPanel";
 import DynamicForm from "./components/template-fom/TemplateComp";
@@ -185,7 +181,9 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
   );
-  const [username, setUsername] = useState(localStorage.getItem("username") || "");
+  const [username, setUsername] = useState(
+    localStorage.getItem("username") || ""
+  );
   const [templateId, setTemplateId] = useState(null);
 
   const toggleAsideBar = () => {
@@ -193,7 +191,9 @@ function App() {
   };
 
   const handleLogin = (username, password) => {
-    fetch(`http://localhost:8080/login?username=${username}&password=${password}`)
+    fetch(
+      `http://localhost:8080/login?username=${username}&password=${password}`
+    )
       .then((response) => {
         if (response.ok) {
           setIsAuthenticated(true);
@@ -256,15 +256,19 @@ function App() {
                 <>
                   <Calender />
                   <LeadActivity />
-                  <FollowUp templateId={templateId} />
+                  <LeadFollowUp/>
+                  <ClientData templateId={templateId} />
                 </>
               }
             />
-            <Route path="/LeadForm" element={<LeadForm />} />
+            {/* <Route path="/LeadForm" element={<LeadForm />} /> */}
             <Route path="/LeadList" element={<LeadList />} />
             <Route path="/BusinessPanel" element={<BusinessPanel />} />
             <Route path="/DynamicForm" element={<DynamicForm />} />
-            <Route path="/TemplateCreated" element={<TemplateCreated username={username} />} />
+            <Route
+              path="/TemplateCreated"
+              element={<TemplateCreated username={username} />}
+            />
           </Routes>
         </>
       ) : (
@@ -279,5 +283,3 @@ function App() {
 }
 
 export default App;
-
-
