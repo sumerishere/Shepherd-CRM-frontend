@@ -2,7 +2,7 @@
   margin-top: 3%;
   margin-bottom: 55px;
   margin-left: 21.5%;
-  width: 78%;
+  width: 75%;
   background-color: rgb(240, 238, 238);
   border: 1px solid rgba(188, 183, 183, 0.799);
   box-shadow: 0px 2px 3px rgb(0,0,0,0.5);
@@ -34,8 +34,6 @@
 }
 
 
-
-
 .lead-data-root {
   padding: 20px;
 }
@@ -43,14 +41,15 @@
 #lead-data-heading {
   font-size: 24px;
   margin-bottom: 10px;
+  margin-top: 5px;
 }
 
 .add-lead-btn-div {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 #add-lead-btn {
-  padding: 10px 15px;
+  padding: 8px 15px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -58,15 +57,28 @@
   cursor: pointer;
 }
 
+#add-lead-btn:hover{
+  background-color: #4caf4fd3;
+}
+
 .lead-table-root {
-  margin-top: 20px;
+  width: 100%;
+  border-radius: 10px;
+
 }
 
 .lead-table-div {
-  overflow-x: auto;
+  margin-top: -7%;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  border-radius: 10px;
+  background-color: #ccc;
+  
 }
 
 .lead-table {
+  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
 }
@@ -74,7 +86,17 @@
 .lead-table th, .lead-table td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #f5f4f4;
+}
+
+.lead-table th{
+  background-color: #aeaeae;
+  color: #191919; 
+  font-weight: bold; 
+  text-align: left;
+  position: sticky; 
+  top: 0; 
+  z-index: 1;
 }
 
 .action-btn {
@@ -151,24 +173,32 @@
 .history-container {
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: 55%;
   transform: translate(-50%, -50%);
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
+  border: 1px solid #c3c0c0;
+  border-radius: 8px;
+  padding: 0px 25px 25px 25px;
   width: 300px;
   height: 400px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   transition: transform 0.3s ease-in-out;
+  z-index: 100;
+  margin: 0px;
 }
 
 .history-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  position: sticky;
+  top:0;
+  z-index: 100;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  padding: 15px;
 }
 
 .history-title {
@@ -184,6 +214,7 @@
   cursor: pointer;
   padding: 5px 10px;
   font-size: 14px;
+  
 }
 
 .history-content {
@@ -206,29 +237,53 @@
 
 .delete-confirm-container {
   position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-confirm-content {
+  font-weight: 500;
+  position: fixed;
   top: 50%;
-  left: 50%;
+  left: 55%;
   transform: translate(-50%, -50%);
   background-color: white;
-  border: 1px solid #ccc;
+  /* border: 1px solid #b0adad; */
   border-radius: 5px;
   padding: 20px;
-  width: 400px;
-  height: 250px;
+  width: 340px;
+  margin: 5px;
+  height: 190px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  z-index: 100;
+  border-radius: 10px;
+  border: 1px solid black;
+ 
 }
 
-.delete-confirm-content {
-  text-align: center;
+#delete-note-text-id{
+  margin-left: 15px;
+  margin-top: 0px;
 }
 
 .delete-confirm-buttons {
   margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 8px;
 }
+
+
 
 .confirm-btn, .cancel-btn {
   padding: 10px 20px;
@@ -244,7 +299,15 @@
   color: white;
 }
 
+.confirm-btn:hover{
+  background-color: #3ee143f4;
+  color: white;
+}
 .cancel-btn {
   background-color: #f44336;
   color: white;
+}
+
+.cancel-btn:hover{
+  background-color: #fd2617;
 }

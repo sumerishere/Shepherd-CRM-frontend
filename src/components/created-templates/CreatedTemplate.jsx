@@ -135,7 +135,7 @@ const TemplateCreated = ({username}) => {
   return (
     <div className="createdTemplate-root-div">
       <ToastContainer />
-      <p id="createdTemplate-h1"> Add Lead</p>
+      <p id="createdTemplate-h1"> Add Client</p>
 
       {/* <div className="data-table">
           <p>

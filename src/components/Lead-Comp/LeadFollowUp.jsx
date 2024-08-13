@@ -169,6 +169,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './LeadFollowUp.css';
+import { FormOutlined, DeleteOutlined,HistoryOutlined } from "@ant-design/icons";
 
 const LeadFollowUp = () => {
   const [leads, setLeads] = useState([]);
@@ -278,9 +279,10 @@ const LeadFollowUp = () => {
                   <td>{lead.address}</td>
                   <td>{new Date(lead.createdAt).toLocaleString()}</td>
                   <td>
-                    <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}>Update</button>
-                    <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}>Delete</button>
-                    <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}>History</button>
+                    <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}><FormOutlined/></button>
+                    <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}>
+                    <DeleteOutlined/></button>
+                    <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}><HistoryOutlined /></button>
                   </td>
                 </tr>
               ))}
@@ -308,7 +310,7 @@ const LeadFollowUp = () => {
       {showHistory && (
         <div className="history-container">
           <div className="history-header">
-            <span className="history-title">History for {historyData.length > 0 ? historyData[0].leadName : ''}</span>
+            <span className="history-title">History of {historyData.length > 0 ? historyData[0].leadName : ''}</span>
             <button className="close-btn" onClick={closeHistory}>X</button>
           </div>
           <div className="history-content">
@@ -325,7 +327,7 @@ const LeadFollowUp = () => {
       {showDeleteConfirm && (
         <div className="delete-confirm-container">
           <div className="delete-confirm-content">
-            <p>Are you sure you want to delete this entry?</p>
+            <p id="delete-note-text-id">Are you sure you want to delete this lead entry? 🥺</p>
             <div className="delete-confirm-buttons">
               <button className="confirm-btn" onClick={confirmDelete}>Yes</button>
               <button className="cancel-btn" onClick={cancelDelete}>No</button>
