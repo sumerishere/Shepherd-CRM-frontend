@@ -137,14 +137,6 @@ const TemplateCreated = ({username}) => {
       <ToastContainer />
       <p id="createdTemplate-h1"> Add Client</p>
 
-      {/* <div className="data-table">
-          <p>
-           <Link to="/DataTableComp">
-              <button id="check-data-id">check table</button> 
-           </Link> 
-          </p>
-      </div> */}
-
       <div className="form-div-container">
         <form className="created-template-form" onSubmit={handleSubmit}>
           {fields.map((field, index) => (

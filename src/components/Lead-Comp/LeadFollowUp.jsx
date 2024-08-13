@@ -165,11 +165,10 @@
 // export default LeadFollowUp;
 
 
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './LeadFollowUp.css';
-import { FormOutlined, DeleteOutlined,HistoryOutlined } from "@ant-design/icons";
+import { FormOutlined, DeleteOutlined, HistoryOutlined } from "@ant-design/icons";
 
 const LeadFollowUp = () => {
   const [leads, setLeads] = useState([]);
@@ -179,6 +178,8 @@ const LeadFollowUp = () => {
   const [historyData, setHistoryData] = useState([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
+  const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
+  // const [newComment, setNewComment] = useState(''); // State for new comment
 
   useEffect(() => {
     axios.get('http://localhost:8080/get-all-lead')
@@ -217,7 +218,7 @@ const LeadFollowUp = () => {
   const handleUpdate = (uid) => {
     axios.get(`http://localhost:8080/get-lead-by-id/${uid}`)
       .then(response => {
-        setSelectedLead(response.data.leadFollowUp);
+        setSelectedLead(response.data);
         setShowUpdateForm(true);
       })
       .catch(error => {
@@ -228,24 +229,62 @@ const LeadFollowUp = () => {
   const handleHistory = (uid) => {
     axios.get(`http://localhost:8080/get-comments-by-id/${uid}`)
       .then(response => {
-        setHistoryData(response.data);
+        const data = response.data;
+        if (data.length === 0) {
+          setNoHistoryAvailable(true);
+        } else {
+          setHistoryData(data);
+          setNoHistoryAvailable(false);
+        }
         setShowHistory(true);
       })
       .catch(error => {
         console.error('There was an error fetching the history!', error);
+        setNoHistoryAvailable(true);
+        setShowHistory(true);
       });
   };
 
   const closeHistory = () => {
     setShowHistory(false);
+    setNoHistoryAvailable(false);
   };
 
   const handleUpdateSubmit = (event) => {
     event.preventDefault();
-    // Perform update logic here
-    // Make an API call to update the lead
-    // Then close the update form
+  
+    // Create a new comment object
+    const newComment = event.target.newComment.value;
+  
+    const updatedLeadData = {
+      leadFollowUp: {
+        name: event.target.name.value,
+        email: event.target.email.value,
+        mobileNumber: event.target.mobileNumber.value,
+        address: event.target.address.value,
+      },
+      comments: selectedLead.comments.concat(newComment), // Add new comment to existing comments
+    };
+  
+    axios.put(`http://localhost:8080/update-lead-by-id/${selectedLead.uid}`, updatedLeadData)
+      .then(response => {
+        console.log('Lead updated successfully:', response.data);
+        setShowUpdateForm(false);
+        setSelectedLead(null); // Reset selectedLead
+      })
+      .catch(error => {
+        console.error('There was an error updating the lead!', error);
+      });
+  };
+  
+
+  // const handleNewCommentChange = (event) => {
+  //   setNewComment(event.target.value);
+  // };
+
+  const cancelUpdateForm = () => {
     setShowUpdateForm(false);
+    // setNewComment(''); // Clear new comment input
   };
 
   return (
@@ -266,7 +305,7 @@ const LeadFollowUp = () => {
                 <th>Email</th>
                 <th>Mobile Number</th>
                 <th>Address</th>
-                <th>Created At</th>
+                <th>Connected At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -281,7 +320,7 @@ const LeadFollowUp = () => {
                   <td>
                     <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}><FormOutlined/></button>
                     <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}>
-                    <DeleteOutlined/></button>
+                      <DeleteOutlined/></button>
                     <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}><HistoryOutlined /></button>
                   </td>
                 </tr>
@@ -295,14 +334,28 @@ const LeadFollowUp = () => {
         <div className="update-form-container">
           <form className="update-form" onSubmit={handleUpdateSubmit}>
             <label>Name</label>
-            <input type="text" defaultValue={selectedLead.name} />
+            <input type="text" name="name" defaultValue={selectedLead.name} />
+            
             <label>Email</label>
-            <input type="email" defaultValue={selectedLead.email} />
+            <input type="email" name="email" defaultValue={selectedLead.email} />
+            
             <label>Mobile Number</label>
-            <input type="text" defaultValue={selectedLead.mobileNumber} />
+            <input type="text" name="mobileNumber" defaultValue={selectedLead.mobileNumber} />
+            
             <label>Address</label>
-            <input type="text" defaultValue={selectedLead.address} />
+            <input type="text" name="address" defaultValue={selectedLead.address} />
+            
+            <label>Comments</label>
+            <div className="existing-comments">
+              {selectedLead.comments.map((comment, index) => (
+                <p key={index}>{comment}</p> 
+              ))}
+            </div>
+            <textarea name="newComment" placeholder="Add a new comment"></textarea>
+            
             <button type="submit">Update</button>
+            <button type="button" onClick={cancelUpdateForm}>Cancel</button> 
+            {/* <button type="button" onClick={() => setShowUpdateForm(false)}>Cancel</button> */}
           </form>
         </div>
       )}
@@ -310,16 +363,20 @@ const LeadFollowUp = () => {
       {showHistory && (
         <div className="history-container">
           <div className="history-header">
-            <span className="history-title">History of {historyData.length > 0 ? historyData[0].leadName : ''}</span>
+            <span className="history-title">History of {historyData.length > 0 ? historyData[0].leadName : 'Lead'}</span>
             <button className="close-btn" onClick={closeHistory}>X</button>
           </div>
           <div className="history-content">
-            {historyData.map((item) => (
-              <div key={item.id} className="history-item">
-                <p>{item.comment}</p>
-                <span className="history-date">{new Date(item.createdAt).toLocaleString()}</span>
-              </div>
-            ))}
+            {noHistoryAvailable ? (
+              <p id="no-chats-p-id">No chat history available😴</p>  
+            ) : (
+              historyData.map((item) => (
+                <div key={item.id} className="history-item">
+                  <p>{item.comment}</p>
+                  <span className="history-date">{new Date(item.createdAt).toLocaleString()}</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
