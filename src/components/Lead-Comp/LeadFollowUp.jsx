@@ -1,6 +1,10 @@
-// import React, { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import './LeadFollowUp.css';
+// import { FormOutlined, DeleteOutlined, HistoryOutlined } from "@ant-design/icons";
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+
 
 // const LeadFollowUp = () => {
 //   const [leads, setLeads] = useState([]);
@@ -10,15 +14,15 @@
 //   const [historyData, setHistoryData] = useState([]);
 //   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 //   const [leadToDelete, setLeadToDelete] = useState(null);
+//   const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
 
 //   useEffect(() => {
-//     // Fetch all leads from the backend
 //     axios.get('http://localhost:8080/get-all-lead')
 //       .then(response => {
-//         setLeads(response.data);
+//         setLeads(response.data || []);
 //       })
 //       .catch(error => {
-//         console.error('There was an error fetching the leads!', error);
+//         console.error('Error fetching leads:', error);
 //       });
 //   }, []);
 
@@ -32,11 +36,13 @@
 //       axios.delete(`http://localhost:8080/delete-lead-by-id/${leadToDelete}`)
 //         .then(() => {
 //           setLeads(leads.filter(lead => lead.uid !== leadToDelete));
+//           toast.success('Lead deleted successfully!');
 //           setShowDeleteConfirm(false);
 //           setLeadToDelete(null);
 //         })
 //         .catch(error => {
-//           console.error('There was an error deleting the lead!', error);
+//           console.error('Error deleting lead:', error);
+//           toast.error('Failed to update lead. Please try again.');
 //         });
 //     }
 //   };
@@ -49,27 +55,78 @@
 //   const handleUpdate = (uid) => {
 //     axios.get(`http://localhost:8080/get-lead-by-id/${uid}`)
 //       .then(response => {
-//         setSelectedLead(response.data.leadFollowUp);
+//         setSelectedLead(response.data);
 //         setShowUpdateForm(true);
 //       })
 //       .catch(error => {
-//         console.error('There was an error fetching the lead data!', error);
+//         console.error('Error fetching lead data:', error);
 //       });
 //   };
 
 //   const handleHistory = (uid) => {
 //     axios.get(`http://localhost:8080/get-comments-by-id/${uid}`)
 //       .then(response => {
-//         setHistoryData(response.data);
+//         const data = response.data;
+//         if (Array.isArray(data) && data.length === 0) {
+//           setNoHistoryAvailable(true);
+//         } else {
+//           setHistoryData(Array.isArray(data) ? data : []);
+//           setNoHistoryAvailable(false);
+//         }
 //         setShowHistory(true);
 //       })
 //       .catch(error => {
-//         console.error('There was an error fetching the history!', error);
+//         console.error('Error fetching history:', error);
+//         setNoHistoryAvailable(true);
+//         setShowHistory(true);
 //       });
 //   };
 
 //   const closeHistory = () => {
 //     setShowHistory(false);
+//     setNoHistoryAvailable(false);
+//   };
+
+//   const handleUpdateSubmit = (event) => {
+//     event.preventDefault();
+//     const newComment = event.target.newComment.value;
+  
+//     if (!selectedLead) return;
+  
+//     // Ensure that existing comments are strings
+//     // const existingComments = (selectedLead.comments || []).map(comment =>
+//     //   typeof comment === 'string' ? comment : comment.comment
+//     // );
+  
+//     // Prepare the updated lead data
+//     const updatedLeadData = {
+//       leadFollowUp: {
+//         name: event.target.name.value,
+//         email: event.target.email.value,
+//         mobileNumber: event.target.mobileNumber.value,
+//         address: event.target.address.value,
+//       },
+//       comments: [newComment] // Ensure comments are strings
+//     };
+  
+//     // Send the updated data to the backend
+//     axios.put(`http://localhost:8080/update-lead-by-id/${selectedLead.uid}`, updatedLeadData)
+//       .then(response => {
+//         console.log('Lead updated successfully:', response.data);
+//         toast.success('Lead updated successfully!');
+//         setShowUpdateForm(false);
+//         setSelectedLead(null);
+//       })
+//       .catch(error => {
+//         console.error('Error updating lead:', error);
+//         toast.error('Failed to update lead. Please try again.');
+//       });
+//   };
+  
+
+
+//   const cancelUpdateForm = () => {
+//     setShowUpdateForm(false);
 //   };
 
 //   return (
@@ -90,7 +147,7 @@
 //                 <th>Email</th>
 //                 <th>Mobile Number</th>
 //                 <th>Address</th>
-//                 <th>Created At</th>
+//                 <th>Connected At</th>
 //                 <th>Action</th>
 //               </tr>
 //             </thead>
@@ -103,9 +160,9 @@
 //                   <td>{lead.address}</td>
 //                   <td>{new Date(lead.createdAt).toLocaleString()}</td>
 //                   <td>
-//                     <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}>Update</button>
-//                     <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}>Delete</button>
-//                     <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}>History</button>
+//                     <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}><FormOutlined /></button>
+//                     <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}><DeleteOutlined /></button>
+//                     <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}><HistoryOutlined /></button>
 //                   </td>
 //                 </tr>
 //               ))}
@@ -114,35 +171,51 @@
 //         </div>
 //       </div>
 
+
+
 //       {showUpdateForm && selectedLead && (
-//         <div className="update-form-container">
-//           <form className="update-form">
-//             <label>Name</label>
-//             <input type="text" defaultValue={selectedLead.name} />
-//             <label>Email</label>
-//             <input type="email" defaultValue={selectedLead.email} />
-//             <label>Mobile Number</label>
-//             <input type="text" defaultValue={selectedLead.mobileNumber} />
-//             <label>Address</label>
-//             <input type="text" defaultValue={selectedLead.address} />
-//             <button type="submit">Update</button>
+//         <div className="updateFormContainer">
+//           <form className="updateForm" onSubmit={handleUpdateSubmit}>
+//             <label className="updateFormLabel">Name</label>
+//             <input className="updateFormInput" type="text" name="name" defaultValue={selectedLead.name || ''} />
+
+//             <label className="updateFormLabel">Email</label>
+//             <input className="updateFormInput" type="email" name="email" defaultValue={selectedLead.email || ''} />
+
+//             <label className="updateFormLabel">Mobile Number</label>
+//             <input className="updateFormInput" type="text" name="mobileNumber" defaultValue={selectedLead.mobileNumber || ''} />
+
+//             <label className="updateFormLabel">Address</label>
+//             <input className="updateFormInput" type="text" name="address" defaultValue={selectedLead.address || ''} />
+
+//             <label className="updateFormLabel">Comments</label>
+//             <textarea className="updateFormTextarea" name="newComment" placeholder="Add a new comment"></textarea>
+
+//             <button className="updateFormButtonSubmit" type="submit">Update</button>
+//             <button className="updateFormButtonCancel" type="button" onClick={cancelUpdateForm}>Cancel</button>
 //           </form>
 //         </div>
 //       )}
 
+
+
 //       {showHistory && (
 //         <div className="history-container">
 //           <div className="history-header">
-//             <span className="history-title">History for {historyData.length > 0 ? historyData[0].leadName : ''}</span>
+//             <span className="history-title">History of {historyData.length > 0 ? historyData[0]?.leadName : 'Lead'}</span>
 //             <button className="close-btn" onClick={closeHistory}>X</button>
 //           </div>
 //           <div className="history-content">
-//             {historyData.map((item) => (
-//               <div key={item.id} className="history-item">
-//                 <p>{item.comment}</p>
-//                 <span className="history-date">{new Date(item.createdAt).toLocaleString()}</span>
-//               </div>
-//             ))}
+//             {noHistoryAvailable ? (
+//               <p id="no-chats-p-id">No chat history available😴</p>
+//             ) : (
+//               historyData.map((item) => (
+//                 <div key={item.id} className="history-item">
+//                   <p>{item.comment}</p>
+//                   <span className="history-date">{new Date(item.createdAt).toLocaleString()}</span>
+//                 </div>
+//               ))
+//             )}
 //           </div>
 //         </div>
 //       )}
@@ -150,7 +223,7 @@
 //       {showDeleteConfirm && (
 //         <div className="delete-confirm-container">
 //           <div className="delete-confirm-content">
-//             <p>Are you sure you want to delete this entry?</p>
+//             <p id="delete-note-text-id">Are you sure you want to delete this lead entry? 🥺</p>
 //             <div className="delete-confirm-buttons">
 //               <button className="confirm-btn" onClick={confirmDelete}>Yes</button>
 //               <button className="cancel-btn" onClick={cancelDelete}>No</button>
@@ -158,6 +231,7 @@
 //           </div>
 //         </div>
 //       )}
+//       <ToastContainer position="bottom-right" />
 //     </div>
 //   );
 // };
@@ -165,10 +239,13 @@
 // export default LeadFollowUp;
 
 
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './LeadFollowUp.css';
 import { FormOutlined, DeleteOutlined, HistoryOutlined } from "@ant-design/icons";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LeadFollowUp = () => {
   const [leads, setLeads] = useState([]);
@@ -183,7 +260,7 @@ const LeadFollowUp = () => {
   useEffect(() => {
     axios.get('http://localhost:8080/get-all-lead')
       .then(response => {
-        setLeads(response.data);
+        setLeads(response.data || []);
       })
       .catch(error => {
         console.error('Error fetching leads:', error);
@@ -200,11 +277,13 @@ const LeadFollowUp = () => {
       axios.delete(`http://localhost:8080/delete-lead-by-id/${leadToDelete}`)
         .then(() => {
           setLeads(leads.filter(lead => lead.uid !== leadToDelete));
+          // toast.success('Lead deleted successfully!');
           setShowDeleteConfirm(false);
           setLeadToDelete(null);
         })
         .catch(error => {
           console.error('Error deleting lead:', error);
+          // toast.error('Failed to delete lead. Please try again.');
         });
     }
   };
@@ -217,6 +296,7 @@ const LeadFollowUp = () => {
   const handleUpdate = (uid) => {
     axios.get(`http://localhost:8080/get-lead-by-id/${uid}`)
       .then(response => {
+        console.log('Lead data fetched successfully:', response.data);
         setSelectedLead(response.data);
         setShowUpdateForm(true);
       })
@@ -225,7 +305,7 @@ const LeadFollowUp = () => {
       });
   };
 
-  const handleHistory = (uid) => {
+    const handleHistory = (uid) => {
     axios.get(`http://localhost:8080/get-comments-by-id/${uid}`)
       .then(response => {
         const data = response.data;
@@ -249,18 +329,13 @@ const LeadFollowUp = () => {
     setNoHistoryAvailable(false);
   };
 
+
   const handleUpdateSubmit = (event) => {
     event.preventDefault();
     const newComment = event.target.newComment.value;
   
     if (!selectedLead) return;
   
-    // Ensure that existing comments are strings
-    const existingComments = (selectedLead.comments || []).map(comment =>
-      typeof comment === 'string' ? comment : comment.comment
-    );
-  
-    // Prepare the updated lead data
     const updatedLeadData = {
       leadFollowUp: {
         name: event.target.name.value,
@@ -268,22 +343,24 @@ const LeadFollowUp = () => {
         mobileNumber: event.target.mobileNumber.value,
         address: event.target.address.value,
       },
-      comments: [...existingComments, newComment] // Ensure comments are strings
+      comments: [newComment]
     };
   
-    // Send the updated data to the backend
     axios.put(`http://localhost:8080/update-lead-by-id/${selectedLead.uid}`, updatedLeadData)
       .then(response => {
         console.log('Lead updated successfully:', response.data);
+        // alert("Lead updated successfully!");
+        toast.success('Lead updated successfully!');
+        console.log('Toast notification should appear here');
         setShowUpdateForm(false);
         setSelectedLead(null);
       })
       .catch(error => {
         console.error('Error updating lead:', error);
+        toast.error('Failed to update lead. Please try again.');
+        // alert("Failed to update lead. Please try again.");
       });
   };
-  
-
 
   const cancelUpdateForm = () => {
     setShowUpdateForm(false);
@@ -291,6 +368,7 @@ const LeadFollowUp = () => {
 
   return (
     <div className="lead-data-root">
+      <ToastContainer position="bottom-right" />
       <p id="lead-data-heading">Follow Up</p>
       <hr />
 
@@ -332,26 +410,25 @@ const LeadFollowUp = () => {
       </div>
 
       {showUpdateForm && selectedLead && (
-        <div className="update-form-container">
-          <form className="update-form" onSubmit={handleUpdateSubmit}>
-            <label>Name</label>
-            <input type="text" name="name" defaultValue={selectedLead.name || ''} />
+        <div className="updateFormContainer">
+          <form className="updateForm" onSubmit={handleUpdateSubmit}>
+            <label className="updateFormLabel">Name</label>
+            <input className="updateFormInput" type="text" name="name" defaultValue={selectedLead.name || ''} />
 
-            <label>Email</label>
-            <input type="email" name="email" defaultValue={selectedLead.email || ''} />
+            <label className="updateFormLabel">Email</label>
+            <input className="updateFormInput" type="email" name="email" defaultValue={selectedLead.email || ''} />
 
-            <label>Mobile Number</label>
-            <input type="text" name="mobileNumber" defaultValue={selectedLead.mobileNumber || ''} />
+            <label className="updateFormLabel">Mobile Number</label>
+            <input className="updateFormInput" type="tel" name="mobileNumber" defaultValue={selectedLead.mobileNumber || ''} />
 
-            <label>Address</label>
-            <input type="text" name="address" defaultValue={selectedLead.address || ''} />
+            <label className="updateFormLabel">Address</label>
+            <input className="updateFormInput" type="text" name="address" defaultValue={selectedLead.address || ''} />
 
-            <label>Comments</label>
-            {/* Exclude existing comments from the form */}
-            <textarea name="newComment" placeholder="Add a new comment"></textarea>
+            <label className="updateFormLabel">New Comment</label>
+            <textarea className="updateFormTextarea" placeholder='add new comment under(1-151) letters' name="newComment" />
 
-            <button type="submit">Update</button>
-            <button type="button" onClick={cancelUpdateForm}>Cancel</button>
+            <button className="updateFormButtonSubmit" type="submit">Update</button>
+            <button className="updateFormButtonCancel" type="button" onClick={cancelUpdateForm}>Cancel</button>
           </form>
         </div>
       )}

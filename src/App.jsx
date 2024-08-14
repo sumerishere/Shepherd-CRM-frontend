@@ -175,6 +175,7 @@ import DynamicForm from "./components/template-fom/TemplateComp";
 import TemplateCreated from "./components/created-templates/CreatedTemplate";
 import LoginComponent from "./components/Login-form/LoginComp";
 import SignUpComp from "./components/SignUp-form/SignUpComp";
+import ErrorBoundary from "./ErrorBoundary";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -256,7 +257,7 @@ function App() {
                 <>
                   <Calender />
                   <LeadActivity />
-                  <LeadFollowUp/>
+                  <ErrorBoundary><LeadFollowUp/></ErrorBoundary>
                   <ClientData templateId={templateId} />
                 </>
               }
