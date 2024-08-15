@@ -241,11 +241,12 @@
 
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import './LeadFollowUp.css';
 import { FormOutlined, DeleteOutlined, HistoryOutlined } from "@ant-design/icons";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 const LeadFollowUp = () => {
   const [leads, setLeads] = useState([]);
@@ -258,79 +259,82 @@ const LeadFollowUp = () => {
   const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/get-all-lead')
-      .then(response => {
-        setLeads(response.data || []);
-      })
-      .catch(error => {
+    const fetchLeads = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/get-all-lead');
+        const data = await response.json();
+        setLeads(data || []);
+      } catch (error) {
         console.error('Error fetching leads:', error);
-      });
+      }
+    };
+    fetchLeads();
   }, []);
-
+  
   const handleDelete = (uid) => {
     setLeadToDelete(uid);
     setShowDeleteConfirm(true);
   };
-
-  const confirmDelete = () => {
+  
+  const confirmDelete = async () => {
     if (leadToDelete) {
-      axios.delete(`http://localhost:8080/delete-lead-by-id/${leadToDelete}`)
-        .then(() => {
-          setLeads(leads.filter(lead => lead.uid !== leadToDelete));
-          // toast.success('Lead deleted successfully!');
-          setShowDeleteConfirm(false);
-          setLeadToDelete(null);
-        })
-        .catch(error => {
-          console.error('Error deleting lead:', error);
-          // toast.error('Failed to delete lead. Please try again.');
+      try {
+        await fetch(`http://localhost:8080/delete-lead-by-id/${leadToDelete}`, {
+          method: 'DELETE',
         });
+        setLeads(leads.filter(lead => lead.uid !== leadToDelete));
+        toast.success('Lead deleted successfully!');
+        setShowDeleteConfirm(false);
+        setLeadToDelete(null);
+        
+      } catch (error) {
+        console.error('Error deleting lead:', error);
+        toast.error('Failed to delete lead. Please try again.');
+      }
     }
   };
-
+  
   const cancelDelete = () => {
     setShowDeleteConfirm(false);
     setLeadToDelete(null);
   };
-
-  const handleUpdate = (uid) => {
-    axios.get(`http://localhost:8080/get-lead-by-id/${uid}`)
-      .then(response => {
-        console.log('Lead data fetched successfully:', response.data);
-        setSelectedLead(response.data);
-        setShowUpdateForm(true);
-      })
-      .catch(error => {
-        console.error('Error fetching lead data:', error);
-      });
+  
+  const handleUpdate = async (uid) => {
+    try {
+      const response = await fetch(`http://localhost:8080/get-lead-by-id/${uid}`);
+      const data = await response.json();
+      console.log('Lead data fetched successfully:', data);
+      setSelectedLead(data);
+      setShowUpdateForm(true);
+    } catch (error) {
+      console.error('Error fetching lead data:', error);
+    }
   };
-
-    const handleHistory = (uid) => {
-    axios.get(`http://localhost:8080/get-comments-by-id/${uid}`)
-      .then(response => {
-        const data = response.data;
-        if (Array.isArray(data) && data.length === 0) {
-          setNoHistoryAvailable(true);
-        } else {
-          setHistoryData(Array.isArray(data) ? data : []);
-          setNoHistoryAvailable(false);
-        }
-        setShowHistory(true);
-      })
-      .catch(error => {
-        console.error('Error fetching history:', error);
+  
+  const handleHistory = async (uid) => {
+    try {
+      const response = await fetch(`http://localhost:8080/get-comments-by-id/${uid}`);
+      const data = await response.json();
+      if (Array.isArray(data) && data.length === 0) {
         setNoHistoryAvailable(true);
-        setShowHistory(true);
-      });
+      } else {
+        setHistoryData(Array.isArray(data) ? data : []);
+        setNoHistoryAvailable(false);
+      }
+      setShowHistory(true);
+    } catch (error) {
+      console.error('Error fetching history:', error);
+      setNoHistoryAvailable(true);
+      setShowHistory(true);
+    }
   };
-
+  
   const closeHistory = () => {
     setShowHistory(false);
     setNoHistoryAvailable(false);
   };
-
-
-  const handleUpdateSubmit = (event) => {
+  
+  const handleUpdateSubmit = async (event) => {
     event.preventDefault();
     const newComment = event.target.newComment.value;
   
@@ -343,28 +347,50 @@ const LeadFollowUp = () => {
         mobileNumber: event.target.mobileNumber.value,
         address: event.target.address.value,
       },
-      comments: [newComment]
+      comments: [newComment],
     };
   
-    axios.put(`http://localhost:8080/update-lead-by-id/${selectedLead.uid}`, updatedLeadData)
-      .then(response => {
-        console.log('Lead updated successfully:', response.data);
-        // alert("Lead updated successfully!");
-        toast.success('Lead updated successfully!');
-        console.log('Toast notification should appear here');
+    try {
+      const response = await fetch(`http://localhost:8080/update-lead-by-id/${selectedLead.uid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedLeadData),
+      });
+  
+      // Check if the response is in JSON format
+      const contentType = response.headers.get("content-type");
+      
+      if (response.ok) {
+        let data;
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+          console.log('Lead updated successfully:', data);
+          
+        } 
+        else {
+          const textData = await response.text();
+          console.log('Lead updated successfully:', textData);
+        }
+        toast.success('Lead updated successfully!!!');
         setShowUpdateForm(false);
         setSelectedLead(null);
-      })
-      .catch(error => {
-        console.error('Error updating lead:', error);
-        toast.error('Failed to update lead. Please try again.');
-        // alert("Failed to update lead. Please try again.");
-      });
+        
+      } else {
+          throw new Error('Failed to update lead');
+      }
+    } catch (error) {
+      console.error('Error updating lead:', error);
+      toast.error('Failed to update lead. Please try again.');
+    }
   };
-
+  
+  
   const cancelUpdateForm = () => {
     setShowUpdateForm(false);
   };
+  
 
   return (
     <div className="lead-data-root">
@@ -373,7 +399,9 @@ const LeadFollowUp = () => {
       <hr />
 
       <div className="add-lead-btn-div">
-        <button id="add-lead-btn">Add Lead</button>
+        <Link to="/LeadRegistrationForm" style={{textDecoration:"none", color:"white"}}>
+          <button id="add-lead-btn">Add Lead</button>
+        </Link>
       </div>
 
       <div className="lead-table-root">

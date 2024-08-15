@@ -176,6 +176,8 @@ import TemplateCreated from "./components/created-templates/CreatedTemplate";
 import LoginComponent from "./components/Login-form/LoginComp";
 import SignUpComp from "./components/SignUp-form/SignUpComp";
 import ErrorBoundary from "./ErrorBoundary";
+import LeadRegistrationForm from "./components/Lead-Comp/LeadRegistrationForm";
+
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -270,7 +272,9 @@ function App() {
               path="/TemplateCreated"
               element={<TemplateCreated username={username} />}
             />
+            <Route path="/LeadRegistrationForm" element={<LeadRegistrationForm/>}/>
           </Routes>
+          
         </>
       ) : (
         <Routes>

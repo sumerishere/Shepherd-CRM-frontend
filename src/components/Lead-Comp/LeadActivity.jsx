@@ -2,7 +2,6 @@ import "./LeadActivity.css";
 import { BsPersonStanding } from "react-icons/bs";
 
 import { GrGroup, GrUserExpert,GrRun } from "react-icons/gr";
-// import PieChart from "../Chart-Comp/PieChart"
 
 const LeadActivity = () => {
 
@@ -35,7 +34,6 @@ const LeadActivity = () => {
         <p id="open-lead-p">Open-lead <span id="open-lead-span">10</span></p>
       </div>
 
-      {/* <PieChart/> */}
     </div>
   );
 };
