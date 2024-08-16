@@ -124,7 +124,7 @@ const LeadRegistrationForm = () => {
         });
 
         if (response.ok) {
-          toast.success("Form submitted successfully!!");
+          toast.success("Lead Added successfully!!");
           setFormData({
             name: "",
             mobile: "",

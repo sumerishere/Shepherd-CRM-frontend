@@ -249,6 +249,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 
 const LeadFollowUp = () => {
+  const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState([]);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
@@ -257,6 +258,7 @@ const LeadFollowUp = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
   const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
+  
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -266,6 +268,9 @@ const LeadFollowUp = () => {
         setLeads(data || []);
       } catch (error) {
         console.error('Error fetching leads:', error);
+      }
+      finally{
+        setLoading(false);
       }
     };
     fetchLeads();
@@ -277,17 +282,21 @@ const LeadFollowUp = () => {
   };
   
   const confirmDelete = async () => {
+
     if (leadToDelete) {
       try {
+
         await fetch(`http://localhost:8080/delete-lead-by-id/${leadToDelete}`, {
           method: 'DELETE',
         });
+
         setLeads(leads.filter(lead => lead.uid !== leadToDelete));
         toast.success('Lead deleted successfully!');
         setShowDeleteConfirm(false);
         setLeadToDelete(null);
         
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error deleting lead:', error);
         toast.error('Failed to delete lead. Please try again.');
       }
@@ -306,7 +315,8 @@ const LeadFollowUp = () => {
       console.log('Lead data fetched successfully:', data);
       setSelectedLead(data);
       setShowUpdateForm(true);
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error fetching lead data:', error);
     }
   };
@@ -390,11 +400,25 @@ const LeadFollowUp = () => {
   const cancelUpdateForm = () => {
     setShowUpdateForm(false);
   };
+
+  if (leads.length === 0) {
+    return (
+      <div className="follow-up-div">
+        <hr />
+        <p id="client-data-empty-text">No entries are available.</p>
+        <hr />
+      </div>
+    );
+  } else {
+    if (loading) {
+      return <div id="loading-id">Loading...</div>;
+    }
+  }
   
 
   return (
     <div className="lead-data-root">
-      <ToastContainer position="bottom-right" />
+      <ToastContainer/>
       <p id="lead-data-heading">Follow Up</p>
       <hr />
 
@@ -413,6 +437,7 @@ const LeadFollowUp = () => {
                 <th>Email</th>
                 <th>Mobile Number</th>
                 <th>Address</th>
+                <th>courseType</th>
                 <th>Connected At</th>
                 <th>Action</th>
               </tr>
@@ -420,10 +445,11 @@ const LeadFollowUp = () => {
             <tbody>
               {leads.map((lead) => (
                 <tr key={lead.uid}>
-                  <td>{lead.name}</td>
-                  <td>{lead.email}</td>
-                  <td>{lead.mobileNumber}</td>
-                  <td>{lead.address}</td>
+                  <td id="table-td">{lead.name}</td>
+                  <td id="table-td">{lead.email}</td>
+                  <td id="table-td">{lead.mobileNumber}</td>
+                  <td id="table-td">{lead.address}</td>
+                  <td id="table-td" >{lead.courseType}</td>
                   <td>{new Date(lead.createdAt).toLocaleString()}</td>
                   <td>
                     <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}><FormOutlined /></button>

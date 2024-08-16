@@ -113,7 +113,7 @@ const TemplateCreated = ({username}) => {
   };
 
   if (loading) {
-    return <div id="loading-id">Loading...</div>;
+    return <div id="template-loading-id">Loading...</div>;
   }
 
   if (templateData.length === 0) {
@@ -122,7 +122,7 @@ const TemplateCreated = ({username}) => {
 
 
         <img className="bg-template-img" src="/images/data-8873303_1920.png" alt="" />
-        <p id="empty-text">Template not created yet. 🥲</p>
+        <p id="empty-text">Template! not found. 🥲</p>
         <p id="alert-emoji">⚠️</p>
         <p id="empty-template-note">{`Note :" First you will have to create your own template form then you will able to see your template form here."`}</p>
       </div>

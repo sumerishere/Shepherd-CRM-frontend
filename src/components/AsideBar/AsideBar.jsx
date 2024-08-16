@@ -167,7 +167,7 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             onClick={toggleAsideBar}
           >
             <li>
-              <UserAddOutlined /> Add Lead
+              <UserAddOutlined /> Add Client
             </li>
           </Link>
           <Link

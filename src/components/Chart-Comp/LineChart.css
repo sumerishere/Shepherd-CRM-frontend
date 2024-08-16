@@ -1,8 +1,9 @@
 .line-chart-root{
-  /* height: 285px; */
-  /* width: 655px; */
+/* border: 1px solid rgb(188, 186, 186); */
+border-radius: 9px;
 }
 
 .line-chart-child{
-  margin-left: 5px;
+  border-radius: 9px;
+  height: 285px
 }
