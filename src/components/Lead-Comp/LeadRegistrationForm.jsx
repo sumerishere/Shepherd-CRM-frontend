@@ -223,10 +223,10 @@ const LeadRegistrationForm = () => {
               required
             >
               <option value="">Select a courseType</option>
-              <option value="Java_fullStack_development">Java fullStack development</option>
-              <option value="Automation_Testing">Automation Testing</option>
+              <option value="Java fullStack development">Java fullStack development</option>
+              <option value="Automation Testing">Automation Testing</option>
               <option value="UI/UX">UI/UX</option>
-              <option value="MERN_Stack">MERN Stack</option>
+              <option value="MERN Stack">MERN Stack</option>
             </select>
           </div>
 

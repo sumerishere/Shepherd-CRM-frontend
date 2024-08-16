@@ -120,7 +120,7 @@ import {
   FundProjectionScreenOutlined,
   FileDoneOutlined,
   UserAddOutlined,
-  UsergroupAddOutlined,
+  // UsergroupAddOutlined,
   SolutionOutlined,
   SettingFilled,
   FormOutlined,
@@ -156,7 +156,7 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             style={{ textDecoration: "none", color: "white" }}
             onClick={toggleAsideBar}
           >
-            <li>
+            <li id="dashboard-li">
               <FundProjectionScreenOutlined /> Dashboard
             </li>
           </Link>
@@ -170,17 +170,22 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
               <UserAddOutlined /> Add Client
             </li>
           </Link>
-          <Link
+          {/* <Link
             to={"/LeadList"}
             style={{ textDecoration: "none", color: "white" }}
           >
             <li>
               <UsergroupAddOutlined /> Lead List
             </li>
+          </Link> */}
+
+          <Link to = "/InvoiceGen" style={{textDecoration:"none", color:"white"}}>
+            <li onClick={toggleAsideBar}>
+              <FileDoneOutlined /> Invoice
+            </li>
+
           </Link>
-          <li onClick={toggleAsideBar}>
-            <FileDoneOutlined /> Invoice
-          </li>
+
           <li onClick={toggleAsideBar}>
             <SolutionOutlined /> Subscribers
           </li>

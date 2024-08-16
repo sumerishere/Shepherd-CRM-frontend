@@ -70,8 +70,13 @@
 }
 
 li{
+  margin-top: 2px;
   cursor: pointer;
   color: white;
+}
+
+#dashboard-li{
+  margin-top: 35px;
 }
 
 #develop-text-line1{

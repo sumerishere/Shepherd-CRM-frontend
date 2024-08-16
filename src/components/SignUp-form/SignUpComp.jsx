@@ -2,8 +2,13 @@ import  { useState } from "react";
 import "../SignUp-form/SignUpComp.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate} from "react-router-dom";
+import PropTypes from "prop-types";
 
-const SignUpComp = () => {
+const SignUpComp = ({setIsAuthenticated}) => {
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     fullName: "",
     address: "",
@@ -93,12 +98,21 @@ const SignUpComp = () => {
       console.error("Submission error:", error);
     }
   };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false); // Clear the authentication state
+    localStorage.removeItem("isAuthenticated"); // Remove authentication state from localStorage
+    navigate("/login"); // Redirect to the login page
+  };
   
 
   return (
     <div className="signup-root-div">
       <div className="signup-form-div">
         <h1 id="signup-form-h1">SignUp Form</h1>
+        <div className="signup-img-div">
+          <img className="signup-img" src="/images/signup-png.png" alt="" />
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group-singup">
             <label>Full Name:</label>
@@ -179,6 +193,8 @@ const SignUpComp = () => {
             {/* <p id="pass-show-p">Show Password</p> */}
           </div>
           <button id="SignUp-submit-btn" type="submit">SignUp</button>
+          <span id="already-acc-id">Aleady! account</span>
+          <p  onClick={handleLogout} id="go-login-id">Go-Login</p>
         </form>
       </div>
       <ToastContainer />
@@ -187,3 +203,7 @@ const SignUpComp = () => {
 };
 
 export default SignUpComp;
+
+ SignUpComp.propTypes={
+  setIsAuthenticated: PropTypes.func.isRequired,
+ };

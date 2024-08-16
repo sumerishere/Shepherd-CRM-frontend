@@ -177,6 +177,7 @@ import LoginComponent from "./components/Login-form/LoginComp";
 import SignUpComp from "./components/SignUp-form/SignUpComp";
 import ErrorBoundary from "./ErrorBoundary";
 import LeadRegistrationForm from "./components/Lead-Comp/LeadRegistrationForm";
+import InvoiceGen from "./components/Invoice-generator/InvoiceGen";
 
 
 function App() {
@@ -273,6 +274,7 @@ function App() {
               element={<TemplateCreated username={username} />}
             />
             <Route path="/LeadRegistrationForm" element={<LeadRegistrationForm/>}/>
+            <Route path = "/InvoiceGen" element={<InvoiceGen/>}/>
           </Routes>
           
         </>
@@ -281,6 +283,7 @@ function App() {
           <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/SignUpComp" element={<SignUpComp />} />
+          {/* <Route path = "/" element={<LoginComponent/>}/> */}
         </Routes>
       )}
     </>

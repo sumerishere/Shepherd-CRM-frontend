@@ -1,0 +1,99 @@
+.invoice-gen-root {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 900px;
+  margin-top: 50px;
+  margin-left: 30%;
+}
+
+.invoice-gen-title {
+  text-align: center;
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.invoice-gen-section {
+  display: grid;
+  gap: 20px;
+}
+
+.invoice-gen-details,
+.invoice-gen-party-details,
+.invoice-gen-items-section,
+.invoice-gen-payments-section {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.invoice-gen-header {
+  color: #444;
+}
+
+.invoice-gen-input-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.invoice-gen-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 23%; /* Adjust to fit multiple input fields in a row */
+}
+
+.invoice-gen-input-container label {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.invoice-gen-input-container input,
+.invoice-gen-input-container select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.invoice-gen-add-item-button,
+.invoice-gen-remove-item-button,
+.invoice-gen-add-payment-button,
+.invoice-gen-remove-payment-button,
+.invoice-gen-generate-pdf-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.invoice-gen-remove-item-button,
+.invoice-gen-remove-payment-button {
+  background-color: #f44336;
+}
+
+.invoice-gen-add-item-button:hover,
+.invoice-gen-remove-item-button:hover,
+.invoice-gen-add-payment-button:hover,
+.invoice-gen-remove-payment-button:hover,
+.invoice-gen-generate-pdf-button:hover {
+  background-color: #45a049;
+}
+
+.invoice-gen-remove-item-button:hover {
+  background-color: #e53935;
+}
+
+.invoice-gen-remove-payment-button:hover {
+  background-color: #e53935;
+}
+
+.invoice-gen-generate-pdf-button {
+  margin-top: 20px;
+  width: 100%;
+  font-size: 1.2rem;
+}
+
