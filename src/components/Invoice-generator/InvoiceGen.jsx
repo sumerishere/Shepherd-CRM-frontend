@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import "./InvoiceGen.css";
 import "jspdf-autotable";
@@ -37,10 +37,7 @@ const InvoiceGen = () => {
   };
 
   const addItem = () => {
-    setItems([
-      ...items,
-      { name: "", quantity: "", rate: "", amount: "" },
-    ]);
+    setItems([...items, { name: "", quantity: "", rate: "", amount: "" }]);
   };
 
   const addPayment = () => {
@@ -57,15 +54,14 @@ const InvoiceGen = () => {
     setPayments(newPayments);
   };
 
-
-  const [imgData, setImgData] = useState('');
+  const [imgData, setImgData] = useState("");
 
   // Convert local image to base64
   useEffect(() => {
     const loadImage = async () => {
       try {
-        const response = await fetch('/Admin-img/logo.png');
- // Update this path
+        const response = await fetch("/Admin-img/logo.png");
+        // Update this path
         const blob = await response.blob();
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -73,84 +69,182 @@ const InvoiceGen = () => {
         };
         reader.readAsDataURL(blob);
       } catch (error) {
-        console.error('Error loading image:', error);
+        console.error("Error loading image:", error);
       }
     };
 
     loadImage();
   }, []);
-  
-  const generatePDF = () => {
 
+  const generatePDF = () => {
     const doc = new jsPDF();
 
+    // Add PNG Image from base64
     if (imgData) {
-      // Add PNG Image from base64
-      doc.addImage(imgData, 'PNG', 160, 3, 40, 40); // Adjust these values as needed
+        doc.addImage(imgData, "PNG", 150, 10, 40, 40); // Adjusted image position
     } else {
-      console.error('Image data is not available.');
+        console.error("Image data is not available.");
     }
 
+    // Title with "PAID" Text
     doc.setFontSize(16);
-    doc.text("Invoice", 105, 20, { align: "center" });
-  
+    const title = "Invoice";
+    const paidText = "PAID";
+
+    // Title positioning
+    doc.setTextColor(0, 0, 0); // Black text
+    doc.text(title, 20, 20);
+
+    // Add "PAID" text with green background
+    const paidTextWidth = doc.getTextWidth(paidText);
+    const paidTextX = 20 + doc.getTextWidth(title) + 5; // Position "PAID" next to "Invoice"
+    const titleY = 20;
+
+    doc.setFillColor(0, 128, 0); // Green background for "PAID"
+    doc.rect(paidTextX - 3, titleY - 4, paidTextWidth + 6, 10, 'F'); // Background rectangle
+    doc.setTextColor(255, 255, 255); // White text color
+    doc.text(paidText, paidTextX, titleY + 3);
+
+    // Font sizes
+    const headingFontSize = 12;
+    const valueFontSize = 10;
+
+    // Helper function to wrap text within a given width
+    const wrapText = (text, x, y, maxWidth) => {
+        const lines = doc.splitTextToSize(text, maxWidth);
+        lines.forEach((line, index) => {
+            doc.text(line, x, y + (index * 5)); // Adjust line spacing if needed
+        });
+        return lines.length * 5; // Return the total height used by the text
+    };
+
     // Billed By Section
-    const billedByX = 20;
-    const billedByY = 40;
-    doc.setFillColor(240, 240, 255); // Light grey-purple
-    doc.rect(billedByX, billedByY, 85, 40, "F"); // Draw filled rectangle
+    const billedByX = 15;
+    const billedByY = 50; // Adjusted to position below the title
+    const width = 85;
+    const radius = 5; // Radius for rounded corners
+
+    // Calculate text height
+    const billedByNameHeight = wrapText(invoiceDetails.billedByName, billedByX + 5, billedByY + 20, width - 10);
+    const billedByAddressHeight = wrapText(invoiceDetails.billedByAddress, billedByX + 5, billedByY + 20 + billedByNameHeight, width - 10);
+
+    // Adjust height of the rectangle dynamically
+    const billedByHeight = billedByY + 20 + billedByNameHeight + billedByAddressHeight;
+    drawRoundedRect(doc, billedByX, billedByY, width, billedByHeight - billedByY, radius);
+
     doc.setTextColor(0, 0, 0); // Black text
-    doc.text("Billed By:", billedByX, billedByY + 10);
-    doc.text(invoiceDetails.billedByName, billedByX, billedByY + 20);
-    doc.text(invoiceDetails.billedByAddress, billedByX, billedByY + 30);
-  
+    doc.setFontSize(headingFontSize);
+    doc.text("Billed By:", billedByX + 5, billedByY + 10);
+    doc.setFontSize(valueFontSize);
+    wrapText(invoiceDetails.billedByName, billedByX + 5, billedByY + 20, width - 10);
+    wrapText(invoiceDetails.billedByAddress, billedByX + 5, billedByY + 20 + billedByNameHeight, width - 10);
+
     // Billed To Section
-    const billedToX = 115;
-    const billedToY = 40;
-    doc.setFillColor(240, 240, 255); // Light grey-purple
-    doc.rect(billedToX, billedToY, 85, 40, "F"); // Draw filled rectangle
+    const billedToX = 110;
+    const billedToY = billedByY; // Start at the same vertical position as "Billed By"
+
+    // Calculate text height
+    const billedToNameHeight = wrapText(invoiceDetails.billedToName, billedToX + 5, billedToY + 20, width - 10);
+    const billedToAddressHeight = wrapText(invoiceDetails.billedToAddress, billedToX + 5, billedToY + 20 + billedToNameHeight, width - 10);
+
+    // Adjust height of the rectangle dynamically
+    const billedToHeight = billedToY + 20 + billedToNameHeight + billedToAddressHeight;
+    drawRoundedRect(doc, billedToX, billedToY, width, billedToHeight - billedToY, radius);
+
     doc.setTextColor(0, 0, 0); // Black text
-    doc.text("Billed To:", billedToX, billedToY + 10);
-    doc.text(invoiceDetails.billedToName, billedToX, billedToY + 20);
-    doc.text(invoiceDetails.billedToAddress, billedToX, billedToY + 30);
-  
+    doc.setFontSize(headingFontSize);
+    doc.text("Billed To:", billedToX + 5, billedToY + 10);
+    doc.setFontSize(valueFontSize);
+    wrapText(invoiceDetails.billedToName, billedToX + 5, billedToY + 20, width - 10);
+    wrapText(invoiceDetails.billedToAddress, billedToX + 5, billedToY + 20 + billedToNameHeight, width - 10);
+
     // Table Headers and Rows
+    const tableStartY = Math.max(billedByHeight, billedToHeight) + 20; // Position below the taller section
     doc.autoTable({
-      startY: billedToY + 50, // Start below "Billed To" section
-      head: [["Item", "Quantity", "Rate", "Amount"]],
-      body: items.map(item => [item.name, item.quantity, item.rate, item.amount]),
-      theme: "grid",
-      headStyles: {
-        fillColor: [128, 0, 128], // Purple
-        textColor: [255, 255, 255] // White
-      },
-      styles: {
-        fillColor: [240, 240, 255], // Light grey-purple
-        textColor: [0, 0, 0] // Black
-      },
-      margin: { top: 10, right: 10, bottom: 10, left: 10 }
+        startY: tableStartY,
+        head: [["Item", "Quantity", "Rate", "Amount"]],
+        body: items.map((item) => [
+            item.name,
+            item.quantity,
+            item.rate,
+            item.amount,
+        ]),
+        theme: "grid",
+        headStyles: {
+            fillColor: [128, 0, 128], // Purple
+            textColor: [255, 255, 255], // White
+        },
+        styles: {
+            fillColor: [240, 240, 255], // Light grey-purple
+            textColor: [0, 0, 0], // Black
+        },
+        margin: { top: 10, right: 10, bottom: 10, left: 10 },
     });
-  
+
     // Payments Section
-    doc.text("Payments:", 20, doc.autoTable.previous.finalY + 20);
+    const paymentsStartY = doc.autoTable.previous.finalY + 20; // Position below the table
+    doc.text("Payments:", 16, paymentsStartY);
     doc.autoTable({
-      startY: doc.autoTable.previous.finalY + 30, // Start below previous table
-      head: [["Date", "Mode", "Amount"]],
-      body: payments.map(payment => [payment.date, payment.mode, payment.amount]),
-      theme: "grid",
-      headStyles: {
-        fillColor: [128, 0, 128], // Purple
-        textColor: [255, 255, 255] // White
-      },
-      styles: {
-        fillColor: [240, 240, 255], // Light grey-purple
-        textColor: [0, 0, 0] // Black
-      },
-      margin: { top: 10, right: 10, bottom: 10, left: 10 }
+        startY: paymentsStartY + 10, // Start below the "Payments" label
+        head: [["Date", "Mode", "Amount"]],
+        body: payments.map((payment) => [
+            payment.date,
+            payment.mode,
+            payment.amount,
+        ]),
+        theme: "grid",
+        headStyles: {
+            fillColor: [128, 0, 128], // Purple
+            textColor: [255, 255, 255], // White
+        },
+        styles: {
+            fillColor: [240, 240, 255], // Light grey-purple
+            textColor: [0, 0, 0], // Black
+        },
+        margin: { top: 10, right: 10, bottom: 10, left: 10 },
     });
-  
+
+    // Terms & Conditions Section
+    const termsX = 15;
+    const termsY = doc.autoTable.previous.finalY + 20; // Position below the payments section
+    const termsWidth = 180; // Same width as other sections
+
+    // Title and text positioning
+    const termsTitleHeight = 20; // Height of title
+    const termsText = [
+        "1. Fees paid is not transferrable and non-refundable.",
+        "2. Placement charges are applicable upon receipt of offer letter.",
+        "3. Fees paid shall be applicable for the batch only for which admission is taken.",
+        "4. Batch transfer charges (Rs. 5000) shall be applicable in case you want to change your current batch.",
+        "5. If fees are paid in instalment, then the first instalment shall be paid at the time of admission and the next instalment shall be paid within 25 days of admission."
+    ];
+    const termsTextHeight = termsText.reduce((height, line) => height + wrapText(line, termsX + 5, termsY + height + termsTitleHeight, termsWidth - 10), 0);
+
+    // Adjust height of the rectangle dynamically
+    drawRoundedRect(doc, termsX, termsY, termsWidth, termsTitleHeight + termsTextHeight, radius);
+
+    doc.setTextColor(0, 0, 0); // Black text
+    doc.setFontSize(headingFontSize);
+    doc.text("Terms & Conditions:", termsX + 5, termsY + 10); // Title above the rectangle
+    doc.setFontSize(valueFontSize);
+    termsText.forEach((line, index) => {
+        wrapText(line, termsX + 5, termsY + 16 + (index * 6), termsWidth - 10); // Adjust spacing between lines
+    });
+
     doc.save("invoice.pdf");
-  };
+};
+
+// Helper function to draw a rounded rectangle
+const drawRoundedRect = (doc, x, y, width, height, radius) => {
+    doc.setFillColor(240, 240, 255); // Light grey-purple
+
+    // Draw the rounded rectangle
+    doc.setDrawColor(0, 0, 0); // Border color (black)
+    doc.setLineWidth(0.5); // Border width
+
+    doc.roundedRect(x, y, width, height, radius, radius, 'F'); // 'F' for fill
+    doc.roundedRect(x, y, width, height, radius, radius, 'S'); // 'S' for stroke
+};
 
   return (
     <div className="invoice-gen-root">
@@ -227,7 +321,9 @@ const InvoiceGen = () => {
                   value={item.name}
                   onChange={(e) => handleItemChange(index, e)}
                 >
-                  <option value="" disabled>Select course type</option>
+                  <option value="" disabled>
+                    Select course type
+                  </option>
                   <option value="Java fullStack development">
                     Java fullStack development
                   </option>
@@ -330,14 +426,20 @@ const InvoiceGen = () => {
               </button>
             </div>
           ))}
-          <button className="invoice-gen-add-payment-button" onClick={addPayment}>
+          <button
+            className="invoice-gen-add-payment-button"
+            onClick={addPayment}
+          >
             Add Payment
           </button>
         </div>
       </div>
 
       <div className="invoice-gen-footer">
-        <button className="invoice-gen-generate-pdf-button" onClick={generatePDF}>
+        <button
+          className="invoice-gen-generate-pdf-button"
+          onClick={generatePDF}
+        >
           Get Invoice PDF
         </button>
       </div>
