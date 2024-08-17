@@ -388,11 +388,13 @@ const LeadFollowUp = () => {
         setSelectedLead(null);
         
       } else {
-          throw new Error('Failed to update lead');
+          const errorMessage = await response.text();
+          toast.error(errorMessage);
+          // throw new Error('Failed to update lead');
       }
     } catch (error) {
       console.error('Error updating lead:', error);
-      toast.error('Failed to update lead. Please try again.');
+      toast.error('Failed to update lead,',error);
     }
   };
   
