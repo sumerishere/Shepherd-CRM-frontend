@@ -527,7 +527,7 @@ const ClientData = ({ templateId }) => {
   return (
     <div className="client-data-root">
       <ToastContainer />
-      <p id="client-data-text">Client-Data</p>
+      <p id="client-data-text">Client-Table</p>
       <hr />
 
       <div className="add-client-btn-div">

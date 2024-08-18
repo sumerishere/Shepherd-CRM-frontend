@@ -10,7 +10,10 @@ const LeadRegistrationForm = () => {
     mobile: "",
     address: "",
     email: "",
-    CourseType: "" // Ensure correct field name
+    CourseType: "", // Ensure correct field name
+    source: "",
+    referName: "",
+    qualification: "" // New field for Qualification
   });
 
   const [errors, setErrors] = useState({
@@ -119,7 +122,10 @@ const LeadRegistrationForm = () => {
             email: formData.email,
             mobileNumber: formData.mobile,
             address: formData.address,
-            courseType: formData.CourseType // Ensure correct field name
+            courseType: formData.CourseType, // Ensure correct field name
+            source: formData.source,
+            referName: formData.referName,
+            qualification: formData.qualification // Sending the qualification
           })
         });
 
@@ -130,11 +136,14 @@ const LeadRegistrationForm = () => {
             mobile: "",
             address: "",
             email: "",
-            CourseType: "" // Reset the field correctly
+            CourseType: "", // Reset the field correctly
+            source: "",
+            referName: "",
+            qualification: "" // Reset qualification field
           });
         } else {
           const errorText = await response.text();
-          toast.error("Failed to submit the form.",errorText);
+          toast.error("Failed to submit the form.", errorText);
         }
       } 
       catch (error) {
@@ -154,7 +163,7 @@ const LeadRegistrationForm = () => {
         </div>
       )}
       <div className="lead-registration-form-div">
-        <ToastContainer/>
+        <ToastContainer />
         <h2 className="lead-registration-form-title">Lead Registration</h2>
         <form className="lead-registration-form" onSubmit={handleSubmit}>
           <div className="lead-registration-form-group">
@@ -222,12 +231,57 @@ const LeadRegistrationForm = () => {
               onChange={handleChange}
               required
             >
-              <option value="">Select a courseType</option>
+              <option value="">Select a course type</option>
               <option value="Java fullStack development">Java fullStack development</option>
               <option value="Automation Testing">Automation Testing</option>
               <option value="UI/UX">UI/UX</option>
               <option value="MERN Stack">MERN Stack</option>
+              <option value="REST Api">REST Api</option>
             </select>
+          </div>
+
+          {/* New source dropdown */}
+          <div className="lead-registration-form-group">
+            <label htmlFor="lead-source" className="lead-registration-form-label">Source:</label>
+            <select
+              id="lead-source"
+              className="lead-registration-form-select"
+              value={formData.source}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select a source</option>
+              <option value="Website">Website</option>
+              <option value="Referral">Referral</option>
+              <option value="Social Media">Social Media</option>
+              <option value="Direct">Direct</option>
+            </select>
+          </div>
+
+          {/* New referName input field */}
+          <div className="lead-registration-form-group">
+            <label htmlFor="lead-referName" className="lead-registration-form-label">Refer Name:</label>
+            <input
+              id="lead-referName"
+              type="text"
+              className="lead-registration-form-input"
+              placeholder="Enter the refer name"
+              value={formData.referName}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* New qualification input field */}
+          <div className="lead-registration-form-group">
+            <label htmlFor="lead-qualification" className="lead-registration-form-label">Qualification:</label>
+            <input
+              id="lead-qualification"
+              type="text"
+              className="lead-registration-form-input"
+              placeholder="Enter your qualification"
+              value={formData.qualification}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="lead-registration-form-buttons">

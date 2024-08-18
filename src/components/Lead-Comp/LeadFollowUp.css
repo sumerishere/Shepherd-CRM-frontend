@@ -10,8 +10,8 @@
 
 #lead-data-heading{
   padding-top: 1px;
-  margin-left: 18px;
-  font-size: 20px;
+  margin-left: 10px;
+  font-size: 16px;
   font-weight: 550;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -112,9 +112,17 @@
   max-width: 240px; /* Set a maximum width to control column size */
 }
 
+#table-td-checkbox{
+  /* word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal; */
+  max-width: 100px;
+}
+
 .action-btn {
   margin-right: 5px;
-  padding: 5px 10px;
+  margin-top: 5px;
+  padding: 5px 12px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -156,8 +164,8 @@
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   padding: 20px;
-  height: 500px;
-  width: 400px; /* Fixed width for consistency */
+  /* height: 500px; */
+  width: 500px; /* Fixed width for consistency */
   box-sizing: border-box;
 }
 
@@ -206,7 +214,6 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Focus effect */
 }
-
 
 
 .history-container {
@@ -328,7 +335,6 @@
   margin-bottom: 20px;
   margin-right: 8px;
 }
-
 
 
 .confirm-btn, .cancel-btn {
