@@ -9,7 +9,7 @@
   .invoice-gen-title {
     text-align: center;
     color: #333;
-    font-size: 2rem;
+    font-size: 1.6rem;
     margin-bottom: 20px;
   }
 
@@ -73,6 +73,8 @@
   .invoice-gen-remove-item-button,
   .invoice-gen-remove-payment-button {
     background-color: #f44336;
+    padding: 4px;
+    /* width: 140px; */
   }
 
   .invoice-gen-add-item-button:hover,

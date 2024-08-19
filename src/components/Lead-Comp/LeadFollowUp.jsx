@@ -19,6 +19,10 @@ const LeadFollowUp = () => {
    // Add state for managing selected checkboxes
    const [selectedCheckboxes, setSelectedCheckboxes] = useState({});
 
+   const [filteredLeads, setFilteredLeads] = useState([]); // Added state for filtered leads
+   const [searchText, setSearchText] = useState('');
+
+
   
 
   useEffect(() => {
@@ -27,6 +31,7 @@ const LeadFollowUp = () => {
         const response = await fetch('http://localhost:8080/get-all-lead');
         const data = await response.json();
         setLeads(data || []);
+        setFilteredLeads(data || []); // Initialize filtered leads
       } catch (error) {
         console.error('Error fetching leads:', error);
       }
@@ -36,6 +41,17 @@ const LeadFollowUp = () => {
     };
     fetchLeads();
   }, []);
+
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/search-lead-name?name=${searchText}`);
+      const data = await response.json();
+      setFilteredLeads(data || []); // Update filtered leads based on search
+    } catch (error) {
+      console.error('Error searching leads:', error);
+    }
+  };
   
   const handleDelete = (uid) => {
     setLeadToDelete(uid);
@@ -52,6 +68,7 @@ const LeadFollowUp = () => {
         });
 
         setLeads(leads.filter(lead => lead.uid !== leadToDelete));
+        setFilteredLeads(filteredLeads.filter(lead => lead.uid !== leadToDelete));
         toast.success('Lead deleted successfully!');
         setShowDeleteConfirm(false);
         setLeadToDelete(null);
@@ -209,8 +226,20 @@ const LeadFollowUp = () => {
     <div className="lead-data-root">
       <ToastContainer/>
       <p id="lead-data-heading">Lead-Table</p>
-      <hr />
 
+      {/* search input div*/}
+      <div className='lead-search-div'>
+        <input
+          type="text"
+          placeholder='Search lead here'
+          id="lead-search-input"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <button id="lead-search-btn" onClick={handleSearch}>Search</button>
+      </div>
+      
+      <hr />
       <div className="add-lead-btn-div">
         <Link to="/LeadRegistrationForm" style={{textDecoration:"none", color:"white"}}>
           <button id="add-lead-btn">Add Lead</button>
@@ -234,30 +263,35 @@ const LeadFollowUp = () => {
               </tr>
             </thead>
             <tbody>
-
-              {leads.map((lead) => (
-                <tr key={lead.uid}>
-                  <td id="table-td-checkbox">
-                    <input 
-                      type="checkbox" 
-                      checked={!!selectedCheckboxes[lead.uid]} 
-                      onChange={() => handleCheckboxChange(lead.uid)} 
-                    />
-                  </td>
-                  <td id="table-td" >{lead.name}</td>
-                  <td id="table-td">{lead.email}</td>
-                  <td id="table-td">{lead.mobileNumber}</td>
-                  <td id="table-td">{lead.address}</td>
-                  <td id="table-td" >{lead.qualification}</td>
-                  <td id="table-td" >{lead.courseType}</td>
-                  <td>{new Date(lead.createdAt).toLocaleString()}</td>
-                  <td>
-                    <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}><FormOutlined /></button>
-                    <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}><DeleteOutlined /></button>
-                    <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}><HistoryOutlined /></button>
-                  </td>
+              {filteredLeads.length === 0 ? (
+                <tr>
+                  <td colSpan="9" style={{ fontFamily:"Lucida Sans", textAlign: 'center', fontSize:"20px" }}>Lead not found 😭</td>
                 </tr>
-              ))}
+              ) : (
+                filteredLeads.map((lead) => (
+                  <tr key={lead.uid}>
+                    <td id="table-td-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={!!selectedCheckboxes[lead.uid]}
+                        onChange={() => handleCheckboxChange(lead.uid)}
+                      />
+                    </td>
+                    <td id="table-td">{lead.name}</td>
+                    <td id="table-td">{lead.email}</td>
+                    <td id="table-td">{lead.mobileNumber}</td>
+                    <td id="table-td">{lead.address}</td>
+                    <td id="table-td">{lead.qualification}</td>
+                    <td id="table-td">{lead.courseType}</td>
+                    <td>{new Date(lead.createdAt).toLocaleString()}</td>
+                    <td>
+                      <button className="action-btn update-btn" onClick={() => handleUpdate(lead.uid)}><FormOutlined /></button>
+                      <button className="action-btn delete-btn" onClick={() => handleDelete(lead.uid)}><DeleteOutlined /></button>
+                      <button className="action-btn history-btn" onClick={() => handleHistory(lead.uid)}><HistoryOutlined /></button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
