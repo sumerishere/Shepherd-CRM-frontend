@@ -68,6 +68,7 @@ const LeadFollowUp = () => {
     setShowDeleteConfirm(false);
     setLeadToDelete(null);
   };
+
   
   const handleUpdate = async (uid) => {
     try {
@@ -81,24 +82,38 @@ const LeadFollowUp = () => {
       console.error('Error fetching lead data:', error);
     }
   };
+
   
   const handleHistory = async (uid) => {
     try {
-      const response = await fetch(`http://localhost:8080/get-comments-by-id/${uid}`);
-      const data = await response.json();
-      if (Array.isArray(data) && data.length === 0) {
+      // Fetch the lead's data
+      const leadResponse = await fetch(`http://localhost:8080/get-lead-by-id/${uid}`);
+      const leadData = await leadResponse.json();
+      
+      // Fetch the comments (history) data
+      const commentsResponse = await fetch(`http://localhost:8080/get-comments-by-id/${uid}`);
+      const commentsData = await commentsResponse.json();
+  
+      // Set the lead data to show user info in the history container
+      setSelectedLead(leadData);
+  
+      // Set the comments data to show the history
+      if (Array.isArray(commentsData) && commentsData.length === 0) {
         setNoHistoryAvailable(true);
       } else {
-        setHistoryData(Array.isArray(data) ? data : []);
+        setHistoryData(Array.isArray(commentsData) ? commentsData : []);
         setNoHistoryAvailable(false);
       }
+  
+      // Show the history container with user info and comments
       setShowHistory(true);
     } catch (error) {
-      console.error('Error fetching history:', error);
+      console.error('Error fetching history or lead data:', error);
       setNoHistoryAvailable(true);
       setShowHistory(true);
     }
   };
+  
   
   const closeHistory = () => {
     setShowHistory(false);
@@ -281,7 +296,7 @@ const LeadFollowUp = () => {
         </div>
       )}
 
-      {showHistory && (
+      {/* {showHistory && (
         <div className="history-container">
           <div className="history-header">
             <span className="history-title">History of {historyData.length > 0 ? historyData[0]?.leadName : 'Lead'}</span>
@@ -289,7 +304,7 @@ const LeadFollowUp = () => {
           </div>
           <div className="history-content">
             {noHistoryAvailable ? (
-              <p id="no-chats-p-id">No chat history available😴</p>
+              <p id="no-chats-p-id">No history available😴</p>
             ) : (
               historyData.map((item) => (
                 <div key={item.id} className="history-item">
@@ -300,7 +315,50 @@ const LeadFollowUp = () => {
             )}
           </div>
         </div>
+      )} */}
+
+
+
+      {showHistory && selectedLead && (
+  <div className="history-container">
+    <div className="history-header">
+      <span className="history-title">Profile of {historyData.length > 0 ? historyData[0]?.leadName : 'Lead'}</span>
+      <button className="history-close-btn" onClick={closeHistory}>X</button>
+    </div>
+    <div className="history-profile-info">
+      <div className="history-profile-column">
+        <p><strong>Name:</strong> {selectedLead.name || 'N/A'}</p>
+        <p><strong>Email:</strong> {selectedLead.email || 'N/A'}</p>
+        <p><strong>Mobile Number:</strong> {selectedLead.mobileNumber || 'N/A'}</p>
+        <p><strong>Address:</strong> {selectedLead.address || 'N/A'}</p>
+      </div>
+      <div className="history-profile-column">
+        <p><strong>Qualification:</strong> {selectedLead.qualification || 'N/A'}</p>
+        <p><strong>Source:</strong> {selectedLead.source || 'N/A'}</p>
+        <p><strong>Refer Name:</strong> {selectedLead.referName || 'N/A'}</p>
+      </div>
+    </div>
+    <hr/>
+    <h4 id="comment-box-title">Comments :</h4>
+
+    <div className="history-comments">
+      
+      {noHistoryAvailable ? (
+        <p id="no-chats-p-id">No Comments available😴</p>
+      ) : (
+        historyData
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting comments by date (newest first)
+        .map((item) => (
+          <div key={item.id} className="history-comment-item">
+            <p>{item.comment}</p>
+            <span className="history-comment-date">{new Date(item.createdAt).toLocaleString()}</span>
+          </div>
+        ))
       )}
+    </div>
+  </div>
+)}
+
 
       {showDeleteConfirm && (
         <div className="delete-confirm-container">

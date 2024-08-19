@@ -218,17 +218,17 @@
 
 .history-container {
   position: fixed;
-  top: 50%;
+  top: 55%;
   left: 55%;
   transform: translate(-50%, -50%);
   background-color: white;
   border: 1px solid #c3c0c0;
   border-radius: 8px;
   padding: 0px 25px 25px 25px;
-  width: 300px;
-  height: 400px;
+  width: 600px;
+  height: 610px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
+  /* overflow-y: auto; */
   transition: transform 0.3s ease-in-out;
   z-index: 100;
   margin: 0px;
@@ -252,41 +252,79 @@
   font-weight: bold;
 }
 
-.close-btn {
+.history-close-btn {
   background-color: #f44336;
   color: white;
   border: none;
-  border-radius: 50%;
+  border-radius: 12%;
   cursor: pointer;
   padding: 5px 10px;
   font-size: 14px;
   
 }
 
-.history-content {
-  margin-top: 10px;
-}
-
-.history-item {
-  background-color: #f9f9f9;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  border: 1px solid rgb(235, 235, 235);
-}
-
 #no-chats-p-id{
-  margin-top: 130px;
-  margin-left: 46px;
+  margin-top: 100px;
+  margin-left: 32%;
   font-weight: 500;
 }
 
-.history-date {
+
+
+/*updated css of history container*/
+/* Added CSS for the two-column profile layout inside the history container */
+.history-profile-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  margin-left: 30px;
+}
+
+.history-profile-column {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-profile-column p {
+  margin: 8px 0;
+}
+
+/* Comments section styling */
+
+#comment-box-title{
+  margin-bottom: -10px;
+}
+
+.history-comments {
+  margin-top: 20px;
+  overflow-y: auto;
+  height: 290px;
+  
+}
+
+
+.history-comment-item {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.history-comment-item:hover {
+  background-color: #f0f0f0;
+}
+
+.history-comment-date {
   display: block;
   font-size: 12px;
-  color: #555;
-  margin-top: 5px;
+  color: #777;
+  margin-top: 8px;
 }
+
+/* delete container css */
 
 .delete-confirm-container {
   position: fixed;
