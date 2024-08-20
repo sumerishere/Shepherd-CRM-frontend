@@ -243,14 +243,26 @@ const LeadFollowUp = () => {
       </div>
 
       <hr />
-      <div className="add-lead-btn-div">
-        <Link
-          to="/LeadRegistrationForm"
-          style={{ textDecoration: "none", color: "white" }}
-        >
-          <button id="add-lead-btn">Add Lead</button>
-        </Link>
+      <div className="add-btn-filter-lead-div">
+        <div className="add-lead-btn-div">
+          <Link
+            to="/LeadRegistrationForm"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            <button id="add-lead-btn">Add Lead</button>
+          </Link>
+        </div>
+
+        <div className="filter-lead-drop">
+          <select style={{cursor:"pointer"}} name="" id="select-filter-lead">
+            <option value="">Filter lead</option>
+            <option value="hot">Hot</option>
+            <option value="warm">Warm</option>
+            <option value="cold">Cold</option>
+          </select>
+        </div>
       </div>
+      
 
       <div className="lead-table-root">
         <div className="lead-table-div">
