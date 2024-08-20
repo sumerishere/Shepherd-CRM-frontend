@@ -1,0 +1,122 @@
+/* CalendarCheck.css */
+.calendar-root-div {
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  position: relative; */
+}
+
+.calendar-div {
+  /* margin-top: -1%;
+  margin-left: -10px; 
+  height: 480px;
+  width: 585px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px; */
+}
+
+.notification-container {
+  position: absolute;
+  top:45%;
+  left: 33%;
+  width: 250px;
+  height: 190px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease-in-out;
+}
+
+.notification-container.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notification-container h3 {
+  margin-bottom: 20px;
+}
+
+.event-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 40px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.notification-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ok-button, .back-button {
+  width: 45%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ok-button {
+  background-color: #4CAF50;
+}
+
+.ok-button:hover {
+  background-color: #45a049;
+}
+
+.back-button {
+  background-color: #f44336;
+}
+
+.back-button:hover {
+  background-color: #e53935;
+}
+
+.rbc-event {
+  color: white !important;
+  font-weight: bold;
+}
+
+.rbc-event-content {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.rbc-calendar {
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.rbc-toolbar {
+  background-color: #e7e7e7;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.rbc-month-view {
+  border-radius: 10px;
+}
+
+.rbc-header {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
+}

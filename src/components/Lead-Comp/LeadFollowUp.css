@@ -116,14 +116,43 @@
   overflow-y: scroll;
   overflow-x: scroll;
   border-radius: 10px;
-  background-color: #ccc;
+  background-color: #e2e2e2;
   
+}
+
+.lead-color-code{
+  height: 12px;
+  width: 25px;
+  margin-top: 5px;
+  margin-left: 3.8px;
+  /* background-color: red; */
+  border-radius: 2px;
+}
+
+#hot-lead{
+  background-color: rgb(225, 53, 53);
+}
+
+#warm-lead{
+  background-color: rgb(242, 191, 22);
+}
+
+#cold-lead{
+  background-color: #70b5ee;
+}
+
+
+.category-history-code{
+  position: absolute;
+  margin-top: 19.6%;
+  margin-left: 12%;
 }
 
 .lead-table {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
+
 }
 
 .lead-table th, .lead-table td {
@@ -133,7 +162,7 @@
 }
 
 .lead-table th{
-  background-color: #aeaeae;
+  background-color: #c7c4c4;
   color: #191919; 
   font-weight: bold; 
   text-align: left;
@@ -145,6 +174,7 @@
 .lead-table tr:hover {
   cursor: pointer;
   background-color: rgba(245, 244, 242, 0.927);
+  box-shadow:  2px 2px 1px rgb(0,0,0,0.5);
 }
 
 #table-td {
@@ -158,6 +188,7 @@
   /* word-wrap: break-word;
   word-break: break-all;
   white-space: normal; */
+ 
   max-width: 100px;
 }
 
@@ -176,7 +207,7 @@
 }
 
 .update-btn {
-  background-color: #1481da;
+  background-color: #0cb6c2;
   color: white;
 }
 
@@ -186,7 +217,7 @@
 }
 
 .history-btn {
-  background-color: #721b81;
+  background-color: #088b68;
   color: white;
 }
 
@@ -214,6 +245,8 @@
   /* height: 500px; */
   width: 500px; /* Fixed width for consistency */
   box-sizing: border-box;
+  height: 600px;
+  overflow-y: scroll;
 }
 
 /* Form labels */

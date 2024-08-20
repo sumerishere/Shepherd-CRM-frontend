@@ -161,7 +161,7 @@
 import "./App.css";
 import "../src/index.css";
 import Nav from "./components/Nav-Bar/Nav";
-import Calender from "./components/Calender-Comp/Calender";
+import DashboardComponent from "./components/Dashboard-Component/DashboardComponent";
 import LeadActivity from "./components/Lead-Comp/LeadActivity";
 import LeadFollowUp from "./components/Lead-Comp/LeadFollowUp";
 import ClientData from "./components/Client-data/ClientData";
@@ -178,7 +178,7 @@ import SignUpComp from "./components/SignUp-form/SignUpComp";
 import ErrorBoundary from "./ErrorBoundary";
 import LeadRegistrationForm from "./components/Lead-Comp/LeadRegistrationForm";
 import InvoiceGen from "./components/Invoice-generator/InvoiceGen";
-
+import CalenderComponent from "./components/calender-component/CalenderComponent";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -258,9 +258,11 @@ function App() {
               path="/"
               element={
                 <>
-                  <Calender />
+                  <DashboardComponent />
                   <LeadActivity />
-                  <ErrorBoundary><LeadFollowUp/></ErrorBoundary>
+                  <ErrorBoundary>
+                    <LeadFollowUp />
+                  </ErrorBoundary>
                   <ClientData templateId={templateId} />
                 </>
               }
@@ -273,10 +275,14 @@ function App() {
               path="/TemplateCreated"
               element={<TemplateCreated username={username} />}
             />
-            <Route path="/LeadRegistrationForm" element={<LeadRegistrationForm/>}/>
-            <Route path = "/InvoiceGen" element={<InvoiceGen/>}/>
+            <Route
+              path="/LeadRegistrationForm"
+              element={<LeadRegistrationForm />}
+            />
+            <Route path="/InvoiceGen" element={<InvoiceGen />} />
+
+            <Route path="/CalenderComponent" element={<CalenderComponent />} />
           </Routes>
-          
         </>
       ) : (
         <Routes>

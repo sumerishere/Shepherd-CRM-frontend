@@ -13,7 +13,8 @@ const LeadRegistrationForm = () => {
     CourseType: "", // Ensure correct field name
     source: "",
     referName: "",
-    qualification: "" // New field for Qualification
+    qualification: "", // New field for Qualification
+    category:""
   });
 
   const [errors, setErrors] = useState({
@@ -125,7 +126,8 @@ const LeadRegistrationForm = () => {
             courseType: formData.CourseType, // Ensure correct field name
             source: formData.source,
             referName: formData.referName,
-            qualification: formData.qualification // Sending the qualification
+            qualification: formData.qualification, // Sending the qualification
+            category : formData.category
           })
         });
 
@@ -139,7 +141,8 @@ const LeadRegistrationForm = () => {
             CourseType: "", // Reset the field correctly
             source: "",
             referName: "",
-            qualification: "" // Reset qualification field
+            qualification: "", // Reset qualification field
+            category:""
           });
         } else {
           const errorText = await response.text();
@@ -265,7 +268,7 @@ const LeadRegistrationForm = () => {
               id="lead-referName"
               type="text"
               className="lead-registration-form-input"
-              placeholder="Enter the refer name"
+              placeholder="Enter the refer name if available"
               value={formData.referName}
               onChange={handleChange}
             />
@@ -282,6 +285,22 @@ const LeadRegistrationForm = () => {
               value={formData.qualification}
               onChange={handleChange}
             />
+          </div>
+
+          <div className="lead-registration-form-group">
+            <label htmlFor="lead-category" className="lead-registration-form-label">Lead category:</label>
+            <select  
+              id="lead-category-drop"
+              className="lead-registration-form-select"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select lead category</option>
+              <option value="hot">Hot</option>
+              <option value="warm">Warm</option>
+              <option value="cold">Cold</option>
+            </select>
           </div>
 
           <div className="lead-registration-form-buttons">
