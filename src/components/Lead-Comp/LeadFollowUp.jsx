@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import axios from 'axios';
 import "./LeadFollowUp.css";
 import {
   FormOutlined,
@@ -20,12 +19,13 @@ const LeadFollowUp = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
   const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
-  // Add state for managing selected checkboxes
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState({});
-
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState({}); // Add state for managing selected checkboxes
   const [filteredLeads, setFilteredLeads] = useState([]); // Added state for filtered leads
   const [searchText, setSearchText] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState(""); // State for category filter
 
+
+  //------- getting all data from backend of lead table -------//
   useEffect(() => {
     const fetchLeads = async () => {
       try {
@@ -33,9 +33,11 @@ const LeadFollowUp = () => {
         const data = await response.json();
         setLeads(data || []);
         setFilteredLeads(data || []); // Initialize filtered leads
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Error fetching leads:", error);
-      } finally {
+      }
+       finally {
         setLoading(false);
       }
     };
@@ -49,8 +51,24 @@ const LeadFollowUp = () => {
       );
       const data = await response.json();
       setFilteredLeads(data || []); // Update filtered leads based on search
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error searching leads:", error);
+    }
+  };
+
+  // ---- Handle category filter change -------//
+  const handleCategoryFilterChange = (e) => {
+    const selectedCategory = e.target.value;
+    setCategoryFilter(selectedCategory);
+
+    if (selectedCategory === "") {
+      setFilteredLeads(leads); // Reset to all leads if no category is selected
+    } 
+    else {
+      setFilteredLeads(
+        leads.filter((lead) => lead.category === selectedCategory)
+      );
     }
   };
 
@@ -253,16 +271,21 @@ const LeadFollowUp = () => {
           </Link>
         </div>
 
+        {/* filter lead by category */}
         <div className="filter-lead-drop">
-          <select style={{cursor:"pointer"}} name="" id="select-filter-lead">
-            <option value="">Filter lead</option>
+          <select
+            id="select-filter-lead"
+            value={categoryFilter}
+            style={{ cursor: "pointer" }}
+            onChange={handleCategoryFilterChange}
+          >
+            <option value="">Filter Lead</option>
             <option value="hot">Hot</option>
             <option value="warm">Warm</option>
             <option value="cold">Cold</option>
           </select>
         </div>
       </div>
-      
 
       <div className="lead-table-root">
         <div className="lead-table-div">
@@ -299,7 +322,7 @@ const LeadFollowUp = () => {
                   <tr key={lead.uid}>
                     <td id="table-td-checkbox">
                       <input
-                        style={{cursor:"pointer"}}
+                        style={{ cursor: "pointer" }}
                         type="checkbox"
                         checked={!!selectedCheckboxes[lead.uid]}
                         onChange={() => handleCheckboxChange(lead.uid)}
@@ -480,11 +503,11 @@ const LeadFollowUp = () => {
                 <strong>Refer Name:</strong> {selectedLead.referName || "N/A"}
               </p>
               <p>
-                <strong>Category:</strong> {`----  (${selectedLead.category})` || "N/A"}
+                <strong>Category:</strong>{" "}
+                {`----  (${selectedLead.category})` || "N/A"}
               </p>
               <div
                 className="lead-color-code category-history-code"
-
                 id={
                   selectedLead.category === "hot"
                     ? "hot-lead"

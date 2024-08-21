@@ -34,7 +34,7 @@ const LoginComponent = ({ onLogin }) => {
         });
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.", {
+      toast.error("An error occurred. Please try again. or check server", {
         position: "top-center",
         autoClose: 3000,
       });
