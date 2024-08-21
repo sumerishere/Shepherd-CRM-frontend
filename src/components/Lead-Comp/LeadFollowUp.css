@@ -1,14 +1,14 @@
-.lead-data-root{
+.lead-data-root {
   margin-top: 3%;
   margin-bottom: 55px;
   margin-left: 21.5%;
   width: 75%;
   background-color: rgb(240, 238, 238);
   border: 1px solid rgba(188, 183, 183, 0.799);
-  box-shadow: 0px 2px 3px rgb(0,0,0,0.5);
+  box-shadow: 0px 2px 3px rgb(0, 0, 0, 0.5);
 }
 
-#lead-data-heading{
+#lead-data-heading {
   padding-top: 1px;
   margin-left: 10px;
   font-size: 16px;
@@ -16,13 +16,13 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.add-lead-btn-div{
+.add-lead-btn-div {
   /* position: absolute; */
   margin-left: 2.6%;
   margin-top: 15px;
 }
 
-#add-lead-btn{
+#add-lead-btn {
   height: 30px;
   width: 90px;
   border: 1px solid rgb(220, 216, 216);
@@ -34,21 +34,22 @@
 }
 
 
-.add-btn-filter-lead-div{
+.add-btn-filter-lead-div {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.filter-lead-drop{
+.filter-lead-drop {
   height: 30px;
   margin-top: 10px;
-  margin-right: 140px;
+  margin-left: 35%;
   padding: 5px 15px;
+  margin-right: -30px;
   /* background-color: #088b68; */
 }
 
-#select-filter-lead{
+#select-filter-lead {
   height: 100%;
   width: 100%;
   border: 1px solid;
@@ -56,9 +57,72 @@
   border-radius: 5px;
   font-size: 16px;
   background-color: rgb(238, 238, 238);
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
 }
+
+#lead-table-refresh-btn{
+  text-align: center;
+ margin-right: 50px; 
+ border-radius: 4px;
+ width: 50px;
+ height: 25px;
+ background-color: #bbb9b9;
+ cursor: pointer;
+ outline: none;
+ border:1px solid gray;
+}
+
+#lead-table-refresh-btn:hover{
+  background-color: #e8e4e4ac;
+  border-color: #272829;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 2px solid #007bff;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+/* Styles for the refresh button while loading */
+/* #lead-table-refresh-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+} */
+
+#lead-table-refresh-btn .spinner-container {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+#lead-table-refresh-btn.loading .spinner-container {
+  display: block;
+}
+
+#lead-table-refresh-btn.loading .icon-container {
+  display: none;
+}
+
+#lead-table-refresh-btn .icon-container {
+  display: inline-block;
+}
+
+
 
 .lead-data-root {
   padding: 20px;
@@ -72,7 +136,7 @@
 
 
 
-.lead-search-div{
+.lead-search-div {
   width: 93%;
   display: flex;
   flex: 1;
@@ -81,11 +145,11 @@
   margin-left: 34px;
 }
 
-#lead-search-input{
+#lead-search-input {
   /* height: 40px; */
 }
 
-#lead-search-btn{
+#lead-search-btn {
   border: 1px solid rgb(228, 228, 228);
   margin-left: 7px;
   color: white;
@@ -96,12 +160,12 @@
   outline: none;
 }
 
-#lead-search-btn:focus{
+#lead-search-btn:focus {
   border-color: #1481da;
   transform: scale(1);
 }
 
-#lead-search-btn:hover{
+#lead-search-btn:hover {
   transform: scale(1);
   border: 1px solid rgb(16, 71, 234);
   cursor: pointer;
@@ -129,7 +193,7 @@
   font-weight: 600;
 }
 
-#add-lead-btn:hover{
+#add-lead-btn:hover {
   border: 1px solid black;
   color: white;
   width: 100%;
@@ -150,10 +214,10 @@
   overflow-x: scroll;
   border-radius: 10px;
   background-color: #e2e2e2;
-  
+
 }
 
-.lead-color-code{
+.lead-color-code {
   height: 12px;
   width: 25px;
   margin-top: 5px;
@@ -162,20 +226,20 @@
   border-radius: 2px;
 }
 
-#hot-lead{
+#hot-lead {
   background-color: rgb(225, 53, 53);
 }
 
-#warm-lead{
+#warm-lead {
   background-color: rgb(242, 191, 22);
 }
 
-#cold-lead{
+#cold-lead {
   background-color: #70b5ee;
 }
 
 
-.category-history-code{
+.category-history-code {
   position: absolute;
   margin-top: 19.6%;
   margin-left: 12%;
@@ -188,40 +252,42 @@
 
 }
 
-.lead-table th, .lead-table td {
+.lead-table th,
+.lead-table td {
   padding: 10px;
   text-align: left;
   border: 1px solid #f5f4f4;
 }
 
-.lead-table th{
+.lead-table th {
   background-color: #c7c4c4;
-  color: #191919; 
-  font-weight: bold; 
+  color: #191919;
+  font-weight: bold;
   text-align: left;
-  position: sticky; 
-  top: 0; 
+  position: sticky;
+  top: 0;
   z-index: 1;
 }
 
 .lead-table tr:hover {
   cursor: pointer;
   background-color: rgba(245, 244, 242, 0.927);
-  box-shadow:  2px 2px 1px rgb(0,0,0,0.5);
+  box-shadow: 2px 2px 1px rgb(0, 0, 0, 0.5);
 }
 
 #table-td {
   word-wrap: break-word;
   word-break: break-all;
   white-space: normal;
-  max-width: 240px; /* Set a maximum width to control column size */
+  max-width: 240px;
+  /* Set a maximum width to control column size */
 }
 
-#table-td-checkbox{
+#table-td-checkbox {
   /* word-wrap: break-word;
   word-break: break-all;
   white-space: normal; */
- 
+
   max-width: 100px;
 }
 
@@ -235,7 +301,7 @@
   font-size: 16px;
 }
 
-.action-btn:hover{
+.action-btn:hover {
   border: 1.5px solid rgb(50, 41, 41);
 }
 
@@ -271,12 +337,16 @@
 
 /* Styling for the update form */
 .updateForm {
-  background-color: #ffffff; /* White background for the form */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  background-color: #ffffff;
+  /* White background for the form */
+  border-radius: 8px;
+  /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow for depth */
   padding: 20px;
   /* height: 500px; */
-  width: 500px; /* Fixed width for consistency */
+  width: 500px;
+  /* Fixed width for consistency */
   box-sizing: border-box;
   height: 700px;
   overflow-y: scroll;
@@ -294,8 +364,10 @@
 .updateFormTextarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc; /* Light grey border */
-  border-radius: 4px; /* Rounded corners */
+  border: 1px solid #ccc;
+  /* Light grey border */
+  border-radius: 4px;
+  /* Rounded corners */
   margin-bottom: 12px;
   box-sizing: border-box;
 }
@@ -303,33 +375,41 @@
 /* Submit and cancel buttons */
 .updateFormButtonSubmit,
 .updateFormButtonCancel {
-  background-color: #007bff; /* Primary blue color */
-  color: #ffffff; /* White text */
+  background-color: #007bff;
+  /* Primary blue color */
+  color: #ffffff;
+  /* White text */
   border: none;
-  border-radius: 4px; /* Rounded corners */
+  border-radius: 4px;
+  /* Rounded corners */
   padding: 10px 20px;
   cursor: pointer;
-  margin-right: 10px; /* Space between buttons */
+  margin-right: 10px;
+  /* Space between buttons */
   font-size: 16px;
 }
 
 .updateFormButtonCancel {
-  background-color: #6c757d; /* Secondary grey color for cancel button */
+  background-color: #6c757d;
+  /* Secondary grey color for cancel button */
 }
 
 .updateFormButtonSubmit:hover,
 .updateFormButtonCancel:hover {
-  opacity: 0.9; /* Slightly darker on hover */
+  opacity: 0.9;
+  /* Slightly darker on hover */
 }
 
 .updateFormButtonSubmit:focus,
 .updateFormButtonCancel:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Focus effect */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }
 
 
-.history-container {
+/*-------------- css of history container ------------ */
+
+/* .history-container {
   position: fixed;
   top: 55%;
   left: 55%;
@@ -341,8 +421,6 @@
   width: 600px;
   height: 610px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* overflow-y: auto; */
-    
   z-index: 100;
   margin: 0px;
 }
@@ -353,7 +431,7 @@
   align-items: center;
   margin-bottom: 20px;
   position: sticky;
-  top:0;
+  top: 0;
   z-index: 100;
   background-color: white;
   border-bottom: 1px solid #ccc;
@@ -373,24 +451,24 @@
   cursor: pointer;
   padding: 5px 10px;
   font-size: 14px;
-  
+
 }
 
-.history-close-btn:hover{
+.history-close-btn:hover {
   background-color: #f443369a;
 }
 
-#no-chats-p-id{
+#no-chats-p-id {
   margin-top: 100px;
   margin-left: 32%;
   font-weight: 500;
-}
+} */
 
 
 
-/*updated css of history container*/
-/* Added CSS for the two-column profile layout inside the history container */
-.history-profile-info {
+/* -------- css of history prfile -----------*/
+
+/* .history-profile-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
@@ -405,11 +483,11 @@
 
 .history-profile-column p {
   margin: 8px 0;
-}
+} */
 
 /* Comments section styling */
 
-#comment-box-title{
+/* #comment-box-title {
   margin-bottom: -10px;
 }
 
@@ -417,7 +495,7 @@
   margin-top: 20px;
   overflow-y: auto;
   height: 290px;
-  
+
 }
 
 
@@ -439,9 +517,53 @@
   font-size: 12px;
   color: #777;
   margin-top: 8px;
+} */
+
+
+/*--------- Styles for Edit Comment Section ---------- */
+/* .edit-comment {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-/* delete container css */
+.edit-comment input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-comment button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.edit-comment button:hover {
+  background: #0056b3;
+} */
+
+/* Styles for Comment Actions */
+
+/* .comment button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment button:hover {
+  background: #0056b3;
+} */
+
+
+/* --------- delete container css---------- */
 
 .delete-confirm-container {
   position: fixed;
@@ -477,10 +599,10 @@
   z-index: 100;
   border-radius: 10px;
   border: 1px solid black;
- 
+
 }
 
-#delete-note-text-id{
+#delete-note-text-id {
   margin-left: 15px;
   margin-top: 0px;
 }
@@ -492,7 +614,8 @@
 }
 
 
-.confirm-btn, .cancel-btn {
+.confirm-btn,
+.cancel-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -506,15 +629,210 @@
   color: white;
 }
 
-.confirm-btn:hover{
+.confirm-btn:hover {
   background-color: #3ee143f4;
   color: white;
 }
+
 .cancel-btn {
   background-color: #f44336;
   color: white;
 }
 
-.cancel-btn:hover{
+.cancel-btn:hover {
   background-color: #fd2617;
+}
+
+
+
+
+/* Styles for Edit Comment Section */
+.edit-comment {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-comment-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-comment-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  align-items: end;
+  margin-left: 88%;
+}
+
+.edit-comment-btn:hover {
+  background: #0056b3;
+}
+
+/* Styles for Comment Actions */
+/* .comment button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment button:hover {
+  background: #0056b3;
+} */
+
+
+
+
+/* Styles for History Container */
+.history-container {
+  position: fixed;
+  top: 55%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #c3c0c0;
+  border-radius: 8px;
+  padding: 0px 25px 25px 25px;
+  width: 600px;
+  height: 610px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  margin: 0px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  padding: 15px;
+}
+
+.history-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.history-close-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Adjusted to circle */
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.history-close-btn:hover {
+  background-color: #f443369a;
+}
+
+#no-chats-p-id {
+  margin-top: 100px;
+  margin-left: 32%;
+  font-weight: 500;
+}
+
+/* Styles for History Profile */
+.history-profile-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  margin-left: 30px;
+}
+
+.history-profile-column {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-profile-column p {
+  margin: 8px 0;
+}
+
+/* Comments section styling */
+#comment-box-title {
+  margin-bottom: -10px;
+}
+
+.history-comments {
+  margin-top: 20px;
+  overflow-y: auto; /* Adjusted for scrolling */
+  height: 290px;
+}
+
+.history-comment-item {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.history-comment-item:hover {
+  background-color: #f0f0f0;
+}
+
+.history-comment-date {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 8px;
+}
+
+/* Styles for Edit Comment Section */
+.edit-comment {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-comment input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-comment button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.edit-comment button:hover {
+  background: #0056b3;
+}
+
+/* Styles for Comment Actions */
+.comment button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment button:hover {
+  background: #0056b3;
 }

@@ -128,14 +128,17 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 
-const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
-  const navigate = useNavigate();
 
+const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
+
+  
   const handleLogout = () => {
     setIsAuthenticated(false); // Clear the authentication state
     localStorage.removeItem("isAuthenticated"); // Remove authentication state from localStorage
     navigate("/login"); // Redirect to the login page
   };
+  const navigate = useNavigate();
+
 
   return (
     <div>
@@ -154,9 +157,8 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
           <Link
             to={"/"}
             style={{ textDecoration: "none", color: "white" }}
-            onClick={toggleAsideBar}
           >
-            <li id="dashboard-li">
+            <li id="dashboard-li" >
               <FundProjectionScreenOutlined /> Dashboard
             </li>
           </Link>

@@ -54,7 +54,9 @@ const ClientData = ({ templateId }) => {
     } else {
       // Otherwise, filter the data based on the search term
       const filteredData = originalData.filter((item) =>
-        JSON.stringify(item.fields_Data).toLowerCase().includes(searchTerm.toLowerCase())
+        JSON.stringify(item.fields_Data)
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
       );
       if (filteredData.length === 0) {
         setClientNotFound(true); // Set state if no clients found
@@ -64,7 +66,7 @@ const ClientData = ({ templateId }) => {
       setData(filteredData); // Update data with the search results
     }
   };
-  
+
   const handleDeleteClick = (uid) => {
     setUidToDelete(uid);
     setShowConfirm(true);
@@ -221,12 +223,14 @@ const ClientData = ({ templateId }) => {
       <div className="client-search-div">
         <input
           type="text"
-          placeholder="Search lead here"
+          placeholder="Search client here"
           id="client-search-input"
           value={searchTerm} // Controlled input for search
           onChange={(e) => setSearchTerm(e.target.value)} // Update search term
         />
-        <button id="client-search-btn" onClick={handleSearch}> {/* Trigger search */}
+        <button id="client-search-btn" onClick={handleSearch}>
+          {" "}
+          {/* Trigger search */}
           Search
         </button>
       </div>
@@ -247,7 +251,7 @@ const ClientData = ({ templateId }) => {
         <div className="data-table-child">
           <table className="table-class">
             <thead>
-            <tr>
+              <tr>
                 <th className="narrow-column">Lead Status</th>
                 <th className="narrow-column">Fees Completed</th>
                 {columnHeaders.map((header) =>
@@ -259,7 +263,6 @@ const ClientData = ({ templateId }) => {
               </tr>
             </thead>
             <tbody>
-
               {/* Render Client Not Found message in table if no data */}
               {data.length === 0 && clientNotFound && (
                 <tr>
@@ -276,7 +279,7 @@ const ClientData = ({ templateId }) => {
                 </tr>
               )}
 
-{data.map((row) => (
+              {data.map((row) => (
                 <tr key={row.uid}>
                   <td className="narrow-column">
                     <input
