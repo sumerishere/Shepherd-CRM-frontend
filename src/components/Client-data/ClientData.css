@@ -95,7 +95,8 @@
   border-radius: 4px;
   border: 2px solid rgb(158, 158, 158);
   background-color: antiquewhite;
-  overflow-y: scroll;
+  overflow: scroll;
+
 }
 
 #data-table-h1 {

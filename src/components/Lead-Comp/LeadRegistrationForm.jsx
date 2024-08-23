@@ -14,7 +14,8 @@ const LeadRegistrationForm = () => {
     source: "",
     referName: "",
     qualification: "", // New field for Qualification
-    category:""
+    category:"",
+    followUpDate: ""
   });
 
   const [errors, setErrors] = useState({
@@ -127,7 +128,8 @@ const LeadRegistrationForm = () => {
             source: formData.source,
             referName: formData.referName,
             qualification: formData.qualification, // Sending the qualification
-            category : formData.category
+            category : formData.category,
+            followUpDate : formData.followUpDate
           })
         });
 
@@ -142,7 +144,8 @@ const LeadRegistrationForm = () => {
             source: "",
             referName: "",
             qualification: "", // Reset qualification field
-            category:""
+            category:"",
+            followUpDate : ""
           });
         } else {
           const errorText = await response.text();
@@ -156,6 +159,12 @@ const LeadRegistrationForm = () => {
         setLoading(false); // Hide the spinner
       }
     }
+  };
+
+  // Get the current date and time in the format required by the datetime-local input
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    return now.toISOString().slice(0, 16);
   };
 
   return (
@@ -301,6 +310,20 @@ const LeadRegistrationForm = () => {
               <option value="warm">Warm</option>
               <option value="cold">Cold</option>
             </select>
+          </div>
+
+
+          <div className="lead-registration-form-group">
+            <label htmlFor="lead-followUpDate" className="lead-registration-form-label">FollowUp-Date:</label>
+            <input
+              id="lead-followUpDate"
+              type="datetime-local"
+              className="lead-registration-form-input"
+              placeholder="Enter your qualification"
+              value={formData.followUpDate}
+              onChange={handleChange}
+              min={getCurrentDateTime()} 
+            />
           </div>
 
           <div className="lead-registration-form-buttons">

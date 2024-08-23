@@ -17,14 +17,14 @@
 
 .lead-container-1{
   background-color: rgba(255, 255, 255, 0.775);
-  width: 260px;
+  width: 160px;
   height:145px;
-   border: 1px solid rgba(176, 173, 173, 0.799);
+  border: 1px solid rgba(176, 173, 173, 0.799);
 }
 
 .lead-container-2{
   background-color: rgba(255, 255, 255, 0.775);
-  width: 260px;
+  width: 160px;
   height:145px;
    border  : 1px solid rgba(176, 173, 173, 0.799);
   
@@ -32,7 +32,7 @@
 
 .lead-container-3{
   background-color: rgba(255, 255, 255, 0.775);
-  width: 260px;
+  width: 160px;
   height:  145px;
    border: 1px solid rgba(176, 173, 173, 0.799);
   
@@ -40,7 +40,7 @@
 
 .lead-container-4{
   background-color:rgba(255, 255, 255, 0.775);
-  width: 260px;
+  width: 160px;
   height:  145px;
    border: 1px solid rgba(176, 173, 173, 0.799);
 
@@ -79,6 +79,7 @@
 }
 
 #total-lead-count-p{
+  /* margin-top: 10px; */
   margin-left: 6px;
   font-size: 18px;
 }
@@ -99,21 +100,21 @@
 }
 
 #total-lead-count-span{
-  padding-left: 120px;
+  padding-left: 26px;
   font-weight: 600;
 }
 
 #deal-done-span{
-  padding-left: 120px;
+  padding-left: 26px;
   font-weight: 600;
 }
 
 #miss-out-span{
-  padding-left: 130px;
+  padding-left: 26px;
   font-weight: 600;
 }
 
 #open-lead-span{
-  padding-left: 120px;
+  padding-left: 26px;
   font-weight: 600;
 }
