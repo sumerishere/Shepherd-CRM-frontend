@@ -19,7 +19,7 @@ const ClientData = ({ templateId }) => {
   });
 
   const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
-  const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
+  // const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
 
   useEffect(() => {
     if (templateId) {
@@ -50,7 +50,7 @@ const ClientData = ({ templateId }) => {
     if (searchTerm.trim() === "") {
       // If the search term is empty, show all entries
       setData(originalData);
-      setClientNotFound(false); // Reset client not found state
+      // setClientNotFound(false); // Reset client not found state
     } else {
       // Otherwise, filter the data based on the search term
       const filteredData = originalData.filter((item) =>
@@ -58,11 +58,11 @@ const ClientData = ({ templateId }) => {
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
-      if (filteredData.length === 0) {
-        setClientNotFound(true); // Set state if no clients found
-      } else {
-        setClientNotFound(false); // Reset state if clients found
-      }
+      // if (filteredData.length === 0) {
+      //   setClientNotFound(true); // Set state if no clients found
+      // } else {
+      //   setClientNotFound(false); // Reset state if clients found
+      // }
       setData(filteredData); // Update data with the search results
     }
   };
@@ -248,81 +248,80 @@ const ClientData = ({ templateId }) => {
       </div>
 
       <div className="data-table-root">
-        <div className="data-table-child">
-          <table className="table-class">
-            <thead>
-              <tr>
-                <th className="narrow-column">Lead Status</th>
-                <th className="narrow-column">Fees Completed</th>
-                {columnHeaders.map((header) =>
-                  header !== "lead-status" && header !== "fees completed" ? (
-                    <th key={header}>{header}</th>
-                  ) : null
-                )}
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Render Client Not Found message in table if no data */}
-              {data.length === 0 && clientNotFound && (
-                <tr>
-                  <td
-                    colSpan={columnHeaders.length + 3} // Adjust the colspan according to the number of columns
-                    style={{
-                      fontFamily: "Lucida Sans",
-                      textAlign: "center",
-                      fontSize: "20px",
-                    }}
-                  >
-                    Client not found 😭
+  <div className="data-table-child">
+    <table className="table-class">
+      <thead>
+        <tr>
+          <th className="narrow-column">Lead Status</th>
+          <th className="narrow-column">Fees Completed</th>
+          {columnHeaders.map((header) =>
+            header !== "lead-status" && header !== "fees completed" ? (
+              <th key={header}>{header}</th>
+            ) : null
+          )}
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.length === 0 ? (
+          <tr>
+            <td
+              colSpan={columnHeaders.length + 3} // Adjust colspan according to the total number of columns
+              style={{
+                fontFamily: "Lucida Sans",
+                textAlign: "center",
+                fontSize: "20px",
+              }}
+            >
+              Client not found 😭
+            </td>
+          </tr>
+        ) : (
+          data.map((row) => (
+            <tr key={row.uid}>
+              <td className="narrow-column">
+                <input
+                  type="checkbox"
+                  style={{ cursor: "pointer" }}
+                  checked={row.fields_Data["fees completed"] === "Yes"}
+                  onChange={(e) => handleCheckboxChange(e, row.uid)}
+                />
+              </td>
+              <td className="narrow-column">
+                {row.fields_Data["fees completed"] || "No"}
+              </td>
+              {columnHeaders.map((header) =>
+                header !== "lead-status" && header !== "fees completed" ? (
+                  <td key={header}>
+                    {typeof row.fields_Data[header] === "boolean"
+                      ? row.fields_Data[header]
+                        ? "Yes"
+                        : "No"
+                      : row.fields_Data[header]}
                   </td>
-                </tr>
+                ) : null
               )}
-
-              {data.map((row) => (
-                <tr key={row.uid}>
-                  <td className="narrow-column">
-                    <input
-                      type="checkbox"
-                      style={{ cursor: "pointer" }}
-                      checked={row.fields_Data["fees completed"] === "Yes"}
-                      onChange={(e) => handleCheckboxChange(e, row.uid)}
-                    />
-                  </td>
-                  <td className="narrow-column">
-                    {row.fields_Data["fees completed"] || "No"}
-                  </td>
-                  {columnHeaders.map((header) =>
-                    header !== "lead-status" && header !== "fees completed" ? (
-                      <td key={header}>
-                        {typeof row.fields_Data[header] === "boolean"
-                          ? row.fields_Data[header]
-                            ? "Yes"
-                            : "No"
-                          : row.fields_Data[header]}
-                      </td>
-                    ) : null
-                  )}
-                  <td>
-                    <button
-                      className="update-button"
-                      onClick={() => handleUpdateClick(row.uid)}
-                    >
-                      <FormOutlined />
-                    </button>
-                    <button
-                      className="remove-button"
-                      onClick={() => handleDeleteClick(row.uid)}
-                    >
-                      <DeleteOutlined />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              <td>
+                <button
+                  className="update-button"
+                  onClick={() => handleUpdateClick(row.uid)}
+                >
+                  <FormOutlined />
+                </button>
+                <button
+                  className="remove-button"
+                  onClick={() => handleDeleteClick(row.uid)}
+                >
+                  <DeleteOutlined />
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
 
       {showConfirm && (
         <div className="confirm-dialog">

@@ -225,19 +225,19 @@ const LeadFollowUp = () => {
     setShowUpdateForm(false);
   };
 
-  if (leads.length === 0) {
-    return (
-      <div className="follow-up-div">
-        <hr />
-        <p id="client-data-empty-text">No entries are available.</p>
-        <hr />
-      </div>
-    );
-  } else {
+  // if (leads.length === 0) {
+  //   return (
+  //     <div className="follow-up-div">
+  //       <hr />
+  //       <p id="client-data-empty-text">No entries are available.</p>
+  //       <hr />
+  //     </div>
+  //   );
+  // } else {
     if (loading) {
       return <div id="loading-id">Loading...</div>;
     }
-  }
+  // }
 
   // Handle checkbox change
   const handleCheckboxChange = (uid) => {
