@@ -9,6 +9,8 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import debounce from "lodash/debounce";
+
 
 const LeadFollowUp = () => {
   const [loading, setLoading] = useState(true);
@@ -50,17 +52,29 @@ const LeadFollowUp = () => {
     fetchLeads();
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (text) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/search-lead-name?name=${searchText}`
-      );
+      const response = await fetch(`http://localhost:8080/search-lead-name?name=${text}`);
       const data = await response.json();
-      setFilteredLeads(data || []); // Update filtered leads based on search
+      setFilteredLeads(data || []);
     } catch (error) {
       console.error("Error searching leads:", error);
     }
   };
+
+  const debouncedSearch = debounce((text) => handleSearch(text), 300);
+
+
+  useEffect(() => {
+    if (searchText.length >= 3) {
+      debouncedSearch(searchText);
+    } else {
+      // Reset filtered leads if search text is less than 3 characters
+      setFilteredLeads(leads);
+    }
+  }, [searchText, leads, debouncedSearch]);
+
+
 
   // ---- Handle category filter change -------//
   const handleCategoryFilterChange = (e) => {
