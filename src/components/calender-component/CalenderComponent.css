@@ -120,3 +120,67 @@
   padding: 10px;
   border-radius: 10px;
 }
+
+
+
+/* CalenderComponent.css */
+.table-container {
+  position: fixed;
+  top: 20%;
+  left: 10%;
+  width: 80%;
+  height: 450px;
+  background: rgb(255, 255, 255);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.followup-notifier-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-container th {
+  background-color: #f4f4f4;
+}
+
+.table-container .table-close-button {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.table-container .table-close-button:hover {
+  background: #d32f2f;
+}
+
+
+
+/* CalenderComponent.css */
+.custom-agenda-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.custom-agenda-button:hover {
+  background: #0056b3;
+}
