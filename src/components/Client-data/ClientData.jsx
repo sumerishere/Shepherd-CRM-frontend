@@ -5,6 +5,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
+import debounce from "lodash/debounce";
+
 
 const ClientData = ({ templateId }) => {
   const [data, setData] = useState([]);
@@ -19,7 +21,8 @@ const ClientData = ({ templateId }) => {
   });
 
   const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
-  const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
+  // const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     if (templateId) {
@@ -46,25 +49,30 @@ const ClientData = ({ templateId }) => {
     }
   }, [templateId]);
 
-  const handleSearch = () => {
+  useEffect(() => {
+    // Filter data whenever searchTerm or originalData changes
+    debouncedHandleSearch();
+  }, [searchTerm, originalData]);
+
+  const debouncedHandleSearch = debounce(() => {
     if (searchTerm.trim() === "") {
-      // If the search term is empty, show all entries
-      setData(originalData);
-      setClientNotFound(false); // Reset client not found state
+      setFilteredData(originalData);
     } else {
-      // Otherwise, filter the data based on the search term
-      const filteredData = originalData.filter((item) =>
+      const filtered = originalData.filter((item) =>
         JSON.stringify(item.fields_Data)
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
-      if (filteredData.length === 0) {
-        setClientNotFound(true); // Set state if no clients found
-      } else {
-        setClientNotFound(false); // Reset state if clients found
-      }
-      setData(filteredData); // Update data with the search results
+      setFilteredData(filtered);
     }
+  }, 300);
+
+  const handleSearchInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchButtonClick = () => {
+    debouncedHandleSearch();
   };
 
   const handleDeleteClick = (uid) => {
@@ -191,20 +199,20 @@ const ClientData = ({ templateId }) => {
     }));
   };
 
-  const handleCheckboxChange = (e, uid) => {
-    const updatedData = data.map((row) =>
-      row.uid === uid
-        ? {
-            ...row,
-            fields_Data: {
-              ...row.fields_Data,
-              "fees completed": e.target.checked ? "Yes" : "No",
-            },
-          }
-        : row
-    );
-    setData(updatedData);
-  };
+  // const handleCheckboxChange = (e, uid) => {
+  //   const updatedData = data.map((row) =>
+  //     row.uid === uid
+  //       ? {
+  //           ...row,
+  //           fields_Data: {
+  //             ...row.fields_Data,
+  //             "fees completed": e.target.checked ? "Yes" : "No",
+  //           },
+  //         }
+  //       : row
+  //   );
+  //   setData(updatedData);
+  // };
 
   if (loading) {
     return <div id="loading-id">Loading...</div>;
@@ -226,11 +234,9 @@ const ClientData = ({ templateId }) => {
           placeholder="Search client here"
           id="client-search-input"
           value={searchTerm} // Controlled input for search
-          onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+          onChange={handleSearchInputChange}
         />
-        <button id="client-search-btn" onClick={handleSearch}>
-          {" "}
-          {/* Trigger search */}
+        <button id="client-search-btn" onClick={handleSearchButtonClick} >
           Search
         </button>
       </div>
@@ -247,78 +253,51 @@ const ClientData = ({ templateId }) => {
         </div>
       </div>
 
-      <div className="data-table-root">
+            <div className="data-table-root">
         <div className="data-table-child">
           <table className="table-class">
             <thead>
               <tr>
-                <th className="narrow-column">Lead Status</th>
-                <th className="narrow-column">Fees Completed</th>
-                {columnHeaders.map((header) =>
-                  header !== "lead-status" && header !== "fees completed" ? (
-                    <th key={header}>{header}</th>
-                  ) : null
-                )}
-                <th>Action</th>
+                {columnHeaders.map((header, index) => (
+                  <th key={index}>{header}</th>
+                ))}
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {/* Render Client Not Found message in table if no data */}
-              {data.length === 0 && clientNotFound && (
+              {filteredData.length > 0 ? (
+                filteredData.map((item) => (
+                  <tr key={item.uid}>
+                    {columnHeaders.map((header, index) => (
+                      <td key={index}>
+                        {item.fields_Data[header] !== undefined
+                          ? item.fields_Data[header]
+                          : ""}
+                      </td>
+                    ))}
+                    <td>
+                      <button
+                        className="update-button"
+                        onClick={() => handleUpdateClick(item.uid)}
+                      >
+                        <FormOutlined />
+                      </button>
+                      <button
+                        className="remove-button"
+                        onClick={() => handleDeleteClick(item.uid)}
+                      >
+                        <DeleteOutlined />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td
-                    colSpan={columnHeaders.length + 3} // Adjust the colspan according to the number of columns
-                    style={{
-                      fontFamily: "Lucida Sans",
-                      textAlign: "center",
-                      fontSize: "20px",
-                    }}
-                  >
+                  <td colSpan={columnHeaders.length + 3}>
                     Client not found 😭
                   </td>
                 </tr>
               )}
-
-              {data.map((row) => (
-                <tr key={row.uid}>
-                  <td className="narrow-column">
-                    <input
-                      type="checkbox"
-                      style={{ cursor: "pointer" }}
-                      checked={row.fields_Data["fees completed"] === "Yes"}
-                      onChange={(e) => handleCheckboxChange(e, row.uid)}
-                    />
-                  </td>
-                  <td className="narrow-column">
-                    {row.fields_Data["fees completed"] || "No"}
-                  </td>
-                  {columnHeaders.map((header) =>
-                    header !== "lead-status" && header !== "fees completed" ? (
-                      <td key={header}>
-                        {typeof row.fields_Data[header] === "boolean"
-                          ? row.fields_Data[header]
-                            ? "Yes"
-                            : "No"
-                          : row.fields_Data[header]}
-                      </td>
-                    ) : null
-                  )}
-                  <td>
-                    <button
-                      className="update-button"
-                      onClick={() => handleUpdateClick(row.uid)}
-                    >
-                      <FormOutlined />
-                    </button>
-                    <button
-                      className="remove-button"
-                      onClick={() => handleDeleteClick(row.uid)}
-                    >
-                      <DeleteOutlined />
-                    </button>
-                  </td>
-                </tr>
-              ))}
             </tbody>
           </table>
         </div>

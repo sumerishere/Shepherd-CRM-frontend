@@ -1,6 +1,6 @@
 import "./CalenderComponent.css";
 import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
@@ -9,8 +9,26 @@ const localizer = momentLocalizer(moment);
 const CalenderComponent = () => {
   const [events, setEvents] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [showTable, setShowTable] = useState(false);
   const [eventTitle, setEventTitle] = useState("");
   const [eventSlot, setEventSlot] = useState(null);
+  const [currentView, setCurrentView] = useState(Views.MONTH); // Track the current view
+  const [leads, setLeads] = useState([]);
+
+  const fetchLeads = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/get-all-lead");
+      const leadData = await response.json();
+
+      setLeads(leadData || []);
+    } catch (error) {
+      alert("got error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeads(); // Fetch leads when the component mounts
+  }, []);
 
   useEffect(() => {
     if (showNotification) {
@@ -21,10 +39,16 @@ const CalenderComponent = () => {
         if (notificationElement) {
           notificationElement.classList.add("show");
         }
-      }, 10); // Delay to ensure the element is rendered before applying the transition
+      }, 10);
       return () => clearTimeout(timer);
     }
   }, [showNotification]);
+
+  useEffect(() => {
+    if (currentView !== Views.AGENDA) {
+      setShowTable(false); // Hide table when not in Agenda view
+    }
+  }, [currentView]);
 
   const handleSelectSlot = ({ start, end }) => {
     setEventSlot({ start, end });
@@ -54,6 +78,14 @@ const CalenderComponent = () => {
     return color;
   };
 
+  const handleCustomAgendaClick = () => {
+    setShowTable(true); // Show table container on custom agenda button click
+  };
+
+  const handleCloseTable = () => {
+    setShowTable(false);
+  };
+
   return (
     <div className="calendar-root-div">
       <div className="calendar-div">
@@ -64,6 +96,9 @@ const CalenderComponent = () => {
           endAccessor="end"
           selectable
           onSelectSlot={handleSelectSlot}
+          views={{ month: true, week: true, day: true }}
+          view={currentView}
+          onView={setCurrentView}
           style={{ width: 584, height: 480 }}
           eventPropGetter={(event) => ({
             style: {
@@ -77,6 +112,13 @@ const CalenderComponent = () => {
           })}
         />
       </div>
+
+      <button
+        onClick={handleCustomAgendaClick}
+        className="custom-agenda-button"
+      >
+        Show FollowUps
+      </button>
 
       {showNotification && (
         <div className="notification-container">
@@ -98,6 +140,58 @@ const CalenderComponent = () => {
             >
               Back
             </button>
+          </div>
+        </div>
+      )}
+
+      {showTable && (
+        <div className="table-container-parent">
+          <div className="table-container">
+            <div className="followup-close-btn-div">
+              <p className="followup-text-p">FollowUps</p>
+              <button onClick={handleCloseTable} className="table-close-button">
+                X
+              </button>
+            </div>
+
+            <div className="followup-notifier-table-div">
+              <table className="followup-notifier-table">
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Follow Up</th>
+                    <th>Assign To</th>
+                    <th>Comments</th>
+                    <th>Status Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leads.map((lead, index) => (
+                    <tr key={index}>
+                      <td id="followup-table-td">{lead.name}</td>
+                      <td id="followup-table-td">{lead.mobileNumber}</td>
+                      <td id="followup-table-td">{lead.email}</td>
+                      <td id="followup-table-td">{lead.followUpDate}</td>
+                      <td id="followup-table-td">{lead.assignTo}</td>
+                      <td id="followup-table-td">
+                        {lead.comments.map((commentItem) => (
+                          <div  key={commentItem.id}>
+                            <strong>Comment:</strong> {commentItem.comment}{" "}
+                            <br />
+                            <strong>Time:</strong>{" "}
+                            {new Date(commentItem.createdAt).toLocaleString()}{" "}
+                            <br />
+                          </div>
+                        ))}
+                      </td>
+                      <td id="followup-table-td">{lead.statusType}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
