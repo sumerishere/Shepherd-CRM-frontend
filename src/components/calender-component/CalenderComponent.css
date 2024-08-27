@@ -123,51 +123,117 @@
 
 
 
-/* CalenderComponent.css */
+/* table css */
+.table-container-parent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+
 .table-container {
   position: fixed;
-  top: 20%;
-  left: 10%;
-  width: 80%;
-  height: 450px;
+  top: 11.5%;
+  left: 22%;
+  width: 73%;
+  height: 550px;
   background: rgb(255, 255, 255);
-  border: 1px solid #ccc;
+  border: 1px solid #b4b2b2;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
   z-index: 1000;
-  overflow-y: auto;
+ 
+}
+
+.followup-notifier-table-div{
+  overflow: scroll;
+  height: 95%;
 }
 
 .followup-notifier-table{
   width: 100%;
   border-collapse: collapse;
+  
 }
 
 .table-container th, .table-container td {
   padding: 8px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #7f7c7c;
+
+}
+
+.table-container td{
+  /* width: 500px;
+  overflow-y: scroll;
+  height: 100px; */
+}
+
+
+#followup-table-td {
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space:normal;
+  max-width: 340px;
+  /* Set a maximum width to control column size */
 }
 
 .table-container th {
-  background-color: #f4f4f4;
+  background-color: #8f8d8d;
+  color: #060606;
+  font-weight: bold;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.table-container tr:hover{
+  cursor: pointer;
+  background-color: rgba(200, 198, 193, 0.927);
+  box-shadow: 2px 2px 1px rgb(0, 0, 0, 0.6);
+}
+.table-container tr:nth-child(even){
+  background-color: #e7e7e7;
 }
 
-.table-container .table-close-button {
+.followup-close-btn-div{
+  margin-top: -15px;
+  display: flex;
+  flex:1;
+}
+.followup-text-p{
+  margin-top: 7px;
+  font-size: 17px;
+  font-weight: 500;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+ .table-close-button {
   background: #f44336;
   color: white;
   border: none;
-  padding: 8px 16px;
+  height: 22px;
+  padding: 4px 12px;
   border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  margin-left: 89.4%;
 }
 
-.table-container .table-close-button:hover {
+.table-close-button:hover {
   background: #d32f2f;
 }
 
+#comments-cell-id{
+  overflow-y: scroll;
+}
 
 
 /* CalenderComponent.css */

@@ -13,6 +13,22 @@ const CalenderComponent = () => {
   const [eventTitle, setEventTitle] = useState("");
   const [eventSlot, setEventSlot] = useState(null);
   const [currentView, setCurrentView] = useState(Views.MONTH); // Track the current view
+  const [leads, setLeads] = useState([]);
+
+  const fetchLeads = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/get-all-lead");
+      const leadData = await response.json();
+
+      setLeads(leadData || []);
+    } catch (error) {
+      alert("got error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeads(); // Fetch leads when the component mounts
+  }, []);
 
   useEffect(() => {
     if (showNotification) {
@@ -97,7 +113,10 @@ const CalenderComponent = () => {
         />
       </div>
 
-      <button onClick={handleCustomAgendaClick} className="custom-agenda-button">
+      <button
+        onClick={handleCustomAgendaClick}
+        className="custom-agenda-button"
+      >
         Show FollowUps
       </button>
 
@@ -126,24 +145,54 @@ const CalenderComponent = () => {
       )}
 
       {showTable && (
-        <div className="table-container">
-          <button onClick={handleCloseTable} className="table-close-button">Close</button>
-          <table className="followup-notifier-table">
-            <thead>
-              <tr>
-                <th>Full Name</th>
-                <th>Mobile</th>
-                <th>Email</th>
-                <th>Follow Up</th>
-                <th>Assign To</th>
-                <th>Comments</th>
-                <th>Status Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Populate with data as needed */}
-            </tbody>
-          </table>
+        <div className="table-container-parent">
+          <div className="table-container">
+            <div className="followup-close-btn-div">
+              <p className="followup-text-p">FollowUps</p>
+              <button onClick={handleCloseTable} className="table-close-button">
+                X
+              </button>
+            </div>
+
+            <div className="followup-notifier-table-div">
+              <table className="followup-notifier-table">
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Follow Up</th>
+                    <th>Assign To</th>
+                    <th>Comments</th>
+                    <th>Status Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leads.map((lead, index) => (
+                    <tr key={index}>
+                      <td id="followup-table-td">{lead.name}</td>
+                      <td id="followup-table-td">{lead.mobileNumber}</td>
+                      <td id="followup-table-td">{lead.email}</td>
+                      <td id="followup-table-td">{lead.followUpDate}</td>
+                      <td id="followup-table-td">{lead.assignTo}</td>
+                      <td id="followup-table-td">
+                        {lead.comments.map((commentItem) => (
+                          <div  key={commentItem.id}>
+                            <strong>Comment:</strong> {commentItem.comment}{" "}
+                            <br />
+                            <strong>Time:</strong>{" "}
+                            {new Date(commentItem.createdAt).toLocaleString()}{" "}
+                            <br />
+                          </div>
+                        ))}
+                      </td>
+                      <td id="followup-table-td">{lead.statusType}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
     </div>
