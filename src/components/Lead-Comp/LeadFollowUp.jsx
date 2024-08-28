@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import debounce from "lodash/debounce";
 
-
 const LeadFollowUp = () => {
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState([]);
@@ -54,7 +53,9 @@ const LeadFollowUp = () => {
 
   const handleSearch = async (text) => {
     try {
-      const response = await fetch(`http://localhost:8080/search-lead-name?name=${text}`);
+      const response = await fetch(
+        `http://localhost:8080/search-lead-name?name=${text}`
+      );
       const data = await response.json();
       setFilteredLeads(data || []);
     } catch (error) {
@@ -64,7 +65,6 @@ const LeadFollowUp = () => {
 
   const debouncedSearch = debounce((text) => handleSearch(text), 300);
 
-
   useEffect(() => {
     if (searchText.length >= 3) {
       debouncedSearch(searchText);
@@ -73,8 +73,6 @@ const LeadFollowUp = () => {
       setFilteredLeads(leads);
     }
   }, [searchText, leads, debouncedSearch]);
-
-
 
   // ---- Handle category filter change -------//
   const handleCategoryFilterChange = (e) => {
@@ -192,7 +190,8 @@ const LeadFollowUp = () => {
         source: event.target.source.value,
         referName: event.target.referName.value,
         category: event.target.category.value,
-        followUpDate : event.target.followUpDate.value
+        followUpDate: event.target.followUpDate.value,
+        assignTo: event.target.assignTo.value,
       },
       comments: [newComment],
     };
@@ -248,9 +247,9 @@ const LeadFollowUp = () => {
   //     </div>
   //   );
   // } else {
-    if (loading) {
-      return <div id="loading-id">Loading...</div>;
-    }
+  if (loading) {
+    return <div id="loading-id">Loading...</div>;
+  }
   // }
 
   // Handle checkbox change
@@ -481,6 +480,14 @@ const LeadFollowUp = () => {
               type="datetime-local"
               name="followUpDate"
               defaultValue={selectedLead.followUpDate || ""}
+            />
+
+            <label className="updateFormLabel">Assign-To</label>
+            <input
+              className="updateFormInput"
+              type="text"
+              name="assignTo"
+              defaultValue={selectedLead.assignTo || "Assign name"}
             />
 
             <label className="updateFormLabel">New Comment</label>

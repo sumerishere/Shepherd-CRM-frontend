@@ -14,6 +14,7 @@ const CalenderComponent = () => {
   const [eventSlot, setEventSlot] = useState(null);
   const [currentView, setCurrentView] = useState(Views.MONTH); // Track the current view
   const [leads, setLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState([]); // State to hold the filtered leads
 
   const fetchLeads = async () => {
     try {
@@ -21,6 +22,28 @@ const CalenderComponent = () => {
       const leadData = await response.json();
 
       setLeads(leadData || []);
+
+      // Group leads by their followUpDate and create events for the calendar
+      const eventsData = leadData.reduce((eventsAcc, lead) => {
+        const followUpDate = moment(lead.followUpDate).startOf("day").toDate();
+        const existingEvent = eventsAcc.find(
+          (event) => moment(event.start).isSame(followUpDate, "day")
+        );
+
+        if (existingEvent) {
+          existingEvent.title = `${parseInt(existingEvent.title) + 1} leads`; // Increment the count
+        } else {
+          eventsAcc.push({
+            start: followUpDate,
+            end: followUpDate,
+            title: "1 lead", // Initial count for the event
+            backgroundColor: getRandomColor(),
+          });
+        }
+        return eventsAcc;
+      }, []);
+
+      setEvents(eventsData); // Update the events state with counted entries
     } catch (error) {
       alert("got error", error);
     }
@@ -61,7 +84,8 @@ const CalenderComponent = () => {
         start: eventSlot.start,
         end: eventSlot.end,
         title: eventTitle,
-        backgroundColor: getRandomColor(),
+        // backgroundColor: getRandomColor(),
+        backgroundColor: getHashedColor(eventSlot.start),
       };
       setEvents([...events, newEvent]);
       setEventTitle("");
@@ -78,7 +102,27 @@ const CalenderComponent = () => {
     return color;
   };
 
+  // Hashing function for consistent color generation based on followUpDate or event title
+  const getHashedColor = (input) => {
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = input.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = `#${((hash >> 24) & 0xff).toString(16)}${((hash >> 16) & 0xff).toString(16)}${((hash >> 8) & 0xff).toString(16)}`;
+    return color;
+  };
+
   const handleCustomAgendaClick = () => {
+    const today = moment().format("YYYY-MM-DD"); // Get the current date
+
+    // Filter the leads where followUpDate is equal to today's date
+    const filteredLeadsByDate = leads.filter((lead) => {
+      const followUpDate = moment(lead.followUpDate).format("YYYY-MM-DD");
+      return followUpDate === today;
+    });
+
+    setFilteredLeads(filteredLeadsByDate); // Set the filtered leads
+    fetchLeads();
     setShowTable(true); // Show table container on custom agenda button click
   };
 
@@ -102,14 +146,25 @@ const CalenderComponent = () => {
           style={{ width: 584, height: 480 }}
           eventPropGetter={(event) => ({
             style: {
-              backgroundColor: event.backgroundColor,
-              borderRadius: "4px",
+              backgroundColor: getHashedColor(event.start.toString()),
+              borderRadius: "13px",
               color: "white",
               border: "1px",
               display: "block",
-              padding: "3px 1px",
+              height: "30px",
+              width: "84px",
+              marginTop: "12px",
+              // marginLeft: "12px",
+              padding : "0px",
             },
           })}
+          components={{
+            event: ({ event }) => (
+              <div className="rbc-event-content" title={event.title}>
+                {event.title} {/* Displays the count of entries */}
+              </div>
+            ),
+          }}
         />
       </div>
 
@@ -155,44 +210,51 @@ const CalenderComponent = () => {
             </div>
 
             <div className="followup-notifier-table-div">
-              <table className="followup-notifier-table">
-                <thead>
-                  <tr>
-                    <th>Full Name</th>
-                    <th>Mobile</th>
-                    <th>Email</th>
-                    <th>Follow Up</th>
-                    <th>Assign To</th>
-                    <th>Comments</th>
-                    <th>Status Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {leads.map((lead, index) => (
-                    <tr key={index}>
-                      <td id="followup-table-td">{lead.name}</td>
-                      <td id="followup-table-td">{lead.mobileNumber}</td>
-                      <td id="followup-table-td">{lead.email}</td>
-                      <td id="followup-table-td">{lead.followUpDate}</td>
-                      <td id="followup-table-td">{lead.assignTo}</td>
-                      <td id="followup-table-td">
-                        {lead.comments.map((commentItem) => (
-                          <div  key={commentItem.id}>
-                            <strong>Comment:</strong> {commentItem.comment}{" "}
-                            <br />
-                            <strong>Time:</strong>{" "}
-                            {new Date(commentItem.createdAt).toLocaleString()}{" "}
-                            <br />
-                          </div>
-                        ))}
-                      </td>
-                      <td id="followup-table-td">{lead.statusType}</td>
+              {filteredLeads.length > 0 ? (
+                <table className="followup-notifier-table">
+                  <thead>
+                    <tr>
+                      <th>Full Name</th>
+                      <th>Mobile</th>
+                      <th>Email</th>
+                      <th>Follow Up</th>
+                      <th>Assign To</th>
+                      <th>Comments</th>
+                      <th>Status Type</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredLeads.map((lead, index) => (
+                      <tr key={index}>
+                        <td id="followup-table-td">{lead.name}</td>
+                        <td id="followup-table-td">{lead.mobileNumber}</td>
+                        <td id="followup-table-td">{lead.email}</td>
+                        <td id="followup-table-td">{lead.followUpDate}</td>
+                        <td id="followup-table-td">{lead.assignTo || "N/A"}</td>
+                        <td id="followup-table-td">
+                          {lead.comments.map((commentItem) => (
+                            <div key={commentItem.id}>
+                              <strong>Comment:</strong> {commentItem.comment}{" "}
+                              <br />
+                              <strong>Time:</strong>{" "}
+                              {new Date(commentItem.createdAt).toLocaleString()}{" "}
+                              <br />
+                            </div>
+                          ))}
+                        </td>
+                        <td id="followup-table-td">{lead.statusType || "N/A"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="no-followup-text-div">
+                  <img className="no-followup-img" src="/images/no-followups.jpeg" alt="" />
+                  <p id="no-followups-text">No followUps Found 😴</p>
+                </div>
+              )}
             </div>
-            </div>
+          </div>
         </div>
       )}
     </div>
