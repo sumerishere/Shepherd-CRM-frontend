@@ -45,13 +45,13 @@ const CalenderComponent = () => {
 
       setEvents(eventsData); // Update the events state with counted entries
     } catch (error) {
-      alert("got error", error);
+      alert("check server", error);
     }
   };
 
   useEffect(() => {
     fetchLeads(); // Fetch leads when the component mounts
-  }, []);
+  },[]);
 
   useEffect(() => {
     if (showNotification) {
