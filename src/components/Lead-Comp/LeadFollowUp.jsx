@@ -53,8 +53,19 @@ const LeadFollowUp = () => {
 
   const handleSearch = async (text) => {
     try {
+      const queryParams = new URLSearchParams();
+      if (text) {
+        // Check if input is likely a mobile number (only digits and possibly spaces)
+        const isMobileNumber = /^\d+$/.test(text.replace(/\s/g, ""));
+        if (isMobileNumber) {
+          queryParams.append("mobile", text);
+        } else {
+          queryParams.append("name", text);
+        }
+      }
+  
       const response = await fetch(
-        `http://localhost:8080/search-lead-name?name=${text}`
+        `http://localhost:8080/search-lead-name?${queryParams.toString()}`
       );
       const data = await response.json();
       setFilteredLeads(data || []);
@@ -74,6 +85,7 @@ const LeadFollowUp = () => {
     }
   }, [searchText, leads, debouncedSearch]);
 
+  
   // ---- Handle category filter change -------//
   const handleCategoryFilterChange = (e) => {
     const selectedCategory = e.target.value;
