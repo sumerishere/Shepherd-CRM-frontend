@@ -8,13 +8,10 @@ const localizer = momentLocalizer(moment);
 
 const CalenderComponent = () => {
   const [events, setEvents] = useState([]);
-  const [showNotification, setShowNotification] = useState(false);
-  const [showTable, setShowTable] = useState(false);
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventSlot, setEventSlot] = useState(null);
-  const [currentView, setCurrentView] = useState(Views.MONTH); // Track the current view
+  const [currentView, setCurrentView] = useState(Views.MONTH);
   const [leads, setLeads] = useState([]);
-  const [filteredLeads, setFilteredLeads] = useState([]); // State to hold the filtered leads
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [showTable, setShowTable] = useState(false);
 
   const fetchLeads = async () => {
     try {
@@ -23,7 +20,6 @@ const CalenderComponent = () => {
 
       setLeads(leadData || []);
 
-      // Group leads by their followUpDate and create events for the calendar
       const eventsData = leadData.reduce((eventsAcc, lead) => {
         const followUpDate = moment(lead.followUpDate).startOf("day").toDate();
         const existingEvent = eventsAcc.find(
@@ -31,78 +27,28 @@ const CalenderComponent = () => {
         );
 
         if (existingEvent) {
-          existingEvent.title = `${parseInt(existingEvent.title) + 1} leads`; // Increment the count
+          existingEvent.title = `${parseInt(existingEvent.title) + 1}`;
         } else {
           eventsAcc.push({
             start: followUpDate,
             end: followUpDate,
-            title: "1 lead", // Initial count for the event
-            backgroundColor: getRandomColor(),
+            title: "1",
+            backgroundColor: getHashedColor(followUpDate.toString()),
           });
         }
         return eventsAcc;
       }, []);
 
-      setEvents(eventsData); // Update the events state with counted entries
+      setEvents(eventsData);
     } catch (error) {
       alert("check server", error);
     }
   };
 
   useEffect(() => {
-    fetchLeads(); // Fetch leads when the component mounts
-  },[]);
+    fetchLeads();
+  }, []);
 
-  useEffect(() => {
-    if (showNotification) {
-      const timer = setTimeout(() => {
-        const notificationElement = document.querySelector(
-          ".notification-container"
-        );
-        if (notificationElement) {
-          notificationElement.classList.add("show");
-        }
-      }, 10);
-      return () => clearTimeout(timer);
-    }
-  }, [showNotification]);
-
-  useEffect(() => {
-    if (currentView !== Views.AGENDA) {
-      setShowTable(false); // Hide table when not in Agenda view
-    }
-  }, [currentView]);
-
-  const handleSelectSlot = ({ start, end }) => {
-    setEventSlot({ start, end });
-    setShowNotification(true);
-  };
-
-  const handleAddEvent = () => {
-    if (eventTitle) {
-      const newEvent = {
-        start: eventSlot.start,
-        end: eventSlot.end,
-        title: eventTitle,
-        // backgroundColor: getRandomColor(),
-        backgroundColor: getHashedColor(eventSlot.start),
-      };
-      setEvents([...events, newEvent]);
-      setEventTitle("");
-      setShowNotification(false);
-    }
-  };
-
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  // Hashing function for consistent color generation based on followUpDate or event title
   const getHashedColor = (input) => {
     let hash = 0;
     for (let i = 0; i < input.length; i++) {
@@ -112,18 +58,15 @@ const CalenderComponent = () => {
     return color;
   };
 
-  const handleCustomAgendaClick = () => {
-    const today = moment().format("YYYY-MM-DD"); // Get the current date
-
-    // Filter the leads where followUpDate is equal to today's date
+  const handleEventClick = (event) => {
+    const clickedDate = moment(event.start).format("YYYY-MM-DD");
     const filteredLeadsByDate = leads.filter((lead) => {
       const followUpDate = moment(lead.followUpDate).format("YYYY-MM-DD");
-      return followUpDate === today;
+      return followUpDate === clickedDate;
     });
 
-    setFilteredLeads(filteredLeadsByDate); // Set the filtered leads
-    fetchLeads();
-    setShowTable(true); // Show table container on custom agenda button click
+    setFilteredLeads(filteredLeadsByDate);
+    setShowTable(true);
   };
 
   const handleCloseTable = () => {
@@ -138,66 +81,38 @@ const CalenderComponent = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          selectable
-          onSelectSlot={handleSelectSlot}
           views={{ month: true, week: true, day: true }}
           view={currentView}
           onView={setCurrentView}
           style={{ width: 584, height: 480 }}
           eventPropGetter={(event) => ({
             style: {
-              backgroundColor: getHashedColor(event.start.toString()),
+              backgroundColor: event.backgroundColor,
               borderRadius: "13px",
               color: "white",
               border: "1px",
               display: "block",
               height: "30px",
-              width: "84px",
-              marginTop: "12px",
-              // marginLeft: "12px",
-              padding : "0px",
+              width: "70px",
+              marginTop: "20px",
+              marginLeft: "5px",
+              padding: "0px",
+              textAlign: "center",
             },
           })}
           components={{
             event: ({ event }) => (
-              <div className="rbc-event-content" title={event.title}>
-                {event.title} {/* Displays the count of entries */}
+              <div 
+                className="rbc-event-content" 
+                title={event.title}
+                onClick={() => handleEventClick(event)}
+              >
+                {event.title}
               </div>
             ),
           }}
         />
       </div>
-
-      <button
-        onClick={handleCustomAgendaClick}
-        className="custom-agenda-button"
-      >
-        Show FollowUps
-      </button>
-
-      {showNotification && (
-        <div className="notification-container">
-          <h3>Add Event😊</h3>
-          <input
-            type="text"
-            placeholder="Enter event title"
-            value={eventTitle}
-            onChange={(e) => setEventTitle(e.target.value)}
-            className="event-input"
-          />
-          <div className="notification-buttons">
-            <button onClick={handleAddEvent} className="ok-button">
-              OK
-            </button>
-            <button
-              onClick={() => setShowNotification(false)}
-              className="back-button"
-            >
-              Back
-            </button>
-          </div>
-        </div>
-      )}
 
       {showTable && (
         <div className="table-container-parent">

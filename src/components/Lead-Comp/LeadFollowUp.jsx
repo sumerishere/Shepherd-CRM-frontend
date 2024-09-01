@@ -499,7 +499,7 @@ const LeadFollowUp = () => {
               className="updateFormInput"
               type="text"
               name="assignTo"
-              defaultValue={selectedLead.assignTo || "Assign name"}
+              defaultValue={selectedLead.assignTo || "Assign name here"}
             />
 
             <label className="updateFormLabel">New Comment</label>
