@@ -1,8 +1,10 @@
-import "./CalenderComponent.css";
-import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
+import { useEffect, useState } from "react";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./CalenderComponent.css";
 
 const localizer = momentLocalizer(moment);
 
@@ -13,6 +15,19 @@ const CalenderComponent = () => {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+  // New state for showing update form and tracking selected lead data
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [updateFormData, setUpdateFormData] = useState({
+    name: "",
+    mobileNumber: "",
+    email: "",
+    followUpDate: "",
+    assignTo: "",
+    comments: "",
+    statusType: "",
+  });
+
   const fetchLeads = async () => {
     try {
       const response = await fetch("http://localhost:8080/get-all-lead");
@@ -22,8 +37,8 @@ const CalenderComponent = () => {
 
       const eventsData = leadData.reduce((eventsAcc, lead) => {
         const followUpDate = moment(lead.followUpDate).startOf("day").toDate();
-        const existingEvent = eventsAcc.find(
-          (event) => moment(event.start).isSame(followUpDate, "day")
+        const existingEvent = eventsAcc.find((event) =>
+          moment(event.start).isSame(followUpDate, "day")
         );
 
         if (existingEvent) {
@@ -41,7 +56,7 @@ const CalenderComponent = () => {
 
       setEvents(eventsData);
     } catch (error) {
-      alert("check server", error);
+      toast.error("Failed to fetch leads");
     }
   };
 
@@ -54,7 +69,10 @@ const CalenderComponent = () => {
     for (let i = 0; i < input.length; i++) {
       hash = input.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const color = `#${((hash >> 24) & 0xff).toString(16)}${((hash >> 16) & 0xff).toString(16)}${((hash >> 8) & 0xff).toString(16)}`;
+    const color = `#${((hash >> 24) & 0xff).toString(16)}${(
+      (hash >> 16) &
+      0xff
+    ).toString(16)}${((hash >> 8) & 0xff).toString(16)}`;
     return color;
   };
 
@@ -73,8 +91,91 @@ const CalenderComponent = () => {
     setShowTable(false);
   };
 
+  // Function to handle clicking on a table entry to open the update form
+  const handleLeadClick = async (lead) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/get-lead-by-id/${lead.uid}`
+      );
+      const leadData = await response.json();
+
+      setSelectedLead(leadData);
+      setUpdateFormData({
+        name: leadData.name || "",
+        mobileNumber: leadData.mobileNumber || "",
+        email: leadData.email || "",
+        followUpDate: leadData.followUpDate || "",
+        assignTo: leadData.assignTo || "",
+        comments:
+          leadData.comments.map((comment) => comment.comment).join(", ") || "",
+        statusType: leadData.statusType || "",
+      });
+
+      setShowUpdateForm(true);
+    } catch (error) {
+      toast.error("Failed to fetch lead details");
+    }
+  };
+
+  // Function to handle form changes
+  const handleFormChange = (e) => {
+    setUpdateFormData({
+      ...updateFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Function to handle form submission and send PUT request
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Create a payload with only the updated fields
+    const payload = {
+      name: updateFormData.name || selectedLead.name,
+      email: updateFormData.email || selectedLead.email,
+      mobileNumber: updateFormData.mobileNumber || selectedLead.mobileNumber,
+      followUpDate: updateFormData.followUpDate || selectedLead.followUpDate,
+      assignTo: updateFormData.assignTo || selectedLead.assignTo,
+      statusType: updateFormData.statusType || selectedLead.statusType,
+      // Simplify comments to just strings array if updated
+      comments: updateFormData.comments
+        ? updateFormData.comments.split(",").map((comment) => comment.trim())
+        : selectedLead.comments,
+    };
+  
+    try {
+      const response = await fetch(
+        `http://localhost:8080/update-lead-by-id/${selectedLead.uid}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+  
+      if (response.ok) {
+        toast.success("Lead updated successfully!");
+        setShowUpdateForm(false);
+        fetchLeads(); // Refresh leads after update
+      } else {
+        toast.error("Failed to update lead.");
+      }
+    } catch (error) {
+      console.error("Error updating lead:", error);
+      toast.error("An error occurred while updating the lead.");
+    }
+  };
+  
+  // Function to handle closing the update form
+  const handleCloseUpdateForm = () => {
+    setShowUpdateForm(false);
+  };
+
   return (
     <div className="calendar-root-div">
+      <ToastContainer />
       <div className="calendar-div">
         <Calendar
           localizer={localizer}
@@ -102,8 +203,8 @@ const CalenderComponent = () => {
           })}
           components={{
             event: ({ event }) => (
-              <div 
-                className="rbc-event-content" 
+              <div
+                className="rbc-event-content"
                 title={event.title}
                 onClick={() => handleEventClick(event)}
               >
@@ -140,36 +241,125 @@ const CalenderComponent = () => {
                   </thead>
                   <tbody>
                     {filteredLeads.map((lead, index) => (
-                      <tr key={index}>
-                        <td id="followup-table-td">{lead.name}</td>
+                      <tr key={index} onClick={() => handleLeadClick(lead)}>
+                        <td id="followup-table-td">{lead.name || "N/A"}</td>
                         <td id="followup-table-td">{lead.mobileNumber}</td>
-                        <td id="followup-table-td">{lead.email}</td>
-                        <td id="followup-table-td">{lead.followUpDate}</td>
+                        <td id="followup-table-td">{lead.email || "N/A"}</td>
+                        <td id="followup-table-td">
+                          {lead.followUpDate || "N/A"}
+                        </td>
                         <td id="followup-table-td">{lead.assignTo || "N/A"}</td>
                         <td id="followup-table-td">
                           {lead.comments.map((commentItem) => (
                             <div key={commentItem.id}>
-                              <strong>Comment:</strong> {commentItem.comment}{" "}
+                              <strong>Comment:</strong> {commentItem.comment}
                               <br />
-                              <strong>Time:</strong>{" "}
-                              {new Date(commentItem.createdAt).toLocaleString()}{" "}
+                              <strong>Time:</strong>
+                              {new Date(commentItem.createdAt).toLocaleString()}
                               <br />
                             </div>
                           ))}
                         </td>
-                        <td id="followup-table-td">{lead.statusType || "N/A"}</td>
+                        <td id="followup-table-td">
+                          {lead.statusType || "N/A"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               ) : (
-                <div className="no-followup-text-div">
-                  <img className="no-followup-img" src="/images/no-followups.jpeg" alt="" />
-                  <p id="no-followups-text">No followUps Found 😴</p>
-                </div>
+                <p>No leads found for this date.</p>
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {showUpdateForm && (
+        <div className="update-notifier-overlay ">
+        <div className="update-notifier-form-container">
+          <button
+            onClick={handleCloseUpdateForm}
+            className="update-notifier-close-btn"
+          >
+            X
+          </button>
+          <div className="update-notifier-header">Update Lead</div>
+          <form onSubmit={handleFormSubmit}>
+            <label className="update-notifier-label">
+              Name:
+              <input
+                type="text"
+                name="name"
+                value={updateFormData.name}
+                onChange={handleFormChange}
+                className="update-notifier-input"
+              />
+            </label>
+            <label className="update-notifier-label">
+              Mobile Number:
+              <input
+                type="text"
+                name="mobileNumber"
+                value={updateFormData.mobileNumber}
+                onChange={handleFormChange}
+                className="update-notifier-input"
+              />
+            </label>
+            <label className="update-notifier-label">
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={updateFormData.email}
+                onChange={handleFormChange}
+                className="update-notifier-input"
+              />
+            </label>
+            <label className="update-notifier-label">
+              Follow Up Date:
+              <input
+                type="date"
+                name="followUpDate"
+                value={updateFormData.followUpDate}
+                onChange={handleFormChange}
+                className="update-notifier-input"
+              />
+            </label>
+            <label className="update-notifier-label">
+              Assign To:
+              <input
+                type="text"
+                name="assignTo"
+                value={updateFormData.assignTo}
+                onChange={handleFormChange}
+                className="update-notifier-input"
+              />
+            </label>
+            {/* <label className="update-notifier-label">
+              Comments:
+              <textarea
+                name="comments"
+                value={updateFormData.comments}
+                onChange={handleFormChange}
+                className="update-notifier-textarea"
+              />
+            </label> */}
+            <label className="update-notifier-label">
+              Status Type:
+              <input
+                type="text"
+                name="statusType"
+                value={updateFormData.statusType}
+                onChange={handleFormChange}
+                className="update-notifier-input"
+              />
+            </label>
+            <button type="submit" className="update-notifier-submit-btn">
+              Update Lead
+            </button>
+          </form>
+        </div>
         </div>
       )}
     </div>
