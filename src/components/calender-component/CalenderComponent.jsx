@@ -28,6 +28,7 @@ const CalenderComponent = () => {
     statusType: "",
   });
 
+
   const fetchLeads = async () => {
     try {
       const response = await fetch("http://localhost:8080/get-all-lead");
@@ -125,33 +126,41 @@ const CalenderComponent = () => {
     });
   };
 
+  
+
   // Function to handle form submission and send PUT request
   const handleFormSubmit = async (e) => {
     e.preventDefault();
   
-    // Create a payload with only the updated fields
-    const payload = {
+    // Prepare the lead follow-up data
+    const leadFollowUpData = {
       name: updateFormData.name || selectedLead.name,
       email: updateFormData.email || selectedLead.email,
       mobileNumber: updateFormData.mobileNumber || selectedLead.mobileNumber,
       followUpDate: updateFormData.followUpDate || selectedLead.followUpDate,
       assignTo: updateFormData.assignTo || selectedLead.assignTo,
       statusType: updateFormData.statusType || selectedLead.statusType,
-      // Simplify comments to just strings array if updated
-      comments: updateFormData.comments
-        ? updateFormData.comments.split(",").map((comment) => comment.trim())
-        : selectedLead.comments,
+    };
+  
+    // Construct the payload with leadFollowUp data only
+    const payload = {
+      name: leadFollowUpData.name,
+      email: leadFollowUpData.email,
+      mobileNumber: leadFollowUpData.mobileNumber,
+      followUpDate: leadFollowUpData.followUpDate,
+      assignTo: leadFollowUpData.assignTo,
+      statusType: leadFollowUpData.statusType,
     };
   
     try {
       const response = await fetch(
-        `http://localhost:8080/update-lead-by-id/${selectedLead.uid}`,
+        `http://localhost:8080/update-followup/${selectedLead.uid}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(payload), // Send the properly structured payload
         }
       );
   
@@ -167,6 +176,8 @@ const CalenderComponent = () => {
       toast.error("An error occurred while updating the lead.");
     }
   };
+  
+  
   
   // Function to handle closing the update form
   const handleCloseUpdateForm = () => {
@@ -336,15 +347,18 @@ const CalenderComponent = () => {
                 className="update-notifier-input"
               />
             </label>
-            {/* <label className="update-notifier-label">
+
+             {/* <label className="update-notifier-label">
               Comments:
               <textarea
                 name="comments"
                 value={updateFormData.comments}
                 onChange={handleFormChange}
                 className="update-notifier-textarea"
+                readOnly
               />
             </label> */}
+          
             <label className="update-notifier-label">
               Status Type:
               <input
