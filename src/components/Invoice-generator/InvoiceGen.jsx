@@ -255,12 +255,12 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
           <h3 className="invoice-gen-header">Billed By</h3>
           <div className="invoice-gen-input-group">
             <div className="invoice-gen-input-container">
-              <label htmlFor="billedByName">Name</label>
+              <label htmlFor="billedByName">Organization Name</label>
               <input
                 type="text"
                 id="billedByName"
                 name="billedByName"
-                placeholder="Billed By Name"
+                placeholder="Enter Organization Name"
                 value={invoiceDetails.billedByName}
                 onChange={handleInputChange}
               />
@@ -284,12 +284,12 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
           <h3 className="invoice-gen-header">Billed To</h3>
           <div className="invoice-gen-input-group">
             <div className="invoice-gen-input-container">
-              <label htmlFor="billedToName">Name</label>
+              <label htmlFor="billedToName">Receiver Name</label>
               <input
                 type="text"
                 id="billedToName"
                 name="billedToName"
-                placeholder="Billed To Name"
+                placeholder="Enter Receiver Name"
                 value={invoiceDetails.billedToName}
                 onChange={handleInputChange}
               />

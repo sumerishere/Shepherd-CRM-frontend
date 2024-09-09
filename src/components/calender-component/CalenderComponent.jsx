@@ -114,7 +114,7 @@ const CalenderComponent = () => {
 
       setShowUpdateForm(true);
     } catch (error) {
-      toast.error("Failed to fetch lead details");
+      toast.error("Failed to fetch lead details",error);
     }
   };
 
@@ -177,11 +177,15 @@ const CalenderComponent = () => {
     }
   };
   
-  
-  
   // Function to handle closing the update form
   const handleCloseUpdateForm = () => {
     setShowUpdateForm(false);
+  };
+
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    return now.toISOString().slice(0,16);
   };
 
   return (
@@ -295,7 +299,7 @@ const CalenderComponent = () => {
           >
             X
           </button>
-          <div className="update-notifier-header">Update Lead</div>
+          <div className="update-notifier-header">Update FollowUp</div>
           <form onSubmit={handleFormSubmit}>
             <label className="update-notifier-label">
               Name:
@@ -330,11 +334,12 @@ const CalenderComponent = () => {
             <label className="update-notifier-label">
               Follow Up Date:
               <input
-                type="date"
+                type="datetime-local"
                 name="followUpDate"
                 value={updateFormData.followUpDate}
                 onChange={handleFormChange}
                 className="update-notifier-input"
+                min={getCurrentDateTime()}
               />
             </label>
             <label className="update-notifier-label">
