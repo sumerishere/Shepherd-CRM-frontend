@@ -9,7 +9,7 @@ import CalenderComponent from "../calender-component/CalenderComponent";
 const DashboardComponent = () => {
   return (
     <div className="dashboard-root-div">
-      <div className="calander-child-1">
+      <div className="calender-child-1">
         <CalenderComponent />
       </div>
 
