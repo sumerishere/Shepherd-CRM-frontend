@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
-import "./InvoiceGen.css";
 import "jspdf-autotable";
+import { useEffect, useState } from "react";
+import "./InvoiceGen.css";
+import axios from 'axios';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 const InvoiceGen = () => {
+
+  const [loading, setLoading] = useState(false); // State to control loading spinner
+
   const [payments, setPayments] = useState([
     { date: "", mode: "", amount: "" },
   ]);
@@ -81,9 +89,9 @@ const InvoiceGen = () => {
 
     // Add PNG Image from base64
     if (imgData) {
-        doc.addImage(imgData, "PNG", 150, 10, 40, 40); // Adjusted image position
+      doc.addImage(imgData, "PNG", 150, 10, 40, 40); // Adjusted image position
     } else {
-        console.error("Image data is not available.");
+      console.error("Image data is not available.");
     }
 
     // Title with "PAID" Text
@@ -101,7 +109,7 @@ const InvoiceGen = () => {
     const titleY = 20;
 
     doc.setFillColor(0, 128, 0); // Green background for "PAID"
-    doc.rect(paidTextX - 3, titleY - 4, paidTextWidth + 6, 10, 'F'); // Background rectangle
+    doc.rect(paidTextX - 3, titleY - 4, paidTextWidth + 6, 10, "F"); // Background rectangle
     doc.setTextColor(255, 255, 255); // White text color
     doc.text(paidText, paidTextX, titleY + 3);
 
@@ -111,11 +119,11 @@ const InvoiceGen = () => {
 
     // Helper function to wrap text within a given width
     const wrapText = (text, x, y, maxWidth) => {
-        const lines = doc.splitTextToSize(text, maxWidth);
-        lines.forEach((line, index) => {
-            doc.text(line, x, y + (index * 5)); // Adjust line spacing if needed
-        });
-        return lines.length * 5; // Return the total height used by the text
+      const lines = doc.splitTextToSize(text, maxWidth);
+      lines.forEach((line, index) => {
+        doc.text(line, x, y + index * 5); // Adjust line spacing if needed
+      });
+      return lines.length * 5; // Return the total height used by the text
     };
 
     // Billed By Section
@@ -125,83 +133,139 @@ const InvoiceGen = () => {
     const radius = 5; // Radius for rounded corners
 
     // Calculate text height
-    const billedByNameHeight = wrapText(invoiceDetails.billedByName, billedByX + 5, billedByY + 20, width - 10);
-    const billedByAddressHeight = wrapText(invoiceDetails.billedByAddress, billedByX + 5, billedByY + 20 + billedByNameHeight, width - 10);
+    const billedByNameHeight = wrapText(
+      invoiceDetails.billedByName,
+      billedByX + 5,
+      billedByY + 20,
+      width - 10
+    );
+    const billedByAddressHeight = wrapText(
+      invoiceDetails.billedByAddress,
+      billedByX + 5,
+      billedByY + 20 + billedByNameHeight,
+      width - 10
+    );
 
     // Adjust height of the rectangle dynamically
-    const billedByHeight = billedByY + 20 + billedByNameHeight + billedByAddressHeight;
-    drawRoundedRect(doc, billedByX, billedByY, width, billedByHeight - billedByY, radius);
+    const billedByHeight =
+      billedByY + 20 + billedByNameHeight + billedByAddressHeight;
+    drawRoundedRect(
+      doc,
+      billedByX,
+      billedByY,
+      width,
+      billedByHeight - billedByY,
+      radius
+    );
 
     doc.setTextColor(0, 0, 0); // Black text
     doc.setFontSize(headingFontSize);
     doc.text("Billed By:", billedByX + 5, billedByY + 10);
     doc.setFontSize(valueFontSize);
-    wrapText(invoiceDetails.billedByName, billedByX + 5, billedByY + 20, width - 10);
-    wrapText(invoiceDetails.billedByAddress, billedByX + 5, billedByY + 20 + billedByNameHeight, width - 10);
+    wrapText(
+      invoiceDetails.billedByName,
+      billedByX + 5,
+      billedByY + 20,
+      width - 10
+    );
+    wrapText(
+      invoiceDetails.billedByAddress,
+      billedByX + 5,
+      billedByY + 20 + billedByNameHeight,
+      width - 10
+    );
 
     // Billed To Section
     const billedToX = 110;
     const billedToY = billedByY; // Start at the same vertical position as "Billed By"
 
     // Calculate text height
-    const billedToNameHeight = wrapText(invoiceDetails.billedToName, billedToX + 5, billedToY + 20, width - 10);
-    const billedToAddressHeight = wrapText(invoiceDetails.billedToAddress, billedToX + 5, billedToY + 20 + billedToNameHeight, width - 10);
+    const billedToNameHeight = wrapText(
+      invoiceDetails.billedToName,
+      billedToX + 5,
+      billedToY + 20,
+      width - 10
+    );
+    const billedToAddressHeight = wrapText(
+      invoiceDetails.billedToAddress,
+      billedToX + 5,
+      billedToY + 20 + billedToNameHeight,
+      width - 10
+    );
 
     // Adjust height of the rectangle dynamically
-    const billedToHeight = billedToY + 20 + billedToNameHeight + billedToAddressHeight;
-    drawRoundedRect(doc, billedToX, billedToY, width, billedToHeight - billedToY, radius);
+    const billedToHeight =
+      billedToY + 20 + billedToNameHeight + billedToAddressHeight;
+    drawRoundedRect(
+      doc,
+      billedToX,
+      billedToY,
+      width,
+      billedToHeight - billedToY,
+      radius
+    );
 
     doc.setTextColor(0, 0, 0); // Black text
     doc.setFontSize(headingFontSize);
     doc.text("Billed To:", billedToX + 5, billedToY + 10);
     doc.setFontSize(valueFontSize);
-    wrapText(invoiceDetails.billedToName, billedToX + 5, billedToY + 20, width - 10);
-    wrapText(invoiceDetails.billedToAddress, billedToX + 5, billedToY + 20 + billedToNameHeight, width - 10);
+    wrapText(
+      invoiceDetails.billedToName,
+      billedToX + 5,
+      billedToY + 20,
+      width - 10
+    );
+    wrapText(
+      invoiceDetails.billedToAddress,
+      billedToX + 5,
+      billedToY + 20 + billedToNameHeight,
+      width - 10
+    );
 
     // Table Headers and Rows
     const tableStartY = Math.max(billedByHeight, billedToHeight) + 20; // Position below the taller section
     doc.autoTable({
-        startY: tableStartY,
-        head: [["Item", "Quantity", "Rate", "Amount"]],
-        body: items.map((item) => [
-            item.name,
-            item.quantity,
-            item.rate,
-            item.amount,
-        ]),
-        theme: "grid",
-        headStyles: {
-            fillColor: [128, 0, 128], // Purple
-            textColor: [255, 255, 255], // White
-        },
-        styles: {
-            fillColor: [240, 240, 255], // Light grey-purple
-            textColor: [0, 0, 0], // Black
-        },
-        margin: { top: 10, right: 10, bottom: 10, left: 10 },
+      startY: tableStartY,
+      head: [["Item", "Quantity", "Rate", "Amount"]],
+      body: items.map((item) => [
+        item.name,
+        item.quantity,
+        item.rate,
+        item.amount,
+      ]),
+      theme: "grid",
+      headStyles: {
+        fillColor: [128, 0, 128], // Purple
+        textColor: [255, 255, 255], // White
+      },
+      styles: {
+        fillColor: [240, 240, 255], // Light grey-purple
+        textColor: [0, 0, 0], // Black
+      },
+      margin: { top: 10, right: 10, bottom: 10, left: 10 },
     });
 
     // Payments Section
     const paymentsStartY = doc.autoTable.previous.finalY + 20; // Position below the table
     doc.text("Payments:", 16, paymentsStartY);
     doc.autoTable({
-        startY: paymentsStartY + 10, // Start below the "Payments" label
-        head: [["Date", "Mode", "Amount"]],
-        body: payments.map((payment) => [
-            payment.date,
-            payment.mode,
-            payment.amount,
-        ]),
-        theme: "grid",
-        headStyles: {
-            fillColor: [128, 0, 128], // Purple
-            textColor: [255, 255, 255], // White
-        },
-        styles: {
-            fillColor: [240, 240, 255], // Light grey-purple
-            textColor: [0, 0, 0], // Black
-        },
-        margin: { top: 10, right: 10, bottom: 10, left: 10 },
+      startY: paymentsStartY + 10, // Start below the "Payments" label
+      head: [["Date", "Mode", "Amount"]],
+      body: payments.map((payment) => [
+        payment.date,
+        payment.mode,
+        payment.amount,
+      ]),
+      theme: "grid",
+      headStyles: {
+        fillColor: [128, 0, 128], // Purple
+        textColor: [255, 255, 255], // White
+      },
+      styles: {
+        fillColor: [240, 240, 255], // Light grey-purple
+        textColor: [0, 0, 0], // Black
+      },
+      margin: { top: 10, right: 10, bottom: 10, left: 10 },
     });
 
     // Terms & Conditions Section
@@ -212,43 +276,124 @@ const InvoiceGen = () => {
     // Title and text positioning
     const termsTitleHeight = 20; // Height of title
     const termsText = [
-        "1. Fees paid is not transferrable and non-refundable.",
-        "2. Placement charges are applicable upon receipt of offer letter.",
-        "3. Fees paid shall be applicable for the batch only for which admission is taken.",
-        "4. Batch transfer charges (Rs. 5000) shall be applicable in case you want to change your current batch.",
-        "5. If fees are paid in instalment, then the first instalment shall be paid at the time of admission and the next instalment shall be paid within 25 days of admission."
+      "1. Fees paid is not transferrable and non-refundable.",
+      "2. Placement charges are applicable upon receipt of offer letter.",
+      "3. Fees paid shall be applicable for the batch only for which admission is taken.",
+      "4. Batch transfer charges (Rs. 5000) shall be applicable in case you want to change your current batch.",
+      "5. If fees are paid in instalment, then the first instalment shall be paid at the time of admission and the next instalment shall be paid within 25 days of admission.",
     ];
-    const termsTextHeight = termsText.reduce((height, line) => height + wrapText(line, termsX + 5, termsY + height + termsTitleHeight, termsWidth - 10), 0);
+    const termsTextHeight = termsText.reduce(
+      (height, line) =>
+        height +
+        wrapText(
+          line,
+          termsX + 5,
+          termsY + height + termsTitleHeight,
+          termsWidth - 10
+        ),
+      0
+    );
 
     // Adjust height of the rectangle dynamically
-    drawRoundedRect(doc, termsX, termsY, termsWidth, termsTitleHeight + termsTextHeight, radius);
+    drawRoundedRect(
+      doc,
+      termsX,
+      termsY,
+      termsWidth,
+      termsTitleHeight + termsTextHeight,
+      radius
+    );
 
     doc.setTextColor(0, 0, 0); // Black text
     doc.setFontSize(headingFontSize);
     doc.text("Terms & Conditions:", termsX + 5, termsY + 10); // Title above the rectangle
     doc.setFontSize(valueFontSize);
     termsText.forEach((line, index) => {
-        wrapText(line, termsX + 5, termsY + 16 + (index * 6), termsWidth - 10); // Adjust spacing between lines
+      wrapText(line, termsX + 5, termsY + 16 + index * 6, termsWidth - 10); // Adjust spacing between lines
     });
 
-    doc.save("invoice.pdf");
-};
+    if(generatePDF){
+      doc.save("invoice.pdf");
+    }
+    // doc.save("invoice.pdf");
+  };
 
-// Helper function to draw a rounded rectangle
-const drawRoundedRect = (doc, x, y, width, height, radius) => {
+  // Helper function to draw a rounded rectangle
+  const drawRoundedRect = (doc, x, y, width, height, radius) => {
     doc.setFillColor(240, 240, 255); // Light grey-purple
 
     // Draw the rounded rectangle
     doc.setDrawColor(0, 0, 0); // Border color (black)
     doc.setLineWidth(0.5); // Border width
 
-    doc.roundedRect(x, y, width, height, radius, radius, 'F'); // 'F' for fill
-    doc.roundedRect(x, y, width, height, radius, radius, 'S'); // 'S' for stroke
-};
+    doc.roundedRect(x, y, width, height, radius, radius, "F"); // 'F' for fill
+    doc.roundedRect(x, y, width, height, radius, radius, "S"); // 'S' for stroke
+  };
+
+  // const [candidateName, setCandidateName] = useState("");
+  const [candidateMobile, setCandidateMobile] = useState("");
+  const [candidateMail, setCandidateMail] = useState("");
+  // const [organizationName, setOrganizationName] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+
+    //extracted from invoice-form using destructuring the form.
+    const { billedByName, billedToName } = invoiceDetails;
+  
+    // Generate the PDF
+    const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
+    generatePDF(doc); // Call the function that generates the invoice content in the PDF
+  
+    // Get the PDF as a Blob
+    const pdfBlob = doc.output("blob");
+  
+    // Prepare the form data
+    const formData = new FormData();
+    formData.append("billedToName", billedToName);
+    formData.append("candidateMobile", candidateMobile);
+    formData.append("candidateMail", candidateMail);
+    formData.append("billedByName", billedByName);
+    formData.append("invoicePdf", pdfBlob, "invoice.pdf"); // Attach the PDF blob
+    
+
+    setLoading(true);
+    try {
+      // Make the POST request to the backend
+      const response = await axios.post("http://localhost:8080/save-invoice", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      if (response.status === 200) {
+        toast.success("Invoice Sended Successfully!!");
+        console.log("Invoice uploaded successfully");
+        // You can add toast notification or further success logic here
+      } else {
+        console.error("Error uploading the invoice");
+      }
+    } catch (error) {
+      toast.error("Invoice sending failed!!");
+      console.error("Error during invoice upload:", error);
+      // Handle the error, e.g., show a notification
+    }
+    finally {
+      setLoading(false); // Hide the spinner
+    }
+  };
+  
 
   return (
     <div className="invoice-gen-root">
-      <h1 className="invoice-gen-title">Invoice Generator</h1>
+      {loading && (
+        <div className="invoice-gen-form-spinner-overlay">
+          <ClipLoader color="#ffffff" loading={loading} size={100} />
+        </div>
+      )}
+      <ToastContainer/>
+      <h1 className="invoice-gen-title">Invoice</h1>
       <div id="invoice-gen-section" className="invoice-gen-section">
         {/* Billed By Section */}
         <div className="invoice-gen-details">
@@ -263,6 +408,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                 placeholder="Enter Organization Name"
                 value={invoiceDetails.billedByName}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="invoice-gen-input-container">
@@ -273,6 +419,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                 name="billedByAddress"
                 placeholder="Billed By Address"
                 value={invoiceDetails.billedByAddress}
+                required
                 onChange={handleInputChange}
               />
             </div>
@@ -284,16 +431,43 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
           <h3 className="invoice-gen-header">Billed To</h3>
           <div className="invoice-gen-input-group">
             <div className="invoice-gen-input-container">
-              <label htmlFor="billedToName">Receiver Name</label>
+              <label htmlFor="billedToName">Candidate Name</label>
               <input
                 type="text"
                 id="billedToName"
                 name="billedToName"
                 placeholder="Enter Receiver Name"
                 value={invoiceDetails.billedToName}
+                required
                 onChange={handleInputChange}
               />
             </div>
+            <div className="invoice-gen-input-container">
+              <label htmlFor="billedToMobileNumber">Mobile Number</label>
+              <input
+                type="text"
+                id="billedToMobileNumber"
+                name="billedToMobileNumber"
+                placeholder="Enter mobile number"
+                value={candidateMobile}
+                required
+                onChange={(e) => setCandidateMobile(e.target.value)}
+              />
+            </div>
+
+            <div className="invoice-gen-input-container">
+              <label htmlFor="billedToMail">Mail</label>
+              <input
+                type="text"
+                id="billedToMail"
+                name="billedToMail"
+                placeholder="Enter mail id"
+                value={candidateMail}
+                required
+                onChange={(e) => setCandidateMail(e.target.value)}
+              />
+            </div>
+
             <div className="invoice-gen-input-container">
               <label htmlFor="billedToAddress">Address</label>
               <input
@@ -302,6 +476,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                 name="billedToAddress"
                 placeholder="Billed To Address"
                 value={invoiceDetails.billedToAddress}
+                required
                 onChange={handleInputChange}
               />
             </div>
@@ -319,14 +494,13 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   name="name"
                   id={`itemName-${index}`}
                   value={item.name}
+                  required
                   onChange={(e) => handleItemChange(index, e)}
                 >
                   <option value="" disabled>
                     Select course type
                   </option>
-                  <option value="Java fullStack development">
-                    Java fullStack development
-                  </option>
+                  <option value="Java fullStack development">Java fullStack development</option>
                   <option value="Automation Testing">Automation Testing</option>
                   <option value="UI/UX">UI/UX</option>
                   <option value="MERN Stack">MERN Stack</option>
@@ -342,6 +516,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   id={`itemQuantity-${index}`}
                   placeholder="Quantity"
                   value={item.quantity}
+                  required
                   onChange={(e) => handleItemChange(index, e)}
                 />
               </div>
@@ -353,6 +528,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   id={`itemRate-${index}`}
                   placeholder="Rate"
                   value={item.rate}
+                  required
                   onChange={(e) => handleItemChange(index, e)}
                 />
               </div>
@@ -364,6 +540,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   id={`itemAmount-${index}`}
                   placeholder="Amount"
                   value={item.amount}
+                  required
                   onChange={(e) => handleItemChange(index, e)}
                 />
               </div>
@@ -393,6 +570,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   id={`paymentDate-${index}`}
                   placeholder="Payment Date"
                   value={payment.date}
+                  required
                   onChange={(e) => handlePaymentChange(index, e)}
                 />
               </div>
@@ -404,6 +582,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   id={`paymentMode-${index}`}
                   placeholder="Payment Mode"
                   value={payment.mode}
+                  required
                   onChange={(e) => handlePaymentChange(index, e)}
                 />
               </div>
@@ -415,6 +594,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
                   id={`paymentAmount-${index}`}
                   placeholder="Payment Amount"
                   value={payment.amount}
+                  required
                   onChange={(e) => handlePaymentChange(index, e)}
                 />
               </div>
@@ -426,10 +606,7 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
               </button>
             </div>
           ))}
-          <button
-            className="invoice-gen-add-payment-button"
-            onClick={addPayment}
-          >
+          <button className="invoice-gen-add-payment-button" onClick={addPayment}>
             Add Payment
           </button>
         </div>
@@ -441,6 +618,12 @@ const drawRoundedRect = (doc, x, y, width, height, radius) => {
           onClick={generatePDF}
         >
           Get Invoice PDF
+        </button>
+        <button
+          className="invoice-gen-submit-button"
+          onClick={handleSubmit}
+        >
+          Send Invoice
         </button>
       </div>
     </div>
