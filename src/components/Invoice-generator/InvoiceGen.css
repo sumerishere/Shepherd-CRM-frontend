@@ -115,7 +115,7 @@
   .invoice-gen-add-payment-button,
   .invoice-gen-remove-payment-button,
   .invoice-gen-generate-pdf-button {
-    background-color: #4caf50;
+    background-color: #007bff;
     color: white;
     padding: 10px;
     border: none;
@@ -136,7 +136,7 @@
   .invoice-gen-add-payment-button:hover,
   .invoice-gen-remove-payment-button:hover,
   .invoice-gen-generate-pdf-button:hover {
-    background-color: #45a049;
+    background-color: #055ebd;
   }
 
   .invoice-gen-remove-item-button:hover {

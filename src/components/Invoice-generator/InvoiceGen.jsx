@@ -1,6 +1,6 @@
+import { HistoryOutlined } from "@ant-design/icons";
 import axios from "axios";
 import jsPDF from "jspdf";
-import { HistoryOutlined } from "@ant-design/icons";
 import "jspdf-autotable";
 import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -84,6 +84,7 @@ const InvoiceGen = () => {
   }, []);
 
   const generatePDF = () => {
+
     const doc = new jsPDF();
 
     // Add PNG Image from base64
@@ -312,7 +313,8 @@ const InvoiceGen = () => {
     });
 
     //generate pdf
-    doc.save("invoice.pdf");
+    // doc.save("invoice.pdf");
+    return doc;
   };
 
   // Helper function to draw a rounded rectangle
@@ -338,8 +340,17 @@ const InvoiceGen = () => {
     //extracted from invoice-form using destructuring the form.
     const { billedByName, billedToName } = invoiceDetails;
     // Generate the PDF
-    const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
-    generatePDF(doc); // Call the function that generates the invoice content in the PDF
+    // const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
+
+    
+    let doc;
+    try {
+      doc = generatePDF();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+      return;
+    }
 
     // Get the PDF as a Blob
     const pdfBlob = doc.output("blob");
@@ -377,10 +388,14 @@ const InvoiceGen = () => {
         console.error("Error uploading the invoice");
       }
     } catch (error) {
-      toast.error("Invoice sending failed!!");
-      console.error("Error during invoice upload:", error);
-      // Handle the error, e.g., show a notification
-    } finally {
+        console.error("Error during invoice upload:", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+        }
+        toast.error("Invoice sending failed!");
+    }
+     finally {
       setLoading(false); // Hide the spinner
     }
   };
@@ -624,13 +639,13 @@ const InvoiceGen = () => {
       </div>
 
       <div className="invoice-gen-footer">
-        <button
+        {/* <button
           className="invoice-gen-generate-pdf-button"
           onClick={generatePDF}
         >
           Get Invoice PDF
-        </button>
-        <button className="invoice-gen-submit-button" onClick={handleSubmit}>
+        </button> */}
+        <button className="invoice-gen-generate-pdf-button" onClick={handleSubmit}>
           Send Invoice
         </button>
       </div>
