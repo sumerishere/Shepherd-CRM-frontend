@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import "./LeadFollowUp.css";
 import {
-  FormOutlined,
   DeleteOutlined,
+  FormOutlined,
   HistoryOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
+import debounce from "lodash/debounce";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
-import debounce from "lodash/debounce";
+import "./LeadFollowUp.css";
 
 const LeadFollowUp = () => {
   const [loading, setLoading] = useState(true);
@@ -63,7 +63,7 @@ const LeadFollowUp = () => {
           queryParams.append("name", text);
         }
       }
-  
+
       const response = await fetch(
         `http://localhost:8080/search-lead-name?${queryParams.toString()}`
       );
@@ -85,7 +85,6 @@ const LeadFollowUp = () => {
     }
   }, [searchText, leads, debouncedSearch]);
 
-  
   // ---- Handle category filter change -------//
   const handleCategoryFilterChange = (e) => {
     const selectedCategory = e.target.value;
@@ -526,79 +525,81 @@ const LeadFollowUp = () => {
       {/* show history of lead*/}
 
       {showHistory && selectedLead && (
-        <div className="history-container">
-          <div className="history-header">
-            <span className="history-title">
-              Profile of{" "}
-              {historyData.length > 0 ? historyData[0]?.leadName : "Lead"}
-            </span>
-            <button className="history-close-btn" onClick={closeHistory}>
-              X
-            </button>
-          </div>
-          <div className="history-profile-info">
-            <div className="history-profile-column">
-              <p>
-                <strong>Name:</strong> {selectedLead.name || "N/A"}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedLead.email || "N/A"}
-              </p>
-              <p>
-                <strong>Mobile Number:</strong>{" "}
-                {selectedLead.mobileNumber || "N/A"}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedLead.address || "N/A"}
-              </p>
+        <div className="history-container-root">
+          <div className="history-container">
+            <div className="history-header">
+              <span className="history-title">
+                Profile of{" "}
+                {historyData.length > 0 ? historyData[0]?.leadName : "Lead"}
+              </span>
+              <button className="history-close-btn" onClick={closeHistory}>
+                X
+              </button>
             </div>
-            <div className="history-profile-column">
-              <p>
-                <strong>Qualification:</strong>{" "}
-                {selectedLead.qualification || "N/A"}
-              </p>
-              <p>
-                <strong>Source:</strong> {selectedLead.source || "N/A"}
-              </p>
-              <p>
-                <strong>Refer Name:</strong> {selectedLead.referName || "N/A"}
-              </p>
-              <p>
-                <strong>Category:</strong>{" "}
-                {`----  (${selectedLead.category})` || "N/A"}
-              </p>
-              <div
-                className="lead-color-code category-history-code"
-                id={
-                  selectedLead.category === "hot"
-                    ? "hot-lead"
-                    : selectedLead.category === "warm"
-                    ? "warm-lead"
-                    : selectedLead.category === "cold"
-                    ? "cold-lead"
-                    : ""
-                }
-              ></div>
+            <div className="history-profile-info">
+              <div className="history-profile-column">
+                <p>
+                  <strong>Name:</strong> {selectedLead.name || "N/A"}
+                </p>
+                <p>
+                  <strong>Email:</strong> {selectedLead.email || "N/A"}
+                </p>
+                <p>
+                  <strong>Mobile Number:</strong>{" "}
+                  {selectedLead.mobileNumber || "N/A"}
+                </p>
+                <p>
+                  <strong>Address:</strong> {selectedLead.address || "N/A"}
+                </p>
+              </div>
+              <div className="history-profile-column">
+                <p>
+                  <strong>Qualification:</strong>{" "}
+                  {selectedLead.qualification || "N/A"}
+                </p>
+                <p>
+                  <strong>Source:</strong> {selectedLead.source || "N/A"}
+                </p>
+                <p>
+                  <strong>Refer Name:</strong> {selectedLead.referName || "N/A"}
+                </p>
+                <p>
+                  <strong>Category:</strong>{" "}
+                  {`----  (${selectedLead.category})` || "N/A"}
+                </p>
+                <div
+                  className="lead-color-code category-history-code"
+                  id={
+                    selectedLead.category === "hot"
+                      ? "hot-lead"
+                      : selectedLead.category === "warm"
+                      ? "warm-lead"
+                      : selectedLead.category === "cold"
+                      ? "cold-lead"
+                      : ""
+                  }
+                ></div>
+              </div>
             </div>
-          </div>
-          <hr />
-          <h4 id="comment-box-title">Comments :</h4>
+            <hr />
+            <h4 id="comment-box-title">Comments :</h4>
 
-          <div className="history-comments">
-            {noHistoryAvailable ? (
-              <p id="no-chats-p-id">No Comments available😴</p>
-            ) : (
-              historyData
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting comments by date (newest first)
-                .map((item) => (
-                  <div key={item.id} className="history-comment-item">
-                    <p>{item.comment}</p>
-                    <span className="history-comment-date">
-                      {new Date(item.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-                ))
-            )}
+            <div className="history-comments">
+              {noHistoryAvailable ? (
+                <p id="no-chats-p-id">No Comments available😴</p>
+              ) : (
+                historyData
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting comments by date (newest first)
+                  .map((item) => (
+                    <div key={item.id} className="history-comment-item">
+                      <p>{item.comment}</p>
+                      <span className="history-comment-date">
+                        {new Date(item.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                  ))
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -6,6 +6,46 @@
     margin-left: 30%;
   }
 
+  .select-candidate-btn-div{
+    text-align: end;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    margin: 5px;
+
+  }
+
+  .select-candidate-btn{
+    background-color: #007bff;
+    color: #fff;
+    margin-left: 5px;
+    border: none;
+    height: 30px;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 7px 12px;
+    cursor: pointer;
+    
+  }
+  .history-candidate-btn{
+    background-color: #007bff;
+    color: #fff;
+    margin-left: 5px;
+    border: none;
+    height: 30px;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 7px 12px;
+    cursor: pointer;
+  }
+
+  .select-candidate-btn:hover{
+    background-color: #055bb8;
+  }
+  .history-candidate-btn:hover{
+    background-color: #055bb8;
+  }
+
   .invoice-gen-submit-button{
     background-color: #007bff;
     color: #fff;

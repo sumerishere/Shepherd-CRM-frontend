@@ -1,15 +1,14 @@
+import axios from "axios";
 import jsPDF from "jspdf";
+import { HistoryOutlined } from "@ant-design/icons";
 import "jspdf-autotable";
 import { useEffect, useState } from "react";
-import "./InvoiceGen.css";
-import axios from 'axios';
+import ClipLoader from "react-spinners/ClipLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ClipLoader from "react-spinners/ClipLoader";
-
+import "./InvoiceGen.css";
 
 const InvoiceGen = () => {
-
   const [loading, setLoading] = useState(false); // State to control loading spinner
 
   const [payments, setPayments] = useState([
@@ -312,10 +311,8 @@ const InvoiceGen = () => {
       wrapText(line, termsX + 5, termsY + 16 + index * 6, termsWidth - 10); // Adjust spacing between lines
     });
 
-    if(generatePDF){
-      doc.save("invoice.pdf");
-    }
-    // doc.save("invoice.pdf");
+    //generate pdf
+    doc.save("invoice.pdf");
   };
 
   // Helper function to draw a rounded rectangle
@@ -338,17 +335,19 @@ const InvoiceGen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     //extracted from invoice-form using destructuring the form.
     const { billedByName, billedToName } = invoiceDetails;
-  
     // Generate the PDF
     const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
     generatePDF(doc); // Call the function that generates the invoice content in the PDF
-  
+
     // Get the PDF as a Blob
     const pdfBlob = doc.output("blob");
-  
+
+    // Log PDF Blob size and type
+    console.log("PDF Blob Size:", pdfBlob.size);
+    console.log("PDF Blob Type:", pdfBlob.type);
+
     // Prepare the form data
     const formData = new FormData();
     formData.append("billedToName", billedToName);
@@ -356,17 +355,20 @@ const InvoiceGen = () => {
     formData.append("candidateMail", candidateMail);
     formData.append("billedByName", billedByName);
     formData.append("invoicePdf", pdfBlob, "invoice.pdf"); // Attach the PDF blob
-    
 
     setLoading(true);
     try {
       // Make the POST request to the backend
-      const response = await axios.post("http://localhost:8080/save-invoice", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-  
+      const response = await axios.post(
+        "http://localhost:8080/save-invoice",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       if (response.status === 200) {
         toast.success("Invoice Sended Successfully!!");
         console.log("Invoice uploaded successfully");
@@ -378,12 +380,10 @@ const InvoiceGen = () => {
       toast.error("Invoice sending failed!!");
       console.error("Error during invoice upload:", error);
       // Handle the error, e.g., show a notification
-    }
-    finally {
+    } finally {
       setLoading(false); // Hide the spinner
     }
   };
-  
 
   return (
     <div className="invoice-gen-root">
@@ -392,7 +392,7 @@ const InvoiceGen = () => {
           <ClipLoader color="#ffffff" loading={loading} size={100} />
         </div>
       )}
-      <ToastContainer/>
+      <ToastContainer />
       <h1 className="invoice-gen-title">Invoice</h1>
       <div id="invoice-gen-section" className="invoice-gen-section">
         {/* Billed By Section */}
@@ -428,7 +428,13 @@ const InvoiceGen = () => {
 
         {/* Billed To Section */}
         <div className="invoice-gen-party-details">
+          <div className="select-candidate-btn-div">
+            <button className="select-candidate-btn">select candidate</button>
+            <button className="history-candidate-btn"><HistoryOutlined /></button>
+          </div>
+
           <h3 className="invoice-gen-header">Billed To</h3>
+
           <div className="invoice-gen-input-group">
             <div className="invoice-gen-input-container">
               <label htmlFor="billedToName">Candidate Name</label>
@@ -500,7 +506,9 @@ const InvoiceGen = () => {
                   <option value="" disabled>
                     Select course type
                   </option>
-                  <option value="Java fullStack development">Java fullStack development</option>
+                  <option value="Java fullStack development">
+                    Java fullStack development
+                  </option>
                   <option value="Automation Testing">Automation Testing</option>
                   <option value="UI/UX">UI/UX</option>
                   <option value="MERN Stack">MERN Stack</option>
@@ -606,7 +614,10 @@ const InvoiceGen = () => {
               </button>
             </div>
           ))}
-          <button className="invoice-gen-add-payment-button" onClick={addPayment}>
+          <button
+            className="invoice-gen-add-payment-button"
+            onClick={addPayment}
+          >
             Add Payment
           </button>
         </div>
@@ -619,10 +630,7 @@ const InvoiceGen = () => {
         >
           Get Invoice PDF
         </button>
-        <button
-          className="invoice-gen-submit-button"
-          onClick={handleSubmit}
-        >
+        <button className="invoice-gen-submit-button" onClick={handleSubmit}>
           Send Invoice
         </button>
       </div>

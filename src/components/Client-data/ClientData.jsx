@@ -269,7 +269,7 @@ const ClientData = ({ templateId }) => {
                 filteredData.map((item) => (
                   <tr key={item.uid}>
                     {columnHeaders.map((header, index) => (
-                      <td key={index}>
+                      <td id="client-table-td" key={index}>
                         {item.fields_Data[header] !== undefined
                           ? item.fields_Data[header]
                           : ""}

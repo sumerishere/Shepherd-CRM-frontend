@@ -109,10 +109,19 @@
   border-collapse: collapse;
 }
 
+#client-table-td {
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space:normal;
+  max-width: 340px;
+  /* Set a maximum width to control column size */
+}
+
 .table-class th, .table-class td {
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
+  width: 160px;
 }
 
 .narrow-column {
