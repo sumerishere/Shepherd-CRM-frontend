@@ -1,34 +1,3 @@
-const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    // Extract required fields
-    const { billedByName, billedToName } = invoiceDetails;
-  
-    if (!billedByName || !billedToName) {
-      toast.error("Please fill all the required fields!");
-      return;
-    }
-  
-    // Generate the PDF
-    generatePDF();
-  
-    // Assuming you want to send invoice data to a backend
-    setLoading(true); // Show loading spinner
-    try {
-      const response = await axios.post('/your-api-endpoint', {
-        billedByName,
-        billedToName,
-        items,
-        payments,
-      });
-      setLoading(false);
-      toast.success("Invoice saved successfully!");
-    } catch (error) {
-      setLoading(false);
-      toast.error("Error saving invoice. Please try again.");
-    }
-  };
-  
 
 
 
