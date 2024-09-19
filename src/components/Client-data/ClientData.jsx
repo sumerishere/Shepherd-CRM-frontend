@@ -20,8 +20,7 @@ const ClientData = ({ templateId }) => {
     fieldsData: {},
   });
 
-  const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
-  // const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {

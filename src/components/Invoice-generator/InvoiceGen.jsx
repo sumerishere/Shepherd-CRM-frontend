@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { HistoryOutlined } from "@ant-design/icons";
 import axios from "axios";
 import jsPDF from "jspdf";
@@ -8,8 +9,33 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./InvoiceGen.css";
 
-const InvoiceGen = () => {
+const InvoiceGen = ({templateId}) => {
   const [loading, setLoading] = useState(false); // State to control loading spinner
+
+  const [data, setData] = useState([]);
+  const [showCandidateModal, setShowCandidateModal] = useState(false);
+
+  useEffect(() => {
+    if (templateId) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/get-template-data/${templateId}`
+          );
+          if (response.ok) {
+            const result = await response.json();
+            setData(result); // Update data state with API response
+          } else {
+            console.error("Failed to fetch template data");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [templateId]);
+
 
   const [payments, setPayments] = useState([
     { date: "", mode: "", amount: "" },
@@ -444,9 +470,56 @@ const InvoiceGen = () => {
         {/* Billed To Section */}
         <div className="invoice-gen-party-details">
           <div className="select-candidate-btn-div">
-            <button className="select-candidate-btn">select candidate</button>
+            <button className="select-candidate-btn" onClick={() => setShowCandidateModal(true)} >select candidate</button>
             <button className="history-candidate-btn"><HistoryOutlined /></button>
           </div>
+
+          {showCandidateModal && (
+  <div className="candidate-modal">
+    <div className="candidate-modal-content">
+      <h3 className="candidate-modal-header">Select a Candidate</h3>
+      <button className="candidate-close-btn" onClick={() => setShowCandidateModal(false)}>
+        &times;
+      </button>
+      <div className="candidate-table-container">
+        <table className="candidate-table">
+          <thead>
+            <tr>
+              <th>UID</th>
+              <th>Full Name</th>
+              <th>Address</th>
+              <th>Mobile</th>
+              <th>Mail</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.uid}</td>
+                <td>{item.fieldsData["Full Name"]}</td>
+                <td>{item.fieldsData["Address"]}</td>
+                <td>{item.fieldsData["Mobile"]}</td>
+                <td>{item.fieldsData["Mail"]}</td>
+                <td>
+                  <button
+                    className="candidate-select-btn"
+                    onClick={() => {
+                      // Handle candidate selection logic here
+                      setShowCandidateModal(false); // Close modal after selection
+                    }}
+                  >
+                    Select
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+)}
 
           <h3 className="invoice-gen-header">Billed To</h3>
 
@@ -651,6 +724,10 @@ const InvoiceGen = () => {
       </div>
     </div>
   );
+};
+
+InvoiceGen.propTypes = {
+  templateId: PropTypes.string.isRequired,
 };
 
 export default InvoiceGen;

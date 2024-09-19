@@ -279,7 +279,7 @@ function App() {
               path="/LeadRegistrationForm"
               element={<LeadRegistrationForm />}
             />
-            <Route path="/InvoiceGen" element={<InvoiceGen />} />
+            <Route path="/InvoiceGen" element={<InvoiceGen templateId={templateId} />} />
 
             <Route path="/CalenderComponent" element={<CalenderComponent />} />
           </Routes>
