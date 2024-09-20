@@ -426,6 +426,18 @@ const InvoiceGen = ({templateId}) => {
     }
   };
 
+  // handling candidate info on select btn to fill billToSection  automatically.
+  const handleCandidateSelection = (candidate) => {
+    setInvoiceDetails(prevState => ({
+      ...prevState,
+      billedToName: candidate.fieldsData["Full Name"],
+      billedToAddress: candidate.fieldsData["Address"],
+    }));
+    setCandidateMobile(candidate.fieldsData["Mobile"]);
+    setCandidateMail(candidate.fieldsData["Mail"]);
+    setShowCandidateModal(false);
+  };
+
   return (
     <div className="invoice-gen-root">
       {loading && (
@@ -475,51 +487,53 @@ const InvoiceGen = ({templateId}) => {
           </div>
 
           {showCandidateModal && (
-  <div className="candidate-modal">
-    <div className="candidate-modal-content">
-      <h3 className="candidate-modal-header">Select a Candidate</h3>
-      <button className="candidate-close-btn" onClick={() => setShowCandidateModal(false)}>
-        &times;
-      </button>
-      <div className="candidate-table-container">
-        <table className="candidate-table">
-          <thead>
-            <tr>
-              <th>UID</th>
-              <th>Full Name</th>
-              <th>Address</th>
-              <th>Mobile</th>
-              <th>Mail</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td>{item.uid}</td>
-                <td>{item.fieldsData["Full Name"]}</td>
-                <td>{item.fieldsData["Address"]}</td>
-                <td>{item.fieldsData["Mobile"]}</td>
-                <td>{item.fieldsData["Mail"]}</td>
-                <td>
-                  <button
-                    className="candidate-select-btn"
-                    onClick={() => {
-                      // Handle candidate selection logic here
-                      setShowCandidateModal(false); // Close modal after selection
-                    }}
-                  >
-                    Select
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-)}
+          <div className="candidate-modal">
+            <div className="candidate-modal-content">
+              <h3 className="candidate-modal-header">Select a Candidate</h3>
+              <button className="candidate-close-btn" onClick={() => setShowCandidateModal(false)}>&times;</button>
+              <div className="candidate-table-container">
+                {data.length > 0 ? (
+                  <table className="candidate-table">
+                    <thead>
+                      <tr>
+                        <th>UID</th>
+                        <th>Full Name</th>
+                        <th>Address</th>
+                        <th>Mobile</th>
+                        <th>Mail</th>
+                        <th>Fees Paid</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.uid}</td>
+                          <td>{item.fieldsData["Full Name"]}</td>
+                          <td>{item.fieldsData["Address"]}</td>
+                          <td>{item.fieldsData["Mobile"]}</td>
+                          <td>{item.fieldsData["Mail"]}</td>
+                          <td>{item.fieldsData["fees paid"]}</td>
+                          <td>
+                            <button
+                              className="candidate-select-btn"
+                              onClick={() => handleCandidateSelection(item)}
+                            >
+                              Select
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="no-client-message">No Client Found 🙃</div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
 
           <h3 className="invoice-gen-header">Billed To</h3>
 
