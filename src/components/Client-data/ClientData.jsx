@@ -20,8 +20,7 @@ const ClientData = ({ templateId }) => {
     fieldsData: {},
   });
 
-  const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
-  // const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
@@ -269,7 +268,7 @@ const ClientData = ({ templateId }) => {
                 filteredData.map((item) => (
                   <tr key={item.uid}>
                     {columnHeaders.map((header, index) => (
-                      <td key={index}>
+                      <td id="client-table-td" key={index}>
                         {item.fields_Data[header] !== undefined
                           ? item.fields_Data[header]
                           : ""}

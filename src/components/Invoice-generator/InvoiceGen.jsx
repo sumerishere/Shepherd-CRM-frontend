@@ -1,16 +1,41 @@
+import PropTypes from "prop-types";
+import { HistoryOutlined } from "@ant-design/icons";
+import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { useEffect, useState } from "react";
-import "./InvoiceGen.css";
-import axios from 'axios';
+import ClipLoader from "react-spinners/ClipLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ClipLoader from "react-spinners/ClipLoader";
+import "./InvoiceGen.css";
 
-
-const InvoiceGen = () => {
-
+const InvoiceGen = ({templateId}) => {
   const [loading, setLoading] = useState(false); // State to control loading spinner
+
+  const [data, setData] = useState([]);
+  const [showCandidateModal, setShowCandidateModal] = useState(false);
+
+  useEffect(() => {
+    if (templateId) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/get-template-data/${templateId}`
+          );
+          if (response.ok) {
+            const result = await response.json();
+            setData(result); // Update data state with API response
+          } else {
+            console.error("Failed to fetch template data");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [templateId]);
+
 
   const [payments, setPayments] = useState([
     { date: "", mode: "", amount: "" },
@@ -85,6 +110,7 @@ const InvoiceGen = () => {
   }, []);
 
   const generatePDF = () => {
+
     const doc = new jsPDF();
 
     // Add PNG Image from base64
@@ -312,10 +338,9 @@ const InvoiceGen = () => {
       wrapText(line, termsX + 5, termsY + 16 + index * 6, termsWidth - 10); // Adjust spacing between lines
     });
 
-    if(generatePDF){
-      doc.save("invoice.pdf");
-    }
+    //generate pdf
     // doc.save("invoice.pdf");
+    return doc;
   };
 
   // Helper function to draw a rounded rectangle
@@ -338,17 +363,28 @@ const InvoiceGen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     //extracted from invoice-form using destructuring the form.
     const { billedByName, billedToName } = invoiceDetails;
-  
     // Generate the PDF
-    const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
-    generatePDF(doc); // Call the function that generates the invoice content in the PDF
-  
+    // const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
+
+    
+    let doc;
+    try {
+      doc = generatePDF();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+      return;
+    }
+
     // Get the PDF as a Blob
     const pdfBlob = doc.output("blob");
-  
+
+    // Log PDF Blob size and type
+    console.log("PDF Blob Size:", pdfBlob.size);
+    console.log("PDF Blob Type:", pdfBlob.type);
+
     // Prepare the form data
     const formData = new FormData();
     formData.append("billedToName", billedToName);
@@ -356,17 +392,20 @@ const InvoiceGen = () => {
     formData.append("candidateMail", candidateMail);
     formData.append("billedByName", billedByName);
     formData.append("invoicePdf", pdfBlob, "invoice.pdf"); // Attach the PDF blob
-    
 
     setLoading(true);
     try {
       // Make the POST request to the backend
-      const response = await axios.post("http://localhost:8080/save-invoice", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-  
+      const response = await axios.post(
+        "http://localhost:8080/save-invoice",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       if (response.status === 200) {
         toast.success("Invoice Sended Successfully!!");
         console.log("Invoice uploaded successfully");
@@ -375,15 +414,29 @@ const InvoiceGen = () => {
         console.error("Error uploading the invoice");
       }
     } catch (error) {
-      toast.error("Invoice sending failed!!");
-      console.error("Error during invoice upload:", error);
-      // Handle the error, e.g., show a notification
+        console.error("Error during invoice upload:", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+        }
+        toast.error("Invoice sending failed!");
     }
-    finally {
+     finally {
       setLoading(false); // Hide the spinner
     }
   };
-  
+
+  // handling candidate info on select btn to fill billToSection  automatically.
+  const handleCandidateSelection = (candidate) => {
+    setInvoiceDetails(prevState => ({
+      ...prevState,
+      billedToName: candidate.fieldsData["Full Name"],
+      billedToAddress: candidate.fieldsData["Address"],
+    }));
+    setCandidateMobile(candidate.fieldsData["Mobile"]);
+    setCandidateMail(candidate.fieldsData["Mail"]);
+    setShowCandidateModal(false);
+  };
 
   return (
     <div className="invoice-gen-root">
@@ -392,7 +445,7 @@ const InvoiceGen = () => {
           <ClipLoader color="#ffffff" loading={loading} size={100} />
         </div>
       )}
-      <ToastContainer/>
+      <ToastContainer />
       <h1 className="invoice-gen-title">Invoice</h1>
       <div id="invoice-gen-section" className="invoice-gen-section">
         {/* Billed By Section */}
@@ -428,7 +481,62 @@ const InvoiceGen = () => {
 
         {/* Billed To Section */}
         <div className="invoice-gen-party-details">
+          <div className="select-candidate-btn-div">
+            <button className="select-candidate-btn" onClick={() => setShowCandidateModal(true)} >select candidate</button>
+            <button className="history-candidate-btn"><HistoryOutlined /></button>
+          </div>
+
+          {showCandidateModal && (
+          <div className="candidate-modal">
+            <div className="candidate-modal-content">
+              <h3 className="candidate-modal-header">Select a Candidate</h3>
+              <button className="candidate-close-btn" onClick={() => setShowCandidateModal(false)}>&times;</button>
+              <div className="candidate-table-container">
+                {data.length > 0 ? (
+                  <table className="candidate-table">
+                    <thead>
+                      <tr>
+                        <th>UID</th>
+                        <th>Full Name</th>
+                        <th>Address</th>
+                        <th>Mobile</th>
+                        <th>Mail</th>
+                        <th>Fees Paid</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.uid}</td>
+                          <td>{item.fieldsData["Full Name"]}</td>
+                          <td>{item.fieldsData["Address"]}</td>
+                          <td>{item.fieldsData["Mobile"]}</td>
+                          <td>{item.fieldsData["Mail"]}</td>
+                          <td>{item.fieldsData["fees paid"]}</td>
+                          <td>
+                            <button
+                              className="candidate-select-btn"
+                              onClick={() => handleCandidateSelection(item)}
+                            >
+                              Select
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="no-client-message">No Client Found 🙃</div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+
           <h3 className="invoice-gen-header">Billed To</h3>
+
           <div className="invoice-gen-input-group">
             <div className="invoice-gen-input-container">
               <label htmlFor="billedToName">Candidate Name</label>
@@ -500,7 +608,9 @@ const InvoiceGen = () => {
                   <option value="" disabled>
                     Select course type
                   </option>
-                  <option value="Java fullStack development">Java fullStack development</option>
+                  <option value="Java fullStack development">
+                    Java fullStack development
+                  </option>
                   <option value="Automation Testing">Automation Testing</option>
                   <option value="UI/UX">UI/UX</option>
                   <option value="MERN Stack">MERN Stack</option>
@@ -606,28 +716,32 @@ const InvoiceGen = () => {
               </button>
             </div>
           ))}
-          <button className="invoice-gen-add-payment-button" onClick={addPayment}>
+          <button
+            className="invoice-gen-add-payment-button"
+            onClick={addPayment}
+          >
             Add Payment
           </button>
         </div>
       </div>
 
       <div className="invoice-gen-footer">
-        <button
+        {/* <button
           className="invoice-gen-generate-pdf-button"
           onClick={generatePDF}
         >
           Get Invoice PDF
-        </button>
-        <button
-          className="invoice-gen-submit-button"
-          onClick={handleSubmit}
-        >
+        </button> */}
+        <button className="invoice-gen-generate-pdf-button" onClick={handleSubmit}>
           Send Invoice
         </button>
       </div>
     </div>
   );
+};
+
+InvoiceGen.propTypes = {
+  templateId: PropTypes.string.isRequired,
 };
 
 export default InvoiceGen;
