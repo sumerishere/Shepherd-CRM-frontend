@@ -1,19 +1,41 @@
-import PropTypes from "prop-types";
 import { HistoryOutlined } from "@ant-design/icons";
 import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./InvoiceGen.css";
 
-const InvoiceGen = ({templateId}) => {
+const InvoiceGen = ({ templateId }) => {
   const [loading, setLoading] = useState(false); // State to control loading spinner
 
   const [data, setData] = useState([]);
   const [showCandidateModal, setShowCandidateModal] = useState(false);
+
+  const [isTableVisible, setIsTableVisible] = useState(false);
+  const [candidates, setCandidates] = useState([]);
+
+  const fetchCandidates = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/get-all-candidate");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setCandidates(data);
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isTableVisible) {
+      fetchCandidates();
+    }
+  }, [isTableVisible]);
 
   useEffect(() => {
     if (templateId) {
@@ -35,7 +57,6 @@ const InvoiceGen = ({templateId}) => {
       fetchData();
     }
   }, [templateId]);
-
 
   const [payments, setPayments] = useState([
     { date: "", mode: "", amount: "" },
@@ -110,7 +131,6 @@ const InvoiceGen = ({templateId}) => {
   }, []);
 
   const generatePDF = () => {
-
     const doc = new jsPDF();
 
     // Add PNG Image from base64
@@ -368,7 +388,6 @@ const InvoiceGen = ({templateId}) => {
     // Generate the PDF
     // const doc = new jsPDF(); // Assuming generatePDF is generating the doc here
 
-    
     let doc;
     try {
       doc = generatePDF();
@@ -414,21 +433,20 @@ const InvoiceGen = ({templateId}) => {
         console.error("Error uploading the invoice");
       }
     } catch (error) {
-        console.error("Error during invoice upload:", error);
-        if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-        }
-        toast.error("Invoice sending failed!");
-    }
-     finally {
+      console.error("Error during invoice upload:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+      }
+      toast.error("Invoice sending failed!");
+    } finally {
       setLoading(false); // Hide the spinner
     }
   };
 
   // handling candidate info on select btn to fill billToSection  automatically.
   const handleCandidateSelection = (candidate) => {
-    setInvoiceDetails(prevState => ({
+    setInvoiceDetails((prevState) => ({
       ...prevState,
       billedToName: candidate.fieldsData["Full Name"],
       billedToAddress: candidate.fieldsData["Address"],
@@ -482,58 +500,121 @@ const InvoiceGen = ({templateId}) => {
         {/* Billed To Section */}
         <div className="invoice-gen-party-details">
           <div className="select-candidate-btn-div">
-            <button className="select-candidate-btn" onClick={() => setShowCandidateModal(true)} >select candidate</button>
-            <button className="history-candidate-btn"><HistoryOutlined /></button>
+            <button
+              className="select-candidate-btn"
+              onClick={() => setShowCandidateModal(true)}
+            >
+              select candidate
+            </button>
+            <button
+              className="history-candidate-btn"
+              onClick={() => setIsTableVisible(!isTableVisible)}
+            >
+              <HistoryOutlined />
+            </button>
           </div>
 
           {showCandidateModal && (
-          <div className="candidate-modal">
-            <div className="candidate-modal-content">
-              <h3 className="candidate-modal-header">Select a Candidate</h3>
-              <button className="candidate-close-btn" onClick={() => setShowCandidateModal(false)}>&times;</button>
-              <div className="candidate-table-container">
-                {data.length > 0 ? (
-                  <table className="candidate-table">
-                    <thead>
-                      <tr>
-                        <th>UID</th>
-                        <th>Full Name</th>
-                        <th>Address</th>
-                        <th>Mobile</th>
-                        <th>Mail</th>
-                        <th>Fees Paid</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.uid}</td>
-                          <td>{item.fieldsData["Full Name"]}</td>
-                          <td>{item.fieldsData["Address"]}</td>
-                          <td>{item.fieldsData["Mobile"]}</td>
-                          <td>{item.fieldsData["Mail"]}</td>
-                          <td>{item.fieldsData["fees paid"]}</td>
-                          <td>
-                            <button
-                              className="candidate-select-btn"
-                              onClick={() => handleCandidateSelection(item)}
-                            >
-                              Select
-                            </button>
-                          </td>
+            <div className="candidate-modal">
+              <div className="candidate-modal-content">
+                <h3 className="candidate-modal-header">Select a Candidate</h3>
+                <button
+                  className="candidate-close-btn"
+                  onClick={() => setShowCandidateModal(false)}
+                >
+                  &times;
+                </button>
+                <div className="candidate-table-container">
+                  {data.length > 0 ? (
+                    <table className="candidate-table">
+                      <thead>
+                        <tr>
+                          <th>UID</th>
+                          <th>Full Name</th>
+                          <th>Address</th>
+                          <th>Mobile</th>
+                          <th>Mail</th>
+                          <th>Fees Paid</th>
+                          <th>Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {data.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.uid}</td>
+                            <td>{item.fieldsData["Full Name"]}</td>
+                            <td>{item.fieldsData["Address"]}</td>
+                            <td>{item.fieldsData["Mobile"]}</td>
+                            <td>{item.fieldsData["Mail"]}</td>
+                            <td>{item.fieldsData["fees paid"]}</td>
+                            <td>
+                              <button
+                                className="candidate-select-btn"
+                                onClick={() => handleCandidateSelection(item)}
+                              >
+                                Select
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="no-client-message">No Client Found 🙃</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isTableVisible && (
+            <div className="history-candidate-root">
+              <div className="get-candidate-table-container">
+                <button
+                  className="candidate-close-btn"
+                  onClick={() => setIsTableVisible(false)}
+                >
+                  &times;
+                </button>
+                <h2 className="get-candidate-table-title">Invoice Status List</h2>
+
+                {candidates.length > 0 ? (
+                  <div className="get-candidate-table-wrapper">
+                    <table className="get-candidate-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Mobile</th>
+                          <th>Email</th>
+                          {/* <th>Organization</th> */}
+                          <th>Invoice Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {candidates.map((candidate) => (
+                          <tr key={candidate.id}>
+                            <td>{candidate.id}</td>
+                            <td>{candidate.candidateName}</td>
+                            <td>{candidate.candidateMobile}</td>
+                            <td>{candidate.candidateMail}</td>
+                            {/* <td>{candidate.organizationName}</td> */}
+                            <td>
+                              <span className="get-candidate-invoice-status">
+                                Done
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : (
-                  <div className="no-client-message">No Client Found 🙃</div>
+                  <div className="no-client-message">No Invoice Status 🙃</div>
                 )}
               </div>
             </div>
-          </div>
-        )}
-
+          )}
 
           <h3 className="invoice-gen-header">Billed To</h3>
 
@@ -732,7 +813,10 @@ const InvoiceGen = ({templateId}) => {
         >
           Get Invoice PDF
         </button> */}
-        <button className="invoice-gen-generate-pdf-button" onClick={handleSubmit}>
+        <button
+          className="invoice-gen-generate-pdf-button"
+          onClick={handleSubmit}
+        >
           Send Invoice
         </button>
       </div>
