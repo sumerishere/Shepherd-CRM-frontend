@@ -610,7 +610,7 @@ const InvoiceGen = ({ templateId }) => {
                     </table>
                   </div>
                 ) : (
-                  <div className="no-client-message">No update Found 🙃</div>
+                  <div className="no-client-message">No Invoice Status 🙃</div>
                 )}
               </div>
             </div>

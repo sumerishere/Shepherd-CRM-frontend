@@ -104,8 +104,8 @@ li{
 
 .aside-bar ul li {
   list-style: none;
-  text-align: center;
-  padding: 15px 0px;
+  text-align: start;
+  padding: 15px 5px;
   border-bottom: 1px solid black;
 
 }
