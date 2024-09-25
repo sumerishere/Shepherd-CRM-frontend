@@ -2,7 +2,7 @@
  .aside-bar {
   width: 300px;
   height: 100vh;
-  background-color: rgb(41, 38, 38);
+  background-color: rgb(47, 44, 44);
 
   position: absolute;
   left: 0;
@@ -70,7 +70,7 @@
 }
 
 li{
-  margin-top: 2px;
+  margin-top: 7px;
   cursor: pointer;
   color: white;
 }
@@ -106,7 +106,8 @@ li{
   list-style: none;
   text-align: start;
   padding: 15px 5px;
-  border-bottom: 1px solid black;
+  font-size: 17px;
+  /* border-bottom: 1px solid black; */
 
 }
 

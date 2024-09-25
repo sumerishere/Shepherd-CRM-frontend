@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FormOutlined, DeleteOutlined,SnippetsOutlined } from "@ant-design/icons";
 import debounce from "lodash/debounce";
 
 
@@ -281,6 +281,15 @@ const ClientData = ({ templateId }) => {
                       >
                         <FormOutlined />
                       </button>
+  
+                      <Link to = "/InvoiceGen" style={{textDecoration:"none"}}>
+                        <button
+                          className="get-invoice-btn"
+                        >
+                          <SnippetsOutlined />
+                        </button>
+                      </Link>
+
                       <button
                         className="remove-button"
                         onClick={() => handleDeleteClick(item.uid)}
