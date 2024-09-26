@@ -349,7 +349,7 @@ const ClientData = ({ templateId }) => {
               ) : null
             )}
             <div className="button-group">
-              <button type="submit" className="submit-button">
+              <button type="submit" className="client-update-submit-btn">
                 Update
               </button>
               <button

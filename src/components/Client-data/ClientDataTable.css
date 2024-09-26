@@ -1,0 +1,26 @@
+.client-data-table-div{
+  margin-top: 10%;
+}
+
+.data-not-found-div{
+  height: 380px;
+  width: 450px;
+  /* background-color: aquamarine; */
+  margin-top: 12%;
+  margin-left: 45%;
+}
+
+.data-not-found-img{
+  height: 100%;
+  width:100%;
+  border-radius: 10%;
+  object-fit: cover;
+  border: 1px solid rgba(150, 148, 148, 0.674);
+}
+
+#data-not-found-p{
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: -1px;
+  margin-left: 28%;
+}

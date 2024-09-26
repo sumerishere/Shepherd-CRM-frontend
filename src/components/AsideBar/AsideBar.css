@@ -77,9 +77,11 @@ li{
 
 #dashboard-li{
   margin-top: 35px;
+
 }
 
 #develop-text-line1{
+  margin-top: -5%;
   padding-top: 90px;
   line-height: 1px;
   text-align: center;

@@ -373,9 +373,9 @@
   box-sizing: border-box;
 }
 
-.submit-button {
+.client-update-submit-btn {
   display: inline-block;
-  width: 100%;
+  /* width: 100%; */
   padding: 10px;
   background-color: #007bff;
   color: white;
@@ -386,12 +386,12 @@
   font-weight: bold;
 }
 
-.submit-button:hover {
+.client-update-submit-btn:hover {
   background-color: #0056b3;
 }
 
 #form-cancel-btn{
-  margin-top: 6.5px;
+  margin-top: 1px;
   position: absolute;
   padding: 9.7px 15px;
   padding-bottom: 7.8px;

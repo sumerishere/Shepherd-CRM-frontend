@@ -15,6 +15,7 @@ const CalenderComponent = () => {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+
   // New state for showing update form and tracking selected lead data
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
@@ -28,7 +29,6 @@ const CalenderComponent = () => {
     statusType: "",
   });
 
-
   const fetchLeads = async () => {
     try {
       const response = await fetch("http://localhost:8080/get-all-lead");
@@ -38,6 +38,7 @@ const CalenderComponent = () => {
 
       const eventsData = leadData.reduce((eventsAcc, lead) => {
         const followUpDate = moment(lead.followUpDate).startOf("day").toDate();
+
         const existingEvent = eventsAcc.find((event) =>
           moment(event.start).isSame(followUpDate, "day")
         );
@@ -81,6 +82,7 @@ const CalenderComponent = () => {
     const clickedDate = moment(event.start).format("YYYY-MM-DD");
     const filteredLeadsByDate = leads.filter((lead) => {
       const followUpDate = moment(lead.followUpDate).format("YYYY-MM-DD");
+
       return followUpDate === clickedDate;
     });
 
@@ -114,7 +116,7 @@ const CalenderComponent = () => {
 
       setShowUpdateForm(true);
     } catch (error) {
-      toast.error("Failed to fetch lead details",error);
+      toast.error("Failed to fetch lead details", error);
     }
   };
 
@@ -126,12 +128,10 @@ const CalenderComponent = () => {
     });
   };
 
-  
-
   // Function to handle form submission and send PUT request
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Prepare the lead follow-up data
     const leadFollowUpData = {
       name: updateFormData.name || selectedLead.name,
@@ -141,7 +141,7 @@ const CalenderComponent = () => {
       assignTo: updateFormData.assignTo || selectedLead.assignTo,
       statusType: updateFormData.statusType || selectedLead.statusType,
     };
-  
+
     // Construct the payload with leadFollowUp data only
     const payload = {
       name: leadFollowUpData.name,
@@ -151,7 +151,7 @@ const CalenderComponent = () => {
       assignTo: leadFollowUpData.assignTo,
       statusType: leadFollowUpData.statusType,
     };
-  
+
     try {
       const response = await fetch(
         `http://localhost:8080/update-followup/${selectedLead.uid}`,
@@ -163,7 +163,7 @@ const CalenderComponent = () => {
           body: JSON.stringify(payload), // Send the properly structured payload
         }
       );
-  
+
       if (response.ok) {
         toast.success("Lead updated successfully!");
         setShowUpdateForm(false);
@@ -176,16 +176,15 @@ const CalenderComponent = () => {
       toast.error("An error occurred while updating the lead.");
     }
   };
-  
+
   // Function to handle closing the update form
   const handleCloseUpdateForm = () => {
     setShowUpdateForm(false);
   };
 
-
   const getCurrentDateTime = () => {
     const now = new Date();
-    return now.toISOString().slice(0,16);
+    return now.toISOString().slice(0, 16);
   };
 
   return (
@@ -201,26 +200,45 @@ const CalenderComponent = () => {
           view={currentView}
           onView={setCurrentView}
           style={{ width: 584, height: 480 }}
-          eventPropGetter={(event) => ({
-            style: {
-              backgroundColor: event.backgroundColor,
-              borderRadius: "13px",
-              color: "white",
-              border: "1px",
-              display: "block",
-              height: "30px",
-              width: "70px",
-              marginTop: "20px",
-              marginLeft: "5px",
-              padding: "0px",
-              textAlign: "center",
-            },
-          })}
+          eventPropGetter={(event) => {
+            const eventDate = moment(event.start).startOf("day").toDate(); // Get the start date of the event
+            const today = new Date(); // Get today's date
+          
+            // Compare day, month, and year to apply boxShadow conditionally
+            const setDateCss = 
+              eventDate.getDate() === today.getDate() &&
+              eventDate.getMonth() === today.getMonth() &&
+              eventDate.getFullYear() === today.getFullYear();
+          
+            return {
+              style: {
+                backgroundColor: event.backgroundColor,
+                borderRadius: "6px",
+                color: "white",
+                border: "1px solid #7F7F7F",
+                display: "block",
+                height: "24px",
+                width: "68px",
+                marginTop: "20px",
+                marginLeft: "5px",
+                padding: "0px",
+                boxShadow: setDateCss ? "0px 2px 3px 0px rgb(0, 0, 0, 0.8)" : "none", // Box shadow only for matching dates
+                textAlign: "center",
+              },
+            };
+          }}
+          
           components={{
             event: ({ event }) => (
               <div
                 className="rbc-event-content"
                 title={event.title}
+                style={{
+                  margin: "-4px 0px",
+                  padding: "0px",
+                  width: "100%",
+                  height: "100%",
+                }}
                 onClick={() => handleEventClick(event)}
               >
                 {event.title}
@@ -292,68 +310,68 @@ const CalenderComponent = () => {
 
       {showUpdateForm && (
         <div className="update-notifier-overlay ">
-        <div className="update-notifier-form-container">
-          <button
-            onClick={handleCloseUpdateForm}
-            className="update-notifier-close-btn"
-          >
-            X
-          </button>
-          <div className="update-notifier-header">Update FollowUp</div>
-          <form onSubmit={handleFormSubmit}>
-            <label className="update-notifier-label">
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={updateFormData.name}
-                onChange={handleFormChange}
-                className="update-notifier-input"
-              />
-            </label>
-            <label className="update-notifier-label">
-              Mobile Number:
-              <input
-                type="text"
-                name="mobileNumber"
-                value={updateFormData.mobileNumber}
-                onChange={handleFormChange}
-                className="update-notifier-input"
-              />
-            </label>
-            <label className="update-notifier-label">
-              Email:
-              <input
-                type="email"
-                name="email"
-                value={updateFormData.email}
-                onChange={handleFormChange}
-                className="update-notifier-input"
-              />
-            </label>
-            <label className="update-notifier-label">
-              Follow Up Date:
-              <input
-                type="datetime-local"
-                name="followUpDate"
-                value={updateFormData.followUpDate}
-                onChange={handleFormChange}
-                className="update-notifier-input"
-                min={getCurrentDateTime()}
-              />
-            </label>
-            <label className="update-notifier-label">
-              Assign To:
-              <input
-                type="text"
-                name="assignTo"
-                value={updateFormData.assignTo}
-                onChange={handleFormChange}
-                className="update-notifier-input"
-              />
-            </label>
+          <div className="update-notifier-form-container">
+            <button
+              onClick={handleCloseUpdateForm}
+              className="update-notifier-close-btn"
+            >
+              X
+            </button>
+            <div className="update-notifier-header">Update FollowUp</div>
+            <form onSubmit={handleFormSubmit}>
+              <label className="update-notifier-label">
+                Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={updateFormData.name}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <label className="update-notifier-label">
+                Mobile Number:
+                <input
+                  type="text"
+                  name="mobileNumber"
+                  value={updateFormData.mobileNumber}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <label className="update-notifier-label">
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={updateFormData.email}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <label className="update-notifier-label">
+                Follow Up Date:
+                <input
+                  type="datetime-local"
+                  name="followUpDate"
+                  value={updateFormData.followUpDate}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                  min={getCurrentDateTime()}
+                />
+              </label>
+              <label className="update-notifier-label">
+                Assign To:
+                <input
+                  type="text"
+                  name="assignTo"
+                  value={updateFormData.assignTo}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
 
-             {/* <label className="update-notifier-label">
+              {/* <label className="update-notifier-label">
               Comments:
               <textarea
                 name="comments"
@@ -363,22 +381,22 @@ const CalenderComponent = () => {
                 readOnly
               />
             </label> */}
-          
-            <label className="update-notifier-label">
-              Status Type:
-              <input
-                type="text"
-                name="statusType"
-                value={updateFormData.statusType}
-                onChange={handleFormChange}
-                className="update-notifier-input"
-              />
-            </label>
-            <button type="submit" className="update-notifier-submit-btn">
-              Update Lead
-            </button>
-          </form>
-        </div>
+
+              <label className="update-notifier-label">
+                Status Type:
+                <input
+                  type="text"
+                  name="statusType"
+                  value={updateFormData.statusType}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <button type="submit" className="update-notifier-submit-btn">
+                Update Lead
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>

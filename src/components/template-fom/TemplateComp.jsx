@@ -224,7 +224,7 @@ const DynamicForm = () => {
           <button
             type="button"
             onClick={handleInitialSubmit}
-            className="submit-button"
+            className="template-submit-button"
           >
             Submit
           </button>
