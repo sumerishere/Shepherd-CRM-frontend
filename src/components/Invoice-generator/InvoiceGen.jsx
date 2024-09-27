@@ -544,9 +544,9 @@ const InvoiceGen = ({ templateId }) => {
                             <td>{item.uid}</td>
                             <td>{item.fieldsData["Full Name"]}</td>
                             <td>{item.fieldsData["Address"]}</td>
-                            <td>{item.fieldsData["Mobile"]}</td>
-                            <td>{item.fieldsData["Mail"]}</td>
-                            <td>{item.fieldsData["fees paid"]}</td>
+                            <td>{item.fieldsData["mobile number"]}</td>
+                            <td>{item.fieldsData["email"]}</td>
+                            <td>{item.fieldsData["fees compeletion"]}</td>
                             <td>
                               <button
                                 className="candidate-select-btn"

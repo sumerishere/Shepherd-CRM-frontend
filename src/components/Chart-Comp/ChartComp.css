@@ -3,7 +3,7 @@
   width: 100%;
   background-color: rgb(255, 254, 254);
   border-radius: 4px;
-  box-shadow: 1px 3px 4px #00000080;
+  box-shadow: 1px 1px 1px rgb(0,0,0,0.3);
 }
 
 .chart-child-div{ 
