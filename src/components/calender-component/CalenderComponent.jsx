@@ -15,7 +15,6 @@ const CalenderComponent = () => {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
-
   // New state for showing update form and tracking selected lead data
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
@@ -203,31 +202,33 @@ const CalenderComponent = () => {
           eventPropGetter={(event) => {
             const eventDate = moment(event.start).startOf("day").toDate(); // Get the start date of the event
             const today = new Date(); // Get today's date
-          
+
             // Compare day, month, and year to apply boxShadow conditionally
-            const setDateCss = 
+            const setDateCss =
               eventDate.getDate() === today.getDate() &&
               eventDate.getMonth() === today.getMonth() &&
               eventDate.getFullYear() === today.getFullYear();
-          
+
             return {
               style: {
                 backgroundColor: event.backgroundColor,
                 borderRadius: "6px",
                 color: "white",
-                border: "1px solid #7F7F7F",
+                border: setDateCss ? "1.5px solid white": "1px solid #7F7F7F",
+
                 display: "block",
                 height: "24px",
                 width: "68px",
                 marginTop: "20px",
                 marginLeft: "5px",
                 padding: "0px",
-                boxShadow: setDateCss ? "0px 2px 3px 0px rgb(0, 0, 0, 0.8)" : "none", // Box shadow only for matching dates
+                boxShadow: setDateCss
+                  ? "0px 3px 5px 0px rgb(0, 0, 0, 0.9)"
+                  : "none", // Box shadow only for matching dates
                 textAlign: "center",
               },
             };
           }}
-          
           components={{
             event: ({ event }) => (
               <div
