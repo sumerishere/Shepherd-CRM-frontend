@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import "./App.css";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={styles.container}>
+        <div className="error-boundary-div" style={styles.container}>
           <h2>Oops! Something went wrong.</h2>
           <p>{`We're working on fixing the issue. Please try again later.`}</p>
           <button style={styles.retryButton} onClick={this.handleRetry}>

@@ -20,6 +20,7 @@ import SignUpComp from "./components/SignUp-form/SignUpComp";
 import DynamicForm from "./components/template-fom/TemplateComp";
 import ErrorBoundary from "./ErrorBoundary";
 
+
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -103,6 +104,7 @@ function App() {
                   <ErrorBoundary>
                     <LeadFollowUp />
                   </ErrorBoundary>
+                  
                   <hr />
                   <div className="footer-content-root-div">
                     <div className="footer-content-div">
@@ -111,8 +113,7 @@ function App() {
                         reserved.
                       </p>
                       <p>Terms </p>
-                      <p>Subscription Service Agreement
-                      </p>
+                      <p>Subscription Service Agreement</p>
                       <p>Policy </p>
                       <p>Privacy </p>
                     </div>

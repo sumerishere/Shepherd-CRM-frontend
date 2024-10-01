@@ -4,6 +4,8 @@ import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import Popup from "reactjs-popup";
+// import "reactjs-popup/dist/index.css";
 import "./CalenderComponent.css";
 
 const localizer = momentLocalizer(moment);
@@ -186,6 +188,7 @@ const CalenderComponent = () => {
     return now.toISOString().slice(0, 16);
   };
 
+
   return (
     <div className="calendar-root-div">
       <ToastContainer />
@@ -214,8 +217,7 @@ const CalenderComponent = () => {
                 backgroundColor: event.backgroundColor,
                 borderRadius: "6px",
                 color: "white",
-                border: setDateCss ? "1.5px solid white": "1px solid #7F7F7F",
-
+                border: setDateCss ? "1.5px solid white" : "1px solid #7F7F7F",
                 display: "block",
                 height: "24px",
                 width: "68px",
@@ -241,8 +243,9 @@ const CalenderComponent = () => {
                   height: "100%",
                 }}
                 onClick={() => handleEventClick(event)}
+                // onClick={() => handleEventClickWithPopup(event)}
               >
-                {event.title}
+              {event.title}
               </div>
             ),
           }}
@@ -371,17 +374,6 @@ const CalenderComponent = () => {
                   className="update-notifier-input"
                 />
               </label>
-
-              {/* <label className="update-notifier-label">
-              Comments:
-              <textarea
-                name="comments"
-                value={updateFormData.comments}
-                onChange={handleFormChange}
-                className="update-notifier-textarea"
-                readOnly
-              />
-            </label> */}
 
               <label className="update-notifier-label">
                 Status Type:
