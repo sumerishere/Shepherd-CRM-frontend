@@ -24,3 +24,19 @@
   margin-top: -1px;
   margin-left: 28%;
 }
+
+.loading-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px; /* Set height for proper alignment */
+}
+
+#loading-text {
+  margin-top: 24%;
+  margin-left: 15%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #646262;
+  text-align: center;
+}
