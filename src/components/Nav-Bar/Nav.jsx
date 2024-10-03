@@ -39,7 +39,7 @@ const Nav = ({ toggleAsideBar, isOpen, user }) => {
 
       <div className="profile-div">
         <div className="profile-details-div">
-          
+
          <div className="profile-img-div">
             <img 
               id="logo-img" 
@@ -48,7 +48,7 @@ const Nav = ({ toggleAsideBar, isOpen, user }) => {
               onError={(e) => { e.target.src = defaultImage; }}
             />
           </div>
-          <p id="profile-name">{user.fullName || "User"}</p>
+          <p id="profile-name">{user.organizationName || "Organization Name"}</p>
           <p id="admin-name">{"Admin"}</p>
         </div>
       </div>
@@ -65,6 +65,7 @@ Nav.propTypes = {
     address: PropTypes.string,
     mobileNumber: PropTypes.string,
     email: PropTypes.string,
+    organizationName:PropTypes.string,
     userName: PropTypes.string,
     formTemplates: PropTypes.array,
     logo: PropTypes.string
