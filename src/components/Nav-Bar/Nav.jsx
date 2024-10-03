@@ -3,9 +3,19 @@ import "./Nav.css";
 import Hamburger from "hamburger-react";
 import PropTypes from 'prop-types';
 
-const Nav = ({ toggleAsideBar, isOpen }) => {
+const Nav = ({ toggleAsideBar, isOpen, user }) => {
 
   // const [isOpen, setOpen] = useState(false);
+  const defaultImage = "/Admin-img/admin-default.png";
+
+  const getImageSrc = () => {
+    if (user.logo) {
+      // If logo is a URL, use it directly. If it's base64 data, prefix it.
+      return user.logo.startsWith('data:') ? user.logo : `data:image/jpeg;base64,${user.logo}`;
+    }
+    return defaultImage;
+  };
+
   
 
   return (
@@ -29,11 +39,17 @@ const Nav = ({ toggleAsideBar, isOpen }) => {
 
       <div className="profile-div">
         <div className="profile-details-div">
-          <div className="profile-img-div">
-            <img id="logo-img" src="/Admin-img/logo.png" alt="imgg" />
+          
+         <div className="profile-img-div">
+            <img 
+              id="logo-img" 
+              src={getImageSrc()} 
+              alt="Profile"
+              onError={(e) => { e.target.src = defaultImage; }}
+            />
           </div>
-          <p id="profile-name">Testing shastra</p>
-          <p id="admin-name">Admin</p>
+          <p id="profile-name">{user.fullName || "User"}</p>
+          <p id="admin-name">{"Admin"}</p>
         </div>
       </div>
     </div>
@@ -42,7 +58,17 @@ const Nav = ({ toggleAsideBar, isOpen }) => {
 
 Nav.propTypes = {
   toggleAsideBar: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired
+  isOpen: PropTypes.bool.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    fullName: PropTypes.string,
+    address: PropTypes.string,
+    mobileNumber: PropTypes.string,
+    email: PropTypes.string,
+    userName: PropTypes.string,
+    formTemplates: PropTypes.array,
+    logo: PropTypes.string
+  }).isRequired
 };
 
 export default Nav;

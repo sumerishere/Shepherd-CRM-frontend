@@ -13,6 +13,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
     address: "",
     mobileNumber: "",
     email: "",
+    organizationName:"",
     userName: "",
     password: "",
   });
@@ -95,6 +96,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
         address: "",
         mobileNumber: "",
         email: "",
+        organizationName:"",
         userName: "",
         password: "",
       });
@@ -167,6 +169,20 @@ const SignUpComp = ({ setIsAuthenticated }) => {
             />
             {errors.email && <span className="error">{errors.email}</span>}
           </div>
+
+
+          <div className="form-group-singup">
+            <label>Organization Name:</label>
+            <input
+              className="form-input-grp"
+              type="text"
+              name="organizationName"
+              value={formData.organizationName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
           <div className="form-group-singup">
             <label>Username:</label>
             <input
