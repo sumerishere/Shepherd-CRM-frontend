@@ -50,69 +50,40 @@ const TemplateCreated = ({username}) => {
     fetchTemplateData();
   }, [username]);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : type === "file"
-          ? files[0] 
-          : value,
-    }));
-  };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   // Prepare the form data as JSON structure
-  //   const formSubmissionData = {
-  //     formTemplateId: formTemplateId,
-  //     formData: { ...formData }
-  //   };
-
-  //   // Create a FormData object if there are file uploads
-  //   const formDataObject = new FormData();
-  //   formDataObject.append("formTemplateId", formTemplateId);
-  //   Object.keys(formData).forEach((key) => {
-  //     if (formData[key] instanceof File) {
-  //       formDataObject.append(key, formData[key]);
-  //     } else {
-  //       formDataObject.append(key, JSON.stringify(formData[key]));
-  //     }
-  //   });
-
-  //   try {
-  //     // Send form data using fetch API
-  //     const response = await fetch("http://localhost:8080/submit-form-data", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(formSubmissionData),
-  //     });
-
-  //     if (response.ok) {
-  //       toast.success("Form submitted successfully!", {
-  //         position: "top-center",
-  //       });
-  //       console.log("Form submitted successfully.");
-  //     } else {
-  //       toast.error("Error submitting form.", {
-  //         position: "top-center",
-  //       });
-  //       console.error("Error submitting form.");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Submission error.", {
-  //       position: "top-center",
-  //     });
-  //     console.error("Submission error:", error);
-  //   }
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked, files } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]:
+  //       type === "checkbox"
+  //         ? checked
+  //         : type === "file"
+  //         ? files[0] 
+  //         : value,
+  //   }));
   // };
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    // Special case for Yes/No checkboxes
+    if (type === "checkbox" && (value === "Yes" || value === "No")) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: checked ? value : "", // Set to "Yes" or "No" if checked, or empty if unchecked
+      }));
+    } else {
+      // Handle other input types as before
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
+  };
+  
 
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -226,18 +197,33 @@ const TemplateCreated = ({username}) => {
                 </div>
               ) : field.dataType === "Yes/No check(checkbox)" ? (
                 <div>
-                  <label id="template-label-checkbox">
-                    <input
-                      style={{ cursor: "pointer" }}
-                      id="template-checkbox-input"
-                      type="checkbox"
-                      name={field.columnName}
-                      value="Yes"
-                      onChange={handleChange}
-                    />
-                    Yes
-                  </label>
-                </div>
+                <label id="template-label-checkbox">
+                  <input
+                    style={{ cursor: "pointer" }}
+                    id="template-checkbox-input"
+                    type="checkbox"
+                    name={field.columnName}
+                    value="Yes"
+                    onChange={handleChange}
+                    checked={formData[field.columnName] === "Yes"} // Handle checked state
+                  />
+                  Yes
+                </label>
+            
+                <label id="template-label-checkbox">
+                  <input
+                    style={{ cursor: "pointer" }}
+                    id="template-checkbox-input"
+                    type="checkbox"
+                    name={field.columnName}
+                    value="No"
+                    onChange={handleChange}
+                    checked={formData[field.columnName] === "No"} // Handle checked state
+                  />
+                  No
+                </label>
+              </div>
+            
               ) : field.dataType === "Image" ? (
                 <div>
                   <label id="label-image">

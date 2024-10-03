@@ -31,9 +31,39 @@ function App() {
   );
   const [templateId, setTemplateId] = useState(null);
 
+  const [user, setUser] = useState({
+    id:null,
+    fullName: "",
+    address: "",
+    mobileNumber: "",
+    email: "",
+    userName: "",
+    formTemplates: [],
+    logo: null
+  });
   const toggleAsideBar = () => {
     setIsOpen(!isOpen);
   };
+
+  // const handleLogin = (username, password) => {
+  //   fetch(
+  //     `http://localhost:8080/login?username=${username}&password=${password}`
+  //   )
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         setIsAuthenticated(true);
+  //         setUsername(username);
+  //         localStorage.setItem("isAuthenticated", "true");
+  //         localStorage.setItem("username", username);
+  //         fetchTemplateData(username);
+  //       } else {
+  //         alert("Login failed. Please check your credentials.");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error during login:", error);
+  //     });
+  // };
 
   const handleLogin = (username, password) => {
     fetch(
@@ -41,25 +71,41 @@ function App() {
     )
       .then((response) => {
         if (response.ok) {
-          setIsAuthenticated(true);
-          setUsername(username);
-          localStorage.setItem("isAuthenticated", "true");
-          localStorage.setItem("username", username);
-          fetchTemplateData(username);
+          return response.json();
         } else {
-          alert("Login failed. Please check your credentials.");
+          throw new Error("Login failed");
         }
+      })
+      .then((data) => {
+        setIsAuthenticated(true);
+        setUsername(username);
+        localStorage.setItem("username", username);
+        localStorage.setItem("isAuthenticated", "true");
+        setUser(data);
+        localStorage.setItem("user", JSON.stringify(data));
+        fetchTemplateData(username);
       })
       .catch((error) => {
         console.error("Error during login:", error);
+        alert("Login failed. Please check your credentials.");
       });
   };
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+
 
   const fetchTemplateData = (username) => {
     fetch(`http://localhost:8080/get-template-username?userName=${username}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
+          console.log(data);
           setTemplateId(data[0].id); // Assuming you want the first template's ID
         } else {
           console.error("No templates found for this user.");
@@ -85,7 +131,7 @@ function App() {
     <>
       {isAuthenticated ? (
         <>
-          <Nav toggleAsideBar={toggleAsideBar} isOpen={isOpen} />
+          <Nav toggleAsideBar={toggleAsideBar} user={user} isOpen={isOpen} />
           <AsideBar
             open={isOpen}
             toggleAsideBar={toggleAsideBar}
