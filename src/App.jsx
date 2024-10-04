@@ -37,6 +37,7 @@ function App() {
     address: "",
     mobileNumber: "",
     email: "",
+    organizationName:"",
     userName: "",
     formTemplates: [],
     logo: null

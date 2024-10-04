@@ -12,6 +12,8 @@
   font-weight: 600;
 }
 
+
+
 #client-data-text{
   padding-top: 1px;
   margin-left: 18px;
@@ -57,11 +59,22 @@
   background-color: #007bffb1;
 }
 
+.add-client-refresh-btn-div{
+  display: flex;
+  /* background-color: red; */
+  justify-content: space-around;
+  align-items:center;
+  width: 97%;
+  margin-top: 2%;
+  margin-left: 5px;
+  gap: 75%;
+
+}
 
 .add-client-btn-div{
-  position: absolute;
+  /* position: absolute;
   margin-left: 2.6%;
-  margin-top: 15px;
+  margin-top: 15px; */
 }
 
 #add-client-btn{
@@ -78,10 +91,26 @@
   background-color: #0056b3;
 }
 
+#refresh-clientData{
+  text-align: center;
+  margin-right: 50px; 
+  border-radius: 4px;
+  width: 50px;
+  height: 25px;
+  background-color: #bbb9b9;
+  cursor: pointer;
+  outline: none;
+  border:1px solid gray;
+}
+
+#refresh-clientData:hover{
+  background-color: #e8e4e4ac;
+  border-color: #272829;
+}
 
 .data-table-root {
   width: 96%;
-  margin-top:5.6%;
+  /* margin-top:2%; */
   margin-left: 2%;
   /* Add any additional styling if needed */
 }
@@ -90,7 +119,7 @@
 .data-table-child {
   height: 410px;
   width: 100%;
-  margin-top: 5%;
+  margin-top: 3%;
   margin-bottom: 3%;
   border-radius: 4px;
   border: 2px solid rgb(158, 158, 158);

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { FormOutlined, DeleteOutlined,SnippetsOutlined } from "@ant-design/icons";
+import { FormOutlined, DeleteOutlined,SnippetsOutlined,RedoOutlined } from "@ant-design/icons";
 import debounce from "lodash/debounce";
 
 
@@ -23,9 +23,10 @@ const ClientData = ({ templateId }) => {
   const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
-    if (templateId) {
+
+    // if (templateId) {
       const fetchData = async () => {
+        setLoading(true);
         try {
           const response = await fetch(
             `http://localhost:8080/get-template-data/${templateId}`
@@ -43,10 +44,15 @@ const ClientData = ({ templateId }) => {
           setLoading(false);
         }
       };
+    // }
 
-      fetchData();
-    }
+  useEffect(() =>{
+    fetchData();
   }, [templateId]);
+
+  const handleRefresh = () => {
+    fetchData();
+  };
 
   useEffect(() => {
     // Filter data whenever searchTerm or originalData changes
@@ -238,21 +244,28 @@ const ClientData = ({ templateId }) => {
         <button id="client-search-btn" onClick={handleSearchButtonClick} >
           Search
         </button>
+
+        
       </div>
       <hr />
 
-      <div className="">
+      <div className="add-client-refresh-btn-div">
         <div className="add-client-btn-div">
           <Link
             to={"/TemplateCreated"}
             style={{ textDecoration: "none", color: "black" }}
           >
             <button id="add-client-btn">Add Client</button>
-          </Link>
+          </Link>          
         </div>
+
+        <button id="refresh-clientData" onClick={handleRefresh}>
+          <RedoOutlined />
+        </button>
+
       </div>
 
-            <div className="data-table-root">
+      <div className="data-table-root">
         <div className="data-table-child">
           <table className="table-class">
             <thead>
