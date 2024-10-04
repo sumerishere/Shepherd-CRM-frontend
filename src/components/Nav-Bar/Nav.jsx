@@ -49,7 +49,7 @@ const Nav = ({ toggleAsideBar, isOpen, user }) => {
             />
           </div>
           <p id="profile-name">{user.organizationName || "Organization Name"}</p>
-          <p id="admin-name">{"Admin"}</p>
+          <p id="admin-name">{`Role : Admin`}</p>
         </div>
       </div>
     </div>
