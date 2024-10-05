@@ -6,6 +6,17 @@
   background-color: rgb(240, 238, 238);
   border: 1px solid rgba(188, 183, 183, 0.799);
   box-shadow: 0px 2px 3px rgb(0, 0, 0, 0.5);
+  padding: 20px;
+}
+
+.action-freeze-column{
+  position: sticky;
+  z-index: 0;
+  top:0;
+  right: 0;
+  background-color: #e2e2e2;
+  border: 1px solid #f5f4f4;
+
 }
 
 #lead-data-heading {
@@ -30,7 +41,6 @@
   cursor: pointer;
   background-color: #007bff;
   border-radius: 5px;
-
 }
 
 
@@ -122,12 +132,6 @@
   display: inline-block;
 }
 
-
-
-.lead-data-root {
-  padding: 20px;
-}
-
 #lead-data-heading {
   font-size: 24px;
   margin-bottom: 10px;
@@ -173,8 +177,6 @@
 }
 
 
-
-
 .add-lead-btn-div {
   /* width: 100px; */
   padding: 8px 8px 3px;
@@ -201,14 +203,14 @@
 }
 
 .lead-table-root {
-  width: 100%;
-  border-radius: 10px;
+
 
 }
 
 .lead-table-div {
   margin-top: -7%;
-  width: 100%;
+  margin-left: 1%;
+  width: 98%;
   height: 100%;
   overflow-y: scroll;
   overflow-x: scroll;
@@ -280,7 +282,7 @@
   word-wrap: break-word;
   word-break: break-all;
   white-space:normal;
-  max-width: 340px;
+  max-width: 320px;
   /* Set a maximum width to control column size */
 }
 
