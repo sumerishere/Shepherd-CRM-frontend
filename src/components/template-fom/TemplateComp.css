@@ -124,7 +124,7 @@
 .add-button {
   position: sticky;
   top: 10px;
-  margin: 6px;
+  margin-left: 4%;
   padding: 4px;
   border: 1px solid rgb(53, 158, 27);
   background-color: #28a745;

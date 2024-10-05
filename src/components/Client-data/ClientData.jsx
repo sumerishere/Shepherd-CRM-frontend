@@ -273,7 +273,7 @@ const ClientData = ({ templateId }) => {
                 {columnHeaders.map((header, index) => (
                   <th key={index}>{header}</th>
                 ))}
-                <th>Actions</th>
+                <th className="client-action-btn-freeze">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -287,7 +287,7 @@ const ClientData = ({ templateId }) => {
                           : ""}
                       </td>
                     ))}
-                    <td>
+                    <td className="client-action-btn-freeze">
                       <button
                         className="update-button"
                         onClick={() => handleUpdateClick(item.uid)}
