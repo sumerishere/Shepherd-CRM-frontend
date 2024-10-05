@@ -333,7 +333,7 @@ const LeadFollowUp = () => {
                 <th>Qualification</th>
                 <th>courseType</th>
                 <th>FollowUp-DateTime</th>
-                <th>Action</th>
+                <th className="action-freeze-column">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -382,7 +382,7 @@ const LeadFollowUp = () => {
                     <td id="table-td">{lead.courseType}</td>
                     {/* <td>{new Date(lead.createdAt).toLocaleString()}</td> */}
                     <td id="table-td">{lead.followUpDate}</td>
-                    <td>
+                    <td className="action-freeze-column">
                       <button
                         className="action-btn update-btn"
                         onClick={() => handleUpdate(lead.uid)}
@@ -396,7 +396,7 @@ const LeadFollowUp = () => {
                         <DeleteOutlined />
                       </button>
                       <button
-                        className="action-btn history-btn"
+                        className="action-btn history-btn "
                         onClick={() => handleHistory(lead.uid)}
                       >
                         <HistoryOutlined />
