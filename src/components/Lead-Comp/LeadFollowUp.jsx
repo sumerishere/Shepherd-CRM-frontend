@@ -249,19 +249,9 @@ const LeadFollowUp = () => {
     setShowUpdateForm(false);
   };
 
-  // if (leads.length === 0) {
-  //   return (
-  //     <div className="follow-up-div">
-  //       <hr />
-  //       <p id="client-data-empty-text">No entries are available.</p>
-  //       <hr />
-  //     </div>
-  //   );
-  // } else {
   if (loading) {
     return <div id="loading-id">Loading...</div>;
   }
-  // }
 
   // Handle checkbox change
   const handleCheckboxChange = (uid) => {
@@ -270,6 +260,16 @@ const LeadFollowUp = () => {
       [uid]: !prev[uid],
     }));
   };
+
+  //sorting lead based category of leads(hot->warm->cold)
+  const sortLeads = (a, b) => {
+    const categoryOrder = { hot: 1, warm: 2, cold: 3 };
+    return categoryOrder[a.category] - categoryOrder[b.category];
+  };
+
+  // Sort the filteredLeads array
+  const sortedLeads = [...filteredLeads].sort(sortLeads);
+
 
   return (
     <div className="lead-data-root">
@@ -315,12 +315,19 @@ const LeadFollowUp = () => {
             <option value="cold">Cold</option>
           </select>
         </div>
+
+        <div className="lead-category-description-div">
+          <p id="hot-type">hot</p>
+          <p id="warm-type">warm</p>
+          <p id="cold-type">cold</p>
+        </div>
+
         <button id="lead-table-refresh-btn" onClick={handleRefresh}>
           <RedoOutlined />
         </button>
       </div>
 
-      <div className="lead-table-root">
+      <div className="lead-table-root-div">
         <div className="lead-table-div">
           <table className="lead-table">
             <thead>
@@ -351,7 +358,7 @@ const LeadFollowUp = () => {
                   </td>
                 </tr>
               ) : (
-                filteredLeads.map((lead) => (
+                sortedLeads.map((lead) => (
                   <tr key={lead.uid}>
                     <td id="table-td-checkbox">
                       <input
