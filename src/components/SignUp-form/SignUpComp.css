@@ -55,8 +55,7 @@
   color: #555;
 }
 
-.form-input-grp[type="text"],
-.form-input-grp[type="password"] {
+.mobile-number{
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -65,8 +64,19 @@
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
+.form-input-grp[type="text"],
+.form-input-grp[type="password"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  /* border: 1px solid #ccc; */
+  border-radius: 4px;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  
+}
+
 .form-input-grp:focus{
-  border-color: #007bff;
+  /* border-color: #007bff; */
   transform: scale(1.2);
   outline: none;
 }

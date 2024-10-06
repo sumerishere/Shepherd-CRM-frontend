@@ -21,6 +21,13 @@ const SignUpComp = ({ setIsAuthenticated }) => {
   const [errors, setErrors] = useState({});
   const [logoFile, setLogoFile] = useState(null);
 
+  //validation constant
+  const NAME_isVALID = "^[A-Za-z\\s]+$";
+  const ADDRESS_isVALID = "^[A-Za-z0-9\\s,.-]+$";
+  // const MOBILE_NUMBER_PATTERN = /^\d{1,12}$/;
+  const EMAIL_PATTERN = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -31,11 +38,21 @@ const SignUpComp = ({ setIsAuthenticated }) => {
 
   const validate = () => {
     const errors = {};
-    if (!formData.email.includes("@")) {
-      errors.email = "Invalid email format";
+
+    if(!formData.fullName.match(NAME_isVALID)){
+      errors.fullName = "Valid full Name format is required";
     }
-    if (!/^\d{1,12}$/.test(formData.mobileNumber)) {
-      errors.mobileNumber = "Mobile number must be between (1-12) digits";
+    if(!formData.address.match(ADDRESS_isVALID)){
+      errors.address = "Valid Address format is required"
+    }
+    // if (!formData.mobileNumber.match(MOBILE_NUMBER_PATTERN)) {
+    //   errors.mobileNumber = "Valid Mobile number must be between (1-12) digits";
+    // }
+    if (!formData.email.match(EMAIL_PATTERN)) {
+      errors.email = "Valid email format is required";
+    }
+    if(!formData.organizationName.match(NAME_isVALID)){
+      errors.organizationName = "Valid name format is required";
     }
     return errors;
   };
@@ -113,6 +130,18 @@ const SignUpComp = ({ setIsAuthenticated }) => {
     navigate("/login"); // Redirect to the login page
   };
 
+
+  const handleMobileChange = (e) => {
+    const { name, value } = e.target;
+    // Only allow numeric input and limit to 10 digits
+    const numericValue = value.replace(/\D/g, '').slice(0, 10);
+    
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: numericValue
+    }));
+  };
+
   return (
     <div className="signup-root-div">
       <div className="signup-form-div">
@@ -127,35 +156,39 @@ const SignUpComp = ({ setIsAuthenticated }) => {
               className="form-input-grp"
               type="text"
               name="fullName"
+              placeholder="Enter your full name"
               value={formData.fullName}
               onChange={handleChange}
               required
             />
+            {errors.fullName && (<span className="error">{errors.fullName}</span>)}
           </div>
           <div className="form-group-singup">
             <label>Address:</label>
             <input
               className="form-input-grp"
               type="text"
+              placeholder="Enter your address"
               name="address"
               value={formData.address}
               onChange={handleChange}
               required
             />
+            {errors.address && (<span className="error">{errors.address}</span>)}
           </div>
           <div className="form-group-singup">
             <label>Mobile Number:</label>
             <input
-              className="form-input-grp"
-              type="text"
+              className="form-input-grp mobile-number"
+              type="tel"
               name="mobileNumber"
               value={formData.mobileNumber}
-              onChange={handleChange}
+              onChange={handleMobileChange}
+              pattern="[0-9]{10}"
+              maxLength="10"
+              placeholder="Enter 10-digit mobile number"
               required
             />
-            {errors.mobileNumber && (
-              <span className="error">{errors.mobileNumber}</span>
-            )}
           </div>
           <div className="form-group-singup">
             <label>Email:</label>
@@ -163,6 +196,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
               className="form-input-grp"
               type="text"
               name="email"
+              placeholder="Enter your Email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -177,29 +211,36 @@ const SignUpComp = ({ setIsAuthenticated }) => {
               className="form-input-grp"
               type="text"
               name="organizationName"
+              placeholder="Enter Organization Name"
               value={formData.organizationName}
               onChange={handleChange}
               required
             />
+
+            {errors.organizationName && (
+              <span className="error">{errors.organizationName}</span>
+            )}
           </div>
 
           <div className="form-group-singup">
-            <label>Username:</label>
+            <label>Create Username:</label>
             <input
               className="form-input-grp"
               type="text"
               name="userName"
+              placeholder="Create New Username "
               value={formData.userName}
               onChange={handleChange}
               required
             />
           </div>
           <div className="form-group-singup">
-            <label>Password:</label>
+            <label>Create Password:</label>
             <input
               className="form-input-grp"
               type={showPassword ? "text" : "password"}
               name="password"
+              placeholder="Enter new password"
               value={formData.password}
               onChange={handleChange}
               required
