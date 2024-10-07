@@ -13,7 +13,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
     address: "",
     mobileNumber: "",
     email: "",
-    organizationName:"",
+    organizationName: "",
     userName: "",
     password: "",
   });
@@ -23,10 +23,11 @@ const SignUpComp = ({ setIsAuthenticated }) => {
 
   //validation constant
   const NAME_isVALID = "^[A-Za-z\\s]+$";
-  const ADDRESS_isVALID = "^[A-Za-z0-9\\s,.-]+$";
+  const ADDRESS_isVALID = "^(?!.*\s{2})[A-Za-z0-9\\s,./-]+(\s[A-Za-z0-9\s'#,.\-/()]+)*$";
+  // const ADDRESS_isVALID = "^[A-Za-z0-9\\s,.-/]+$";
+
   // const MOBILE_NUMBER_PATTERN = /^\d{1,12}$/;
   const EMAIL_PATTERN = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,11 +40,11 @@ const SignUpComp = ({ setIsAuthenticated }) => {
   const validate = () => {
     const errors = {};
 
-    if(!formData.fullName.match(NAME_isVALID)){
+    if (!formData.fullName.match(NAME_isVALID)) {
       errors.fullName = "Valid full Name format is required";
     }
-    if(!formData.address.match(ADDRESS_isVALID)){
-      errors.address = "Valid Address format is required"
+    if (!formData.address.match(ADDRESS_isVALID)) {
+      errors.address = "Valid Address format is required";
     }
     // if (!formData.mobileNumber.match(MOBILE_NUMBER_PATTERN)) {
     //   errors.mobileNumber = "Valid Mobile number must be between (1-12) digits";
@@ -51,7 +52,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
     if (!formData.email.match(EMAIL_PATTERN)) {
       errors.email = "Valid email format is required";
     }
-    if(!formData.organizationName.match(NAME_isVALID)){
+    if (!formData.organizationName.match(NAME_isVALID)) {
       errors.organizationName = "Valid name format is required";
     }
     return errors;
@@ -113,7 +114,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
         address: "",
         mobileNumber: "",
         email: "",
-        organizationName:"",
+        organizationName: "",
         userName: "",
         password: "",
       });
@@ -130,15 +131,14 @@ const SignUpComp = ({ setIsAuthenticated }) => {
     navigate("/login"); // Redirect to the login page
   };
 
-
   const handleMobileChange = (e) => {
     const { name, value } = e.target;
     // Only allow numeric input and limit to 10 digits
-    const numericValue = value.replace(/\D/g, '').slice(0, 10);
-    
-    setFormData(prevState => ({
+    const numericValue = value.replace(/\D/g, "").slice(0, 10);
+
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: numericValue
+      [name]: numericValue,
     }));
   };
 
@@ -161,7 +161,9 @@ const SignUpComp = ({ setIsAuthenticated }) => {
               onChange={handleChange}
               required
             />
-            {errors.fullName && (<span className="error">{errors.fullName}</span>)}
+            {errors.fullName && (
+              <span className="error">{errors.fullName}</span>
+            )}
           </div>
           <div className="form-group-singup">
             <label>Address:</label>
@@ -174,7 +176,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
               onChange={handleChange}
               required
             />
-            {errors.address && (<span className="error">{errors.address}</span>)}
+            {errors.address && <span className="error">{errors.address}</span>}
           </div>
           <div className="form-group-singup">
             <label>Mobile Number:</label>
@@ -203,7 +205,6 @@ const SignUpComp = ({ setIsAuthenticated }) => {
             />
             {errors.email && <span className="error">{errors.email}</span>}
           </div>
-
 
           <div className="form-group-singup">
             <label>Organization Name:</label>
