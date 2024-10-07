@@ -46,26 +46,6 @@ function App() {
     setIsOpen(!isOpen);
   };
 
-  // const handleLogin = (username, password) => {
-  //   fetch(
-  //     `http://localhost:8080/login?username=${username}&password=${password}`
-  //   )
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         setIsAuthenticated(true);
-  //         setUsername(username);
-  //         localStorage.setItem("isAuthenticated", "true");
-  //         localStorage.setItem("username", username);
-  //         fetchTemplateData(username);
-  //       } else {
-  //         alert("Login failed. Please check your credentials.");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error during login:", error);
-  //     });
-  // };
-
   const handleLogin = (username, password) => {
     fetch(
       `http://localhost:8080/login?username=${username}&password=${password}`

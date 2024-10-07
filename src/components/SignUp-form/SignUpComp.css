@@ -81,6 +81,19 @@
   outline: none;
 }
 
+#view-comment-btn{
+  border-radius: 4px;
+  outline: none;
+  height: 30px;
+  border: 1px solid rgb(152, 151, 151);
+  background-color: #007bff;
+  color: white; 
+  cursor: pointer;
+}
+
+#view-comment-btn:hover{
+  background-color: #034b97ee;
+}
 
 #pass-check-box{
   margin-top: 10px;
