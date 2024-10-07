@@ -1,3 +1,144 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { useState } from 'react';
+// import axios from 'axios';
+// import jsPDF from 'jspdf';
+
+// const InvoiceForm = () => {
+//     const [candidateName, setCandidateName] = useState('');
+//     const [candidateMobile, setCandidateMobile] = useState('');
+//     const [candidateMail, setCandidateMail] = useState('');
+//     const [organizationName, setOrganizationName] = useState('');
+
+//     const generatePDF = () => {
+//         const doc = new jsPDF();
+
+//         doc.text('Invoice', 10, 10);
+//         doc.text(`Candidate Name: ${candidateName}`, 10, 20);
+//         doc.text(`Mobile Number: ${candidateMobile}`, 10, 30);
+//         doc.text(`Email: ${candidateMail}`, 10, 40);
+//         doc.text(`Organization Name: ${organizationName}`, 10, 50);
+
+//         return doc;
+//     };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+
+//         const doc = generatePDF();
+//         const pdfBlob = doc.output('blob');
+
+//         const formData = new FormData();
+        
+//         formData.append('candidateName', candidateName);
+//         formData.append('candidateMobile', candidateMobile);
+//         formData.append('candidateMail', candidateMail);
+//         formData.append('organizationName', organizationName);
+//         formData.append('invoicePdf', pdfBlob, 'invoice.pdf');
+
+//         try {
+//             const response = await axios.post('http://localhost:8080/save-invoice', formData, {
+//                 headers: {
+//                     'Content-Type': 'multipart/form-data',
+//                 },
+//             });
+//             alert(response.data);
+//         } catch (error) {
+//             console.error('Error saving invoice:', error);
+//             alert('Failed to save invoice');
+//         }
+//     };
+
+//     return (
+//         <form onSubmit={handleSubmit}>
+//             <div>
+//                 <label>Candidate Name:</label>
+//                 <input
+//                     type="text"
+//                     value={candidateName}
+//                     onChange={(e) => setCandidateName(e.target.value)}
+//                     required
+//                 />
+//             </div>
+//             <div>
+//                 <label>Mobile Number:</label>
+//                 <input
+//                     type="text"
+//                     value={candidateMobile}
+//                     onChange={(e) => setCandidateMobile(e.target.value)}
+//                     required
+//                 />
+//             </div>
+//             <div>
+//                 <label>Email:</label>
+//                 <input
+//                     type="email"
+//                     value={candidateMail}
+//                     onChange={(e) => setCandidateMail(e.target.value)}
+//                     required
+//                 />
+//             </div>
+//             <div>
+//                 <label>Organization Name:</label>
+//                 <input
+//                     type="text"
+//                     value={organizationName}
+//                     onChange={(e) => setOrganizationName(e.target.value)}
+//                     required
+//                 />
+//             </div>
+//             <button type="submit">Generate Invoice</button>
+//         </form>
+//     );
+// };
+
+// export default InvoiceForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import { useEffect, useState } from "react";
 // import "./LeadFollowUp.css";
 // import {

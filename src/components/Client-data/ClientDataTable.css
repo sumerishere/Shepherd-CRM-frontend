@@ -1,0 +1,42 @@
+.client-data-table-div{
+  margin-top: 10%;
+}
+
+.data-not-found-div{
+  height: 380px;
+  width: 450px;
+  /* background-color: aquamarine; */
+  margin-top: 12%;
+  margin-left: 44%;
+}
+
+.data-not-found-img{
+  height: 100%;
+  width:100%;
+  border-radius: 10%;
+  object-fit: cover;
+  border: 1px solid rgba(150, 148, 148, 0.674);
+}
+
+#data-not-found-p{
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: -1px;
+  margin-left: 28%;
+}
+
+.loading-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px; /* Set height for proper alignment */
+}
+
+#loading-text {
+  margin-top: 24%;
+  margin-left: 15%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #646262;
+  text-align: center;
+}

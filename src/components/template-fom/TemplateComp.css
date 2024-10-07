@@ -124,7 +124,7 @@
 .add-button {
   position: sticky;
   top: 10px;
-  margin: 6px;
+  margin-left: 4%;
   padding: 4px;
   border: 1px solid rgb(53, 158, 27);
   background-color: #28a745;
@@ -141,10 +141,10 @@
 }
 
 /* Submit button styling */
-.submit-button {
+.template-submit-button {
   position: sticky; 
-  margin: 6px;
-  padding-top: 5px;
+  margin: 7px;
+  padding-top: 6px;
   border: 2px solid rgb(42, 110, 255);
   background-color: #007bff;
   color: white;
@@ -155,7 +155,7 @@
   cursor: pointer;
 }
 
-.submit-button:hover {
+.template-submit-button:hover {
   background-color: #0056b3;
 }
 

@@ -2,10 +2,22 @@
   margin-top: 5%;
   margin-bottom: 55px;
   margin-left: 21.5%;
-  width: 75%;
+  width: 74.8%;
+  height: 700px;
   background-color: rgb(240, 238, 238);
   border: 1px solid rgba(188, 183, 183, 0.799);
   box-shadow: 0px 2px 3px rgb(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.action-freeze-column{
+  position: sticky;
+  z-index: 0;
+  top:0;
+  right: 0;
+  background-color: #e2e2e2;
+  border: 1px solid #f5f4f4;
+
 }
 
 #lead-data-heading {
@@ -43,9 +55,9 @@
 .filter-lead-drop {
   height: 30px;
   margin-top: 10px;
-  margin-left: 35%;
+  margin-left: 27%;
   padding: 5px 15px;
-  margin-right: -30px;
+  margin-right: -5%;
   /* background-color: #088b68; */
 }
 
@@ -59,6 +71,43 @@
   background-color: rgb(238, 238, 238);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
+}
+
+.lead-category-description-div{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 190px;
+}
+
+#hot-type{
+  background-color: rgb(225, 53, 53);
+  height: 18px;
+  color: rgb(23, 2, 42);
+  width: 44px;
+  padding-bottom: 1px;
+  text-align: center;
+   border-radius: 2px;
+}
+
+#warm-type{
+  background-color: rgb(242, 191, 22);
+  height: 18px;
+  color: rgb(23, 2, 42);
+  width: 44px;
+  padding-bottom: 1px;
+  text-align: center;
+   border-radius: 2px;
+}
+
+#cold-type{
+  background-color: #70b5ee;
+  height: 18px;
+  color: rgb(23, 2, 42);
+  width: 44px;
+  padding-bottom: 1px;
+  text-align: center;
+   border-radius: 2px;
 }
 
 #lead-table-refresh-btn{
@@ -122,11 +171,6 @@
   display: inline-block;
 }
 
-
-
-.lead-data-root {
-  padding: 20px;
-}
 
 #lead-data-heading {
   font-size: 24px;
@@ -200,15 +244,20 @@
   background-color: #4caf4fc1;
 }
 
-.lead-table-root {
+.lead-table-root-div {
+  margin-top: 8%;
   width: 100%;
+  position: absolute;
+  height:70%;
+  /* padding: 20px; */
   border-radius: 10px;
 
 }
 
 .lead-table-div {
   margin-top: -7%;
-  width: 100%;
+  margin-left: 1%;
+  width: 98%;
   height: 100%;
   overflow-y: scroll;
   overflow-x: scroll;
@@ -280,7 +329,7 @@
   word-wrap: break-word;
   word-break: break-all;
   white-space:normal;
-  max-width: 340px;
+  max-width: 320px;
   /* Set a maximum width to control column size */
 }
 
@@ -698,9 +747,24 @@
 
 
 /* Styles for History Container */
+
+.history-container-root{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+
 .history-container {
   position: fixed;
-  top: 55%;
+  top: 50%;
   left: 55%;
   transform: translate(-50%, -50%);
   background-color: white;

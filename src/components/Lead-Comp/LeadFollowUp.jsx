@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
-import "./LeadFollowUp.css";
 import {
-  FormOutlined,
   DeleteOutlined,
+  FormOutlined,
   HistoryOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
+import debounce from "lodash/debounce";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
-import debounce from "lodash/debounce";
-
+import "./LeadFollowUp.css";
 
 const LeadFollowUp = () => {
   const [loading, setLoading] = useState(true);
@@ -54,7 +53,20 @@ const LeadFollowUp = () => {
 
   const handleSearch = async (text) => {
     try {
-      const response = await fetch(`http://localhost:8080/search-lead-name?name=${text}`);
+      const queryParams = new URLSearchParams();
+      if (text) {
+        // Check if input is likely a mobile number (only digits and possibly spaces)
+        const isMobileNumber = /^\d+$/.test(text.replace(/\s/g, ""));
+        if (isMobileNumber) {
+          queryParams.append("mobile", text);
+        } else {
+          queryParams.append("name", text);
+        }
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/search-lead-name?${queryParams.toString()}`
+      );
       const data = await response.json();
       setFilteredLeads(data || []);
     } catch (error) {
@@ -64,7 +76,6 @@ const LeadFollowUp = () => {
 
   const debouncedSearch = debounce((text) => handleSearch(text), 300);
 
-
   useEffect(() => {
     if (searchText.length >= 3) {
       debouncedSearch(searchText);
@@ -73,8 +84,6 @@ const LeadFollowUp = () => {
       setFilteredLeads(leads);
     }
   }, [searchText, leads, debouncedSearch]);
-
-
 
   // ---- Handle category filter change -------//
   const handleCategoryFilterChange = (e) => {
@@ -192,7 +201,8 @@ const LeadFollowUp = () => {
         source: event.target.source.value,
         referName: event.target.referName.value,
         category: event.target.category.value,
-        followUpDate : event.target.followUpDate.value
+        followUpDate: event.target.followUpDate.value,
+        assignTo: event.target.assignTo.value,
       },
       comments: [newComment],
     };
@@ -239,19 +249,9 @@ const LeadFollowUp = () => {
     setShowUpdateForm(false);
   };
 
-  // if (leads.length === 0) {
-  //   return (
-  //     <div className="follow-up-div">
-  //       <hr />
-  //       <p id="client-data-empty-text">No entries are available.</p>
-  //       <hr />
-  //     </div>
-  //   );
-  // } else {
-    if (loading) {
-      return <div id="loading-id">Loading...</div>;
-    }
-  // }
+  if (loading) {
+    return <div id="loading-id">Loading...</div>;
+  }
 
   // Handle checkbox change
   const handleCheckboxChange = (uid) => {
@@ -260,6 +260,16 @@ const LeadFollowUp = () => {
       [uid]: !prev[uid],
     }));
   };
+
+  //sorting lead based category of leads(hot->warm->cold)
+  const sortLeads = (a, b) => {
+    const categoryOrder = { hot: 1, warm: 2, cold: 3 };
+    return categoryOrder[a.category] - categoryOrder[b.category];
+  };
+
+  // Sort the filteredLeads array
+  const sortedLeads = [...filteredLeads].sort(sortLeads);
+
 
   return (
     <div className="lead-data-root">
@@ -305,12 +315,19 @@ const LeadFollowUp = () => {
             <option value="cold">Cold</option>
           </select>
         </div>
+
+        <div className="lead-category-description-div">
+          <p id="hot-type">hot</p>
+          <p id="warm-type">warm</p>
+          <p id="cold-type">cold</p>
+        </div>
+
         <button id="lead-table-refresh-btn" onClick={handleRefresh}>
           <RedoOutlined />
         </button>
       </div>
 
-      <div className="lead-table-root">
+      <div className="lead-table-root-div">
         <div className="lead-table-div">
           <table className="lead-table">
             <thead>
@@ -323,7 +340,7 @@ const LeadFollowUp = () => {
                 <th>Qualification</th>
                 <th>courseType</th>
                 <th>FollowUp-DateTime</th>
-                <th>Action</th>
+                <th className="action-freeze-column">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -341,7 +358,7 @@ const LeadFollowUp = () => {
                   </td>
                 </tr>
               ) : (
-                filteredLeads.map((lead) => (
+                sortedLeads.map((lead) => (
                   <tr key={lead.uid}>
                     <td id="table-td-checkbox">
                       <input
@@ -372,7 +389,7 @@ const LeadFollowUp = () => {
                     <td id="table-td">{lead.courseType}</td>
                     {/* <td>{new Date(lead.createdAt).toLocaleString()}</td> */}
                     <td id="table-td">{lead.followUpDate}</td>
-                    <td>
+                    <td className="action-freeze-column">
                       <button
                         className="action-btn update-btn"
                         onClick={() => handleUpdate(lead.uid)}
@@ -386,7 +403,7 @@ const LeadFollowUp = () => {
                         <DeleteOutlined />
                       </button>
                       <button
-                        className="action-btn history-btn"
+                        className="action-btn history-btn "
                         onClick={() => handleHistory(lead.uid)}
                       >
                         <HistoryOutlined />
@@ -483,6 +500,14 @@ const LeadFollowUp = () => {
               defaultValue={selectedLead.followUpDate || ""}
             />
 
+            <label className="updateFormLabel">Assign-To</label>
+            <input
+              className="updateFormInput"
+              type="text"
+              name="assignTo"
+              defaultValue={selectedLead.assignTo || "Assign name here"}
+            />
+
             <label className="updateFormLabel">New Comment</label>
             <textarea
               className="updateFormTextarea"
@@ -507,79 +532,81 @@ const LeadFollowUp = () => {
       {/* show history of lead*/}
 
       {showHistory && selectedLead && (
-        <div className="history-container">
-          <div className="history-header">
-            <span className="history-title">
-              Profile of{" "}
-              {historyData.length > 0 ? historyData[0]?.leadName : "Lead"}
-            </span>
-            <button className="history-close-btn" onClick={closeHistory}>
-              X
-            </button>
-          </div>
-          <div className="history-profile-info">
-            <div className="history-profile-column">
-              <p>
-                <strong>Name:</strong> {selectedLead.name || "N/A"}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedLead.email || "N/A"}
-              </p>
-              <p>
-                <strong>Mobile Number:</strong>{" "}
-                {selectedLead.mobileNumber || "N/A"}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedLead.address || "N/A"}
-              </p>
+        <div className="history-container-root">
+          <div className="history-container">
+            <div className="history-header">
+              <span className="history-title">
+                Profile of{" "}
+                {historyData.length > 0 ? historyData[0]?.leadName : "Lead"}
+              </span>
+              <button className="history-close-btn" onClick={closeHistory}>
+                X
+              </button>
             </div>
-            <div className="history-profile-column">
-              <p>
-                <strong>Qualification:</strong>{" "}
-                {selectedLead.qualification || "N/A"}
-              </p>
-              <p>
-                <strong>Source:</strong> {selectedLead.source || "N/A"}
-              </p>
-              <p>
-                <strong>Refer Name:</strong> {selectedLead.referName || "N/A"}
-              </p>
-              <p>
-                <strong>Category:</strong>{" "}
-                {`----  (${selectedLead.category})` || "N/A"}
-              </p>
-              <div
-                className="lead-color-code category-history-code"
-                id={
-                  selectedLead.category === "hot"
-                    ? "hot-lead"
-                    : selectedLead.category === "warm"
-                    ? "warm-lead"
-                    : selectedLead.category === "cold"
-                    ? "cold-lead"
-                    : ""
-                }
-              ></div>
+            <div className="history-profile-info">
+              <div className="history-profile-column">
+                <p>
+                  <strong>Name:</strong> {selectedLead.name || "N/A"}
+                </p>
+                <p>
+                  <strong>Email:</strong> {selectedLead.email || "N/A"}
+                </p>
+                <p>
+                  <strong>Mobile Number:</strong>{" "}
+                  {selectedLead.mobileNumber || "N/A"}
+                </p>
+                <p>
+                  <strong>Address:</strong> {selectedLead.address || "N/A"}
+                </p>
+              </div>
+              <div className="history-profile-column">
+                <p>
+                  <strong>Qualification:</strong>{" "}
+                  {selectedLead.qualification || "N/A"}
+                </p>
+                <p>
+                  <strong>Source:</strong> {selectedLead.source || "N/A"}
+                </p>
+                <p>
+                  <strong>Refer Name:</strong> {selectedLead.referName || "N/A"}
+                </p>
+                <p>
+                  <strong>Category:</strong>{" "}
+                  {`----  (${selectedLead.category})` || "N/A"}
+                </p>
+                <div
+                  className="lead-color-code category-history-code"
+                  id={
+                    selectedLead.category === "hot"
+                      ? "hot-lead"
+                      : selectedLead.category === "warm"
+                      ? "warm-lead"
+                      : selectedLead.category === "cold"
+                      ? "cold-lead"
+                      : ""
+                  }
+                ></div>
+              </div>
             </div>
-          </div>
-          <hr />
-          <h4 id="comment-box-title">Comments :</h4>
+            <hr />
+            <h4 id="comment-box-title">Comments :</h4>
 
-          <div className="history-comments">
-            {noHistoryAvailable ? (
-              <p id="no-chats-p-id">No Comments available😴</p>
-            ) : (
-              historyData
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting comments by date (newest first)
-                .map((item) => (
-                  <div key={item.id} className="history-comment-item">
-                    <p>{item.comment}</p>
-                    <span className="history-comment-date">
-                      {new Date(item.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-                ))
-            )}
+            <div className="history-comments">
+              {noHistoryAvailable ? (
+                <p id="no-chats-p-id">No Comments available😴</p>
+              ) : (
+                historyData
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting comments by date (newest first)
+                  .map((item) => (
+                    <div key={item.id} className="history-comment-item">
+                      <p>{item.comment}</p>
+                      <span className="history-comment-date">
+                        {new Date(item.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                  ))
+              )}
+            </div>
           </div>
         </div>
       )}

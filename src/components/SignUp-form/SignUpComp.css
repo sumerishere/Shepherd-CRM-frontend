@@ -2,26 +2,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  margin-left: 23%;
-  margin-top: 3.5%;
+  width: 70%;
+  margin-left: 13%;
+  margin-top: 2.5%;
   position: absolute;
   background-color: #f5f5f5;
 }
 
 .signup-form-div {
-  /* background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  width: 380px;
-  position: relative; */
-
   background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    width: 780px;
+    width: 100%;
     position: relative;
     display: flex;
     justify-content: space-evenly;
@@ -33,7 +26,7 @@
 }
 
 #signup-form-h1 {
-  margin-right: 24%;
+  margin-right: 35%;
   font-family: Arial, sans-serif;
   color: #333;
   position: absolute;
@@ -42,8 +35,8 @@
 
 .signup-img-div{
   margin-top: 80px;
-  height: 400px;
-  width: 400px;
+  height: 500px;
+  width: 500px;
 }
 .signup-img{
   /* height: 100%; */
@@ -62,8 +55,7 @@
   color: #555;
 }
 
-.form-input-grp[type="text"],
-.form-input-grp[type="password"] {
+.mobile-number{
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -72,12 +64,36 @@
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
+.form-input-grp[type="text"],
+.form-input-grp[type="password"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  /* border: 1px solid #ccc; */
+  border-radius: 4px;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  
+}
+
 .form-input-grp:focus{
-  border-color: #007bff;
+  /* border-color: #007bff; */
   transform: scale(1.2);
   outline: none;
 }
 
+#view-comment-btn{
+  border-radius: 4px;
+  outline: none;
+  height: 30px;
+  border: 1px solid rgb(152, 151, 151);
+  background-color: #007bff;
+  color: white; 
+  cursor: pointer;
+}
+
+#view-comment-btn:hover{
+  background-color: #034b97ee;
+}
 
 #pass-check-box{
   margin-top: 10px;
@@ -116,12 +132,12 @@
 #already-acc-id{
   position: absolute;
   margin-top: 40px;
-  margin-left: -195px;
+  margin-left: -230px;
 }
 
 #go-login-id{
   /* width: 120px; */
-  margin-left: 130px;
+  margin-left: 160px;
   margin-top: 2px;
   color: #007bff;
   cursor: pointer;

@@ -1,19 +1,35 @@
-import "./CalenderComponent.css";
-import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
+import { useEffect, useState } from "react";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import Popup from "reactjs-popup";
+// import "reactjs-popup/dist/index.css";
+import "./CalenderComponent.css";
 
 const localizer = momentLocalizer(moment);
 
 const CalenderComponent = () => {
   const [events, setEvents] = useState([]);
-  const [showNotification, setShowNotification] = useState(false);
-  const [showTable, setShowTable] = useState(false);
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventSlot, setEventSlot] = useState(null);
-  const [currentView, setCurrentView] = useState(Views.MONTH); // Track the current view
+  const [currentView, setCurrentView] = useState(Views.MONTH);
   const [leads, setLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+
+ 
+  // New state for showing update form and tracking selected lead data
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [updateFormData, setUpdateFormData] = useState({
+    name: "",
+    mobileNumber: "",
+    email: "",
+    followUpDate: "",
+    assignTo: "",
+    comments: "",
+    statusType: "",
+  });
 
   const fetchLeads = async () => {
     try {
@@ -21,128 +37,221 @@ const CalenderComponent = () => {
       const leadData = await response.json();
 
       setLeads(leadData || []);
+
+      const eventsData = leadData.reduce((eventsAcc, lead) => {
+        const followUpDate = moment(lead.followUpDate).startOf("day").toDate();
+
+        const existingEvent = eventsAcc.find((event) =>
+          moment(event.start).isSame(followUpDate, "day")
+        );
+
+        if (existingEvent) {
+          existingEvent.title = `${parseInt(existingEvent.title) + 1}`;
+        } else {
+          eventsAcc.push({
+            start: followUpDate,
+            end: followUpDate,
+            title: "1",
+            backgroundColor: getHashedColor(followUpDate.toString()),
+          });
+        }
+        return eventsAcc;
+      }, []);
+
+      setEvents(eventsData);
     } catch (error) {
-      alert("got error", error);
+      toast.error("Failed to fetch leads");
     }
   };
 
   useEffect(() => {
-    fetchLeads(); // Fetch leads when the component mounts
+    fetchLeads();
   }, []);
 
-  useEffect(() => {
-    if (showNotification) {
-      const timer = setTimeout(() => {
-        const notificationElement = document.querySelector(
-          ".notification-container"
-        );
-        if (notificationElement) {
-          notificationElement.classList.add("show");
-        }
-      }, 10);
-      return () => clearTimeout(timer);
+  const getHashedColor = (input) => {
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = input.charCodeAt(i) + ((hash << 5) - hash);
     }
-  }, [showNotification]);
-
-  useEffect(() => {
-    if (currentView !== Views.AGENDA) {
-      setShowTable(false); // Hide table when not in Agenda view
-    }
-  }, [currentView]);
-
-  const handleSelectSlot = ({ start, end }) => {
-    setEventSlot({ start, end });
-    setShowNotification(true);
-  };
-
-  const handleAddEvent = () => {
-    if (eventTitle) {
-      const newEvent = {
-        start: eventSlot.start,
-        end: eventSlot.end,
-        title: eventTitle,
-        backgroundColor: getRandomColor(),
-      };
-      setEvents([...events, newEvent]);
-      setEventTitle("");
-      setShowNotification(false);
-    }
-  };
-
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
+    const color = `#${((hash >> 24) & 0xff).toString(16)}${(
+      (hash >> 16) &
+      0xff
+    ).toString(16)}${((hash >> 8) & 0xff).toString(16)}`;
     return color;
   };
 
-  const handleCustomAgendaClick = () => {
-    setShowTable(true); // Show table container on custom agenda button click
+  const handleEventClick = (event) => {
+    const clickedDate = moment(event.start).format("YYYY-MM-DD");
+    const filteredLeadsByDate = leads.filter((lead) => {
+      const followUpDate = moment(lead.followUpDate).format("YYYY-MM-DD");
+
+      return followUpDate === clickedDate;
+    });
+
+    setFilteredLeads(filteredLeadsByDate);
+    setShowTable(true);
   };
 
   const handleCloseTable = () => {
     setShowTable(false);
   };
 
+  // Function to handle clicking on a table entry to open the update form
+  const handleLeadClick = async (lead) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/get-lead-by-id/${lead.uid}`
+      );
+      const leadData = await response.json();
+
+      setSelectedLead(leadData);
+      setUpdateFormData({
+        name: leadData.name || "",
+        mobileNumber: leadData.mobileNumber || "",
+        email: leadData.email || "",
+        followUpDate: leadData.followUpDate || "",
+        assignTo: leadData.assignTo || "",
+        comments:
+          leadData.comments.map((comment) => comment.comment).join(", ") || "",
+        statusType: leadData.statusType || "",
+      });
+
+      setShowUpdateForm(true);
+    } catch (error) {
+      toast.error("Failed to fetch lead details", error);
+    }
+  };
+
+  // Function to handle form changes
+  const handleFormChange = (e) => {
+    setUpdateFormData({
+      ...updateFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Function to handle form submission and send PUT request
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    // Prepare the lead follow-up data
+    const leadFollowUpData = {
+      name: updateFormData.name || selectedLead.name,
+      email: updateFormData.email || selectedLead.email,
+      mobileNumber: updateFormData.mobileNumber || selectedLead.mobileNumber,
+      followUpDate: updateFormData.followUpDate || selectedLead.followUpDate,
+      assignTo: updateFormData.assignTo || selectedLead.assignTo,
+      statusType: updateFormData.statusType || selectedLead.statusType,
+    };
+
+    // Construct the payload with leadFollowUp data only
+    const payload = {
+      name: leadFollowUpData.name,
+      email: leadFollowUpData.email,
+      mobileNumber: leadFollowUpData.mobileNumber,
+      followUpDate: leadFollowUpData.followUpDate,
+      assignTo: leadFollowUpData.assignTo,
+      statusType: leadFollowUpData.statusType,
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/update-followup/${selectedLead.uid}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload), // Send the properly structured payload
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Lead updated successfully!");
+        setShowUpdateForm(false);
+        fetchLeads(); // Refresh leads after update
+      } else {
+        toast.error("Failed to update lead.");
+      }
+    } catch (error) {
+      console.error("Error updating lead:", error);
+      toast.error("An error occurred while updating the lead.");
+    }
+  };
+
+  // Function to handle closing the update form
+  const handleCloseUpdateForm = () => {
+    setShowUpdateForm(false);
+  };
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    return now.toISOString().slice(0, 16);
+  };
+
+
   return (
     <div className="calendar-root-div">
+      <ToastContainer />
       <div className="calendar-div">
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
-          selectable
-          onSelectSlot={handleSelectSlot}
           views={{ month: true, week: true, day: true }}
           view={currentView}
           onView={setCurrentView}
           style={{ width: 584, height: 480 }}
-          eventPropGetter={(event) => ({
-            style: {
-              backgroundColor: event.backgroundColor,
-              borderRadius: "4px",
-              color: "white",
-              border: "1px",
-              display: "block",
-              padding: "3px 1px",
-            },
-          })}
+          eventPropGetter={(event) => {
+            const eventDate = moment(event.start).startOf("day").toDate(); // Get the start date of the event
+            const today = new Date(); // Get today's date
+
+            // Compare day, month, and year to apply boxShadow conditionally
+            const setDateCss =
+              eventDate.getDate() === today.getDate() &&
+              eventDate.getMonth() === today.getMonth() &&
+              eventDate.getFullYear() === today.getFullYear();
+
+            return {
+              style: {
+                backgroundColor: event.backgroundColor,
+                borderRadius: "6px",
+                color: "white",
+                border: setDateCss ? "1.5px solid white" : "1px solid #7F7F7F",
+                display: "block",
+                height: "24px",
+                width: "68px",
+                marginTop: "20px",
+                marginLeft: "5px",
+                padding: "0px",
+                boxShadow: setDateCss
+                  ? "0px 3px 5px 0px rgb(0, 0, 0, 0.9)"
+                  : "none", // Box shadow only for matching dates
+                textAlign: "center",
+              },
+            };
+          }}
+          components={{
+            event: ({ event }) => (
+              <div
+                className="rbc-event-content"
+                title={event.title}
+                style={{
+                  margin: "-4px 0px",
+                  padding: "0px",
+                  width: "100%",
+                  height: "100%",
+                }}
+                onClick={() => handleEventClick(event)}
+                // onClick={() => handleEventClickWithPopup(event)}
+              >
+              {event.title}
+              </div>
+            ),
+          }}
         />
       </div>
-
-      <button
-        onClick={handleCustomAgendaClick}
-        className="custom-agenda-button"
-      >
-        Show FollowUps
-      </button>
-
-      {showNotification && (
-        <div className="notification-container">
-          <h3>Add Event😊</h3>
-          <input
-            type="text"
-            placeholder="Enter event title"
-            value={eventTitle}
-            onChange={(e) => setEventTitle(e.target.value)}
-            className="event-input"
-          />
-          <div className="notification-buttons">
-            <button onClick={handleAddEvent} className="ok-button">
-              OK
-            </button>
-            <button
-              onClick={() => setShowNotification(false)}
-              className="back-button"
-            >
-              Back
-            </button>
-          </div>
-        </div>
-      )}
 
       {showTable && (
         <div className="table-container-parent">
@@ -155,43 +264,137 @@ const CalenderComponent = () => {
             </div>
 
             <div className="followup-notifier-table-div">
-              <table className="followup-notifier-table">
-                <thead>
-                  <tr>
-                    <th>Full Name</th>
-                    <th>Mobile</th>
-                    <th>Email</th>
-                    <th>Follow Up</th>
-                    <th>Assign To</th>
-                    <th>Comments</th>
-                    <th>Status Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {leads.map((lead, index) => (
-                    <tr key={index}>
-                      <td id="followup-table-td">{lead.name}</td>
-                      <td id="followup-table-td">{lead.mobileNumber}</td>
-                      <td id="followup-table-td">{lead.email}</td>
-                      <td id="followup-table-td">{lead.followUpDate}</td>
-                      <td id="followup-table-td">{lead.assignTo}</td>
-                      <td id="followup-table-td">
-                        {lead.comments.map((commentItem) => (
-                          <div  key={commentItem.id}>
-                            <strong>Comment:</strong> {commentItem.comment}{" "}
-                            <br />
-                            <strong>Time:</strong>{" "}
-                            {new Date(commentItem.createdAt).toLocaleString()}{" "}
-                            <br />
-                          </div>
-                        ))}
-                      </td>
-                      <td id="followup-table-td">{lead.statusType}</td>
+              {filteredLeads.length > 0 ? (
+                <table className="followup-notifier-table">
+                  <thead>
+                    <tr>
+                      <th>Full Name</th>
+                      <th>Mobile</th>
+                      <th>Email</th>
+                      <th>Follow Up</th>
+                      <th>Assign To</th>
+                      <th>Status Type</th>
+                      <th>Comments</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredLeads.map((lead, index) => (
+                      <tr key={index} onClick={() => handleLeadClick(lead)}>
+                        <td id="followup-table-td">{lead.name || "N/A"}</td>
+                        <td id="followup-table-td">{lead.mobileNumber}</td>
+                        <td id="followup-table-td">{lead.email || "N/A"}</td>
+                        <td id="followup-table-td">
+                          {lead.followUpDate || "N/A"}
+                        </td>
+                        <td id="followup-table-td">{lead.assignTo || "N/A"}</td>
+
+                        <td id="followup-table-td">
+                          {lead.statusType || "N/A"}
+                        </td>
+                        <td id="followup-table-td">
+                          {lead.comments.map((commentItem) => (
+                            <div key={commentItem.id}>
+                              <strong>Comment:</strong> {commentItem.comment}
+                              <br />
+                              <strong>Time:</strong>
+                              {new Date(commentItem.createdAt).toLocaleString()}
+                              <br />
+                            </div>
+                          ))}
+                        </td>
+                       <td>
+                        <button id="view-comment-btn">view comments</button>
+                       </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>No leads found for this date.</p>
+              )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {showUpdateForm && (
+        <div className="update-notifier-overlay ">
+          <div className="update-notifier-form-container">
+            <button
+              onClick={handleCloseUpdateForm}
+              className="update-notifier-close-btn"
+            >
+              X
+            </button>
+            <div className="update-notifier-header">Update FollowUp</div>
+            <form onSubmit={handleFormSubmit}>
+              <label className="update-notifier-label">
+                Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={updateFormData.name}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <label className="update-notifier-label">
+                Mobile Number:
+                <input
+                  type="text"
+                  name="mobileNumber"
+                  value={updateFormData.mobileNumber}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <label className="update-notifier-label">
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={updateFormData.email}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <label className="update-notifier-label">
+                Follow Up Date:
+                <input
+                  type="datetime-local"
+                  name="followUpDate"
+                  value={updateFormData.followUpDate}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                  min={getCurrentDateTime()}
+                />
+              </label>
+              <label className="update-notifier-label">
+                Assign To:
+                <input
+                  type="text"
+                  name="assignTo"
+                  value={updateFormData.assignTo}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+
+              <label className="update-notifier-label">
+                Status Type:
+                <input
+                  type="text"
+                  name="statusType"
+                  value={updateFormData.statusType}
+                  onChange={handleFormChange}
+                  className="update-notifier-input"
+                />
+              </label>
+              <button type="submit" className="update-notifier-submit-btn">
+                Update Lead
+              </button>
+            </form>
           </div>
         </div>
       )}

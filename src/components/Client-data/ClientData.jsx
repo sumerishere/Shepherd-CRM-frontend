@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FormOutlined, DeleteOutlined,SnippetsOutlined,RedoOutlined } from "@ant-design/icons";
 import debounce from "lodash/debounce";
 
 
@@ -20,13 +20,13 @@ const ClientData = ({ templateId }) => {
     fieldsData: {},
   });
 
-  const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
-  // const [clientNotFound, setClientNotFound] = useState(false); // State to handle "Client not found"
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
-    if (templateId) {
+
+    // if (templateId) {
       const fetchData = async () => {
+        setLoading(true);
         try {
           const response = await fetch(
             `http://localhost:8080/get-template-data/${templateId}`
@@ -44,10 +44,15 @@ const ClientData = ({ templateId }) => {
           setLoading(false);
         }
       };
+    // }
 
-      fetchData();
-    }
+  useEffect(() =>{
+    fetchData();
   }, [templateId]);
+
+  const handleRefresh = () => {
+    fetchData();
+  };
 
   useEffect(() => {
     // Filter data whenever searchTerm or originalData changes
@@ -239,21 +244,28 @@ const ClientData = ({ templateId }) => {
         <button id="client-search-btn" onClick={handleSearchButtonClick} >
           Search
         </button>
+
+        
       </div>
       <hr />
 
-      <div className="">
+      <div className="add-client-refresh-btn-div">
         <div className="add-client-btn-div">
           <Link
             to={"/TemplateCreated"}
             style={{ textDecoration: "none", color: "black" }}
           >
             <button id="add-client-btn">Add Client</button>
-          </Link>
+          </Link>          
         </div>
+
+        <button id="refresh-clientData" onClick={handleRefresh}>
+          <RedoOutlined />
+        </button>
+
       </div>
 
-            <div className="data-table-root">
+      <div className="data-table-root">
         <div className="data-table-child">
           <table className="table-class">
             <thead>
@@ -261,7 +273,7 @@ const ClientData = ({ templateId }) => {
                 {columnHeaders.map((header, index) => (
                   <th key={index}>{header}</th>
                 ))}
-                <th>Actions</th>
+                <th className="client-action-btn-freeze">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -269,19 +281,28 @@ const ClientData = ({ templateId }) => {
                 filteredData.map((item) => (
                   <tr key={item.uid}>
                     {columnHeaders.map((header, index) => (
-                      <td key={index}>
+                      <td id="client-table-td" key={index}>
                         {item.fields_Data[header] !== undefined
                           ? item.fields_Data[header]
                           : ""}
                       </td>
                     ))}
-                    <td>
+                    <td className="client-action-btn-freeze">
                       <button
                         className="update-button"
                         onClick={() => handleUpdateClick(item.uid)}
                       >
                         <FormOutlined />
                       </button>
+  
+                      <Link to = "/InvoiceGen" style={{textDecoration:"none"}}>
+                        <button
+                          className="get-invoice-btn"
+                        >
+                          <SnippetsOutlined />
+                        </button>
+                      </Link>
+
                       <button
                         className="remove-button"
                         onClick={() => handleDeleteClick(item.uid)}
@@ -341,7 +362,7 @@ const ClientData = ({ templateId }) => {
               ) : null
             )}
             <div className="button-group">
-              <button type="submit" className="submit-button">
+              <button type="submit" className="client-update-submit-btn">
                 Update
               </button>
               <button
