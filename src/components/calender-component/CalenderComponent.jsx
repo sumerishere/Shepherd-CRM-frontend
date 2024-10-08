@@ -17,6 +17,7 @@ const CalenderComponent = () => {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+ 
   // New state for showing update form and tracking selected lead data
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
@@ -272,8 +273,9 @@ const CalenderComponent = () => {
                       <th>Email</th>
                       <th>Follow Up</th>
                       <th>Assign To</th>
-                      <th>Comments</th>
                       <th>Status Type</th>
+                      <th>Comments</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -286,6 +288,10 @@ const CalenderComponent = () => {
                           {lead.followUpDate || "N/A"}
                         </td>
                         <td id="followup-table-td">{lead.assignTo || "N/A"}</td>
+
+                        <td id="followup-table-td">
+                          {lead.statusType || "N/A"}
+                        </td>
                         <td id="followup-table-td">
                           {lead.comments.map((commentItem) => (
                             <div key={commentItem.id}>
@@ -297,9 +303,9 @@ const CalenderComponent = () => {
                             </div>
                           ))}
                         </td>
-                        <td id="followup-table-td">
-                          {lead.statusType || "N/A"}
-                        </td>
+                       <td>
+                        <button id="view-comment-btn">view comments</button>
+                       </td>
                       </tr>
                     ))}
                   </tbody>

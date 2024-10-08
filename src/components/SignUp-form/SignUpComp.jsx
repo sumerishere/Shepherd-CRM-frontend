@@ -18,53 +18,146 @@ const SignUpComp = ({ setIsAuthenticated }) => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+
+  const [errors, setErrors] = useState({
+    fullName:"",
+    address: "",
+    mobileNumber: "",
+    email: "",
+    organizationName:"",
+    userName: "",
+    password: "",
+  });
+
   const [logoFile, setLogoFile] = useState(null);
 
   //validation constant
-  const NAME_isVALID = "^[A-Za-z\\s]+$";
-  const ADDRESS_isVALID = "^(?!.*\s{2})[A-Za-z0-9\\s,./-]+(\s[A-Za-z0-9\s'#,.\-/()]+)*$";
-  // const ADDRESS_isVALID = "^[A-Za-z0-9\\s,.-/]+$";
-
+  const NAME_isVALID = /^[a-zA-Z][a-zA-Z\s]*$/;
+  const ADDRESS_isVALID = /^(?!.*\s{2})[A-Za-z0-9\\s,./-]+(\s[A-Za-z0-9\s'#,.\-/()]+)*$/;
   // const MOBILE_NUMBER_PATTERN = /^\d{1,12}$/;
-  const EMAIL_PATTERN = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+
+  const validate = (field,value) => {
+    let isValid = true;
+    let errorMessage = "";
+
+    switch(field){
+
+      case "fullName":{
+        if(!NAME_isVALID.test(value)){
+          errorMessage = "Valid full Name format is required";
+          isValid = false;
+        }
+        break;
+      }
+
+      case "address":{
+        if(!ADDRESS_isVALID.test(value)){
+          errorMessage = "Valid Address format is required"
+          isValid = false;
+        }
+        break;
+      }
+      
+      case "email":{
+        if (!EMAIL_PATTERN.test(value)) {
+          errorMessage = "Valid email format is required";
+          isValid = false;
+        }
+        break;
+      }
+
+      case "organizationName":{
+        if(!NAME_isVALID.test(value)){
+          errorMessage = "Valid organization name format is required";
+          isValid = false;
+        }
+        break;
+      }
+      default:
+        break;
+    }
+    setErrors((prevErrors)=> ({
+      ...prevErrors,
+      [field] : errorMessage,
+    }));
+
+    return isValid;
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { id, value } = e.target;
+
+    switch(id){
+      case "fullName-validate-id":
+        setFormData((prev) => ({ ...prev, fullName: value }));
+        break;
+      
+      case "address-validate-id":
+        setFormData((prev) => ({ ...prev, address: value }));
+        break;
+      
+      // case "mobileNumber-validate-id":
+      //   setFormData((prev) => ({...prev, mobileNumber: value}));
+      //   break;
+      
+      case "email-validate-id":
+        setFormData((prev) => ({
+          ...prev,email:value
+        }));
+        break;
+      
+
+      case "organizationName-validate-id":
+        setFormData((prev) => ({
+          ...prev,organizationName:value
+        }));
+        break;
+      
+
+      case "userName-validate-id":
+        setFormData((prev) => ({
+          ...prev, userName:value
+        }));
+        break;
+
+      case "password-validate-id":
+        setFormData((prev) => ({
+          ...prev, password:value
+        }));
+        break;
+
+      default:
+        break;
+    }
+    validate(id.split("-")[0], value);
   };
 
-  const validate = () => {
-    const errors = {};
-
-    if (!formData.fullName.match(NAME_isVALID)) {
-      errors.fullName = "Valid full Name format is required";
-    }
-    if (!formData.address.match(ADDRESS_isVALID)) {
-      errors.address = "Valid Address format is required";
-    }
-    // if (!formData.mobileNumber.match(MOBILE_NUMBER_PATTERN)) {
-    //   errors.mobileNumber = "Valid Mobile number must be between (1-12) digits";
-    // }
-    if (!formData.email.match(EMAIL_PATTERN)) {
-      errors.email = "Valid email format is required";
-    }
-    if (!formData.organizationName.match(NAME_isVALID)) {
-      errors.organizationName = "Valid name format is required";
-    }
-    return errors;
-  };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+    // const validationErrors = validate();
+    // if (Object.keys(validationErrors).length > 0) {
+    //   setErrors(validationErrors);
+    //   return;
+    // }
+
+
+    // Validate all fields
+  const fields = ['fullName', 'address', 'email', 'organizationName', 'userName', 'password'];
+  let isValid = true;
+
+  for (const field of fields) {
+    if (!validate(field, formData[field])) {
+      isValid = false;
     }
+  }
+
+  if(!isValid){
+    return;
+  }
 
     // Create a FormData object to send the form data
     const formDataToSend = new FormData();
@@ -104,22 +197,28 @@ const SignUpComp = ({ setIsAuthenticated }) => {
       // Handle success response
       if (responseText === "User saved successfully") {
         toast.success("Form submitted successfully!");
-      } else {
-        toast.error(`Error: ${responseText}`);
-      }
+      
+        // Reset form data and errors
+        setFormData({
+          fullName: "",
+          address: "",
+          mobileNumber: "",
+          email: "",
+          organizationName:"",
+          userName: "",
+          password: "",
+        });
+        setErrors({});
 
-      // Reset form data and errors
-      setFormData({
-        fullName: "",
-        address: "",
-        mobileNumber: "",
-        email: "",
-        organizationName: "",
-        userName: "",
-        password: "",
-      });
-      setErrors({});
-    } catch (error) {
+        // Navigate to login page after 3 seconds
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
+
+    } else {
+      toast.error(`Error: ${responseText}`);
+    }
+  }catch (error) {
       toast.error(`Error submitting the form: ${error.message}`);
       console.error("Submission error:", error);
     }
@@ -153,6 +252,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Full Name:</label>
             <input
+              id="fullName-validate-id"
               className="form-input-grp"
               type="text"
               name="fullName"
@@ -168,6 +268,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Address:</label>
             <input
+              id="address-validate-id"
               className="form-input-grp"
               type="text"
               placeholder="Enter your address"
@@ -181,6 +282,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Mobile Number:</label>
             <input
+              id="mobileNumber-validate-id"
               className="form-input-grp mobile-number"
               type="tel"
               name="mobileNumber"
@@ -195,6 +297,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Email:</label>
             <input
+              id="email-validate-id"
               className="form-input-grp"
               type="text"
               name="email"
@@ -209,6 +312,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Organization Name:</label>
             <input
+              id="organizationName-validate-id"
               className="form-input-grp"
               type="text"
               name="organizationName"
@@ -226,6 +330,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Create Username:</label>
             <input
+              id="userName-validate-id"
               className="form-input-grp"
               type="text"
               name="userName"
@@ -238,6 +343,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
           <div className="form-group-singup">
             <label>Create Password:</label>
             <input
+              id="password-validate-id"
               className="form-input-grp"
               type={showPassword ? "text" : "password"}
               name="password"
