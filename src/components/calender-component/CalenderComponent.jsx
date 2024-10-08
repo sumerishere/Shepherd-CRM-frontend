@@ -14,10 +14,10 @@ const CalenderComponent = () => {
   const [events, setEvents] = useState([]);
   const [currentView, setCurrentView] = useState(Views.MONTH);
   const [leads, setLeads] = useState([]);
+  const [leadData, setLeadData] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
- 
   // New state for showing update form and tracking selected lead data
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
@@ -105,6 +105,7 @@ const CalenderComponent = () => {
       const leadData = await response.json();
 
       setSelectedLead(leadData);
+      
       setUpdateFormData({
         name: leadData.name || "",
         mobileNumber: leadData.mobileNumber || "",
@@ -115,7 +116,7 @@ const CalenderComponent = () => {
           leadData.comments.map((comment) => comment.comment).join(", ") || "",
         statusType: leadData.statusType || "",
       });
-
+    
       setShowUpdateForm(true);
     } catch (error) {
       toast.error("Failed to fetch lead details", error);
@@ -189,6 +190,25 @@ const CalenderComponent = () => {
     return now.toISOString().slice(0, 16);
   };
 
+  const [showCommentHistory, setShowCommentHistory] = useState(false);
+  const [historyData, setHistoryData] = useState([]);
+  const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
+
+  const handleViewCommentsClick = (lead) => {
+    // Set the history data for the selected lead
+    const comments = lead.comments || [];
+    setHistoryData(comments);
+    setNoHistoryAvailable(comments.length === 0);
+
+    // Toggle visibility of the comment history
+    setLeadData(lead);
+    setShowCommentHistory(true);
+  };
+
+  const closeCommentHistory = () => {
+    setShowCommentHistory(false);
+    setHistoryData([]);
+  };
 
   return (
     <div className="calendar-root-div">
@@ -244,9 +264,8 @@ const CalenderComponent = () => {
                   height: "100%",
                 }}
                 onClick={() => handleEventClick(event)}
-                // onClick={() => handleEventClickWithPopup(event)}
               >
-              {event.title}
+                {event.title}
               </div>
             ),
           }}
@@ -275,12 +294,12 @@ const CalenderComponent = () => {
                       <th>Assign To</th>
                       <th>Status Type</th>
                       <th>Comments</th>
-                      <th>Action</th>
+                      <th id="comments-action-colmn">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredLeads.map((lead, index) => (
-                      <tr key={index} onClick={() => handleLeadClick(lead)}>
+                      <tr key={index} >
                         <td id="followup-table-td">{lead.name || "N/A"}</td>
                         <td id="followup-table-td">{lead.mobileNumber}</td>
                         <td id="followup-table-td">{lead.email || "N/A"}</td>
@@ -292,26 +311,66 @@ const CalenderComponent = () => {
                         <td id="followup-table-td">
                           {lead.statusType || "N/A"}
                         </td>
+                        
                         <td id="followup-table-td">
-                          {lead.comments.map((commentItem) => (
-                            <div key={commentItem.id}>
-                              <strong>Comment:</strong> {commentItem.comment}
-                              <br />
-                              <strong>Time:</strong>
-                              {new Date(commentItem.createdAt).toLocaleString()}
-                              <br />
+                          {lead.comments && lead.comments.length > 0 ? (
+                            <div>
+                              <strong>Comment:</strong>{" "}
+                              {lead.comments[0].comment}
+                              {lead.comments.length > 1 && " ...."}
                             </div>
-                          ))}
+                          ) : (
+                            "No Comments"
+                          )}
                         </td>
-                       <td>
-                        <button id="view-comment-btn">view comments</button>
-                       </td>
+
+                        <td>
+                          <button
+                            id="view-comment-btn"
+                            onClick={() => handleViewCommentsClick(lead)}
+                          >
+                            view comments
+                          </button>
+                          <button onClick={() => handleLeadClick(lead)} id="update-lead-btn">Update lead</button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               ) : (
                 <p>No leads found for this date.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCommentHistory && (
+        <div className="view-comment-form-div">
+          <div className="lead-history-comments-div">
+            <div className="history-close-box-btn-div">
+              <button
+                className="history-close-box-btn"
+                onClick={closeCommentHistory}
+              >
+                X
+              </button>
+            </div>
+            <p id="comment-headline-p">Comments History : {leadData.name || "N/A"} </p>
+            <div className="lead-comments-div">
+              {noHistoryAvailable ? (
+                <p id="no-chats-p-id">No Comments available 😴</p>
+              ) : (
+                historyData
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                  .map((item) => (
+                    <div key={item.id} className="history-comment-item">
+                      <p>{item.comment}</p>
+                      <span className="history-comment-date">
+                        {new Date(item.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                  ))
               )}
             </div>
           </div>
@@ -401,5 +460,4 @@ const CalenderComponent = () => {
     </div>
   );
 };
-
 export default CalenderComponent;
