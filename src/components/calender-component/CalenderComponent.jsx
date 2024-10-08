@@ -324,7 +324,7 @@ const CalenderComponent = () => {
                           )}
                         </td>
 
-                        <td>
+                        <td id="followup-table-td">
                           <button
                             id="view-comment-btn"
                             onClick={() => handleViewCommentsClick(lead)}

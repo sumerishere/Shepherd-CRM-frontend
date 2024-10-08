@@ -190,9 +190,10 @@
   word-wrap: break-word;
   word-break: break-all;
   white-space: normal;
-  max-width: 340px;
+  max-width: 130px;
   /* Set a maximum width to control column size */
 }
+
 
 .table-container th {
   background-color: #8f8d8d;
