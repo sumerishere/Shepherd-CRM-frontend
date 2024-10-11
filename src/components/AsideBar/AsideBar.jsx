@@ -72,9 +72,11 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
 
           </Link>
 
+          <Link to="/SubscriptionPage" style={{ textDecoration: "none", color: "white" }} >
           <li onClick={toggleAsideBar}>
             <SolutionOutlined /> Subscribers
           </li>
+          </Link>
           <Link
             to="/DynamicForm"
             style={{ textDecoration: "none", color: "white" }}

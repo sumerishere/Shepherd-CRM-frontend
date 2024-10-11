@@ -60,7 +60,8 @@ const CalenderComponent = () => {
 
       setEvents(eventsData);
     } catch (error) {
-      toast.error("Failed to fetch leads");
+      console.log("failed to fetch",error);
+      // toast.error("Failed to fetch leads");
     }
   };
 

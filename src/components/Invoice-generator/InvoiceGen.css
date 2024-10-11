@@ -16,7 +16,7 @@
   }
 
   .select-candidate-btn{
-    background-color: #007bff;
+    background-color: #6c63ff;
     color: #fff;
     margin-left: 5px;
     border: none;
@@ -28,7 +28,7 @@
     
   }
   .history-candidate-btn{
-    background-color: #007bff;
+    background-color: #6c63ff;
     color: #fff;
     margin-left: 5px;
     border: none;
@@ -40,10 +40,10 @@
   }
 
   .select-candidate-btn:hover{
-    background-color: #055bb8;
+    background-color: #554fc1f7;
   }
   .history-candidate-btn:hover{
-    background-color: #055bb8;
+    background-color: #554fc1f7;
   }
 
   .invoice-gen-submit-button{
@@ -57,7 +57,7 @@
   }
 
   .invoice-gen-submit-button:hover{
-    background-color: #007bffcc;
+    background-color: #6c63ff;
   }
 
   .invoice-gen-title {
@@ -115,7 +115,7 @@
   .invoice-gen-add-payment-button,
   .invoice-gen-remove-payment-button,
   .invoice-gen-generate-pdf-button {
-    background-color: #007bff;
+    background-color: #6c63ff;
     color: white;
     padding: 10px;
     border: none;
@@ -136,7 +136,7 @@
   .invoice-gen-add-payment-button:hover,
   .invoice-gen-remove-payment-button:hover,
   .invoice-gen-generate-pdf-button:hover {
-    background-color: #055ebd;
+    background-color: #554fc1f7;
   }
 
   .invoice-gen-remove-item-button:hover {

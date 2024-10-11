@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
 import "../src/index.css";
 import "./App.css";
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AsideBar from "./components/AsideBar/AsideBar";
 import BackDrop from "./components/AsideBar/BackDrop";
 import BusinessPanel from "./components/Business-Panel/BusinessPanel";
@@ -19,7 +19,7 @@ import Nav from "./components/Nav-Bar/Nav";
 import SignUpComp from "./components/SignUp-form/SignUpComp";
 import DynamicForm from "./components/template-fom/TemplateComp";
 import ErrorBoundary from "./ErrorBoundary";
-
+import SubscriptionPage from "./components/Subscription-component/SubscriptionPage";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +52,7 @@ function App() {
     )
       .then((response) => {
         if (response.ok) {
+
           return response.json();
         } else {
           throw new Error("Login failed");
@@ -170,6 +171,8 @@ function App() {
             />
 
             <Route path="/CalenderComponent" element={<CalenderComponent />} />
+
+            <Route path ="/SubscriptionPage" element={<SubscriptionPage/>} />
           </Routes>
         </>
       ) : (
