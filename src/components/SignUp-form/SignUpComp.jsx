@@ -213,7 +213,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
         // Navigate to login page after 3 seconds
         setTimeout(() => {
           navigate('/');
-        }, 3000);
+        }, 2000);
 
     } else {
       toast.error(`Error: ${responseText}`);

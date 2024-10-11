@@ -11,18 +11,18 @@
 
 .signup-form-div {
   background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    position: relative;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: start;
-    /* margin-left: -48%; */
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: flex-end;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: start;
+  /* margin-left: -48%; */
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: flex-end;
 }
 
 #signup-form-h1 {
@@ -33,7 +33,7 @@
   font-size: 25px;
 }
 
-.signup-img-div{
+.signup-img-div {
   margin-top: 80px;
   height: 500px;
   width: 500px;
@@ -55,7 +55,7 @@
   color: #555;
 }
 
-.mobile-number{
+.mobile-number {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -72,37 +72,23 @@
   /* border: 1px solid #ccc; */
   border-radius: 4px;
   transition: border-color 0.3s ease, transform 0.3s ease;
-  
+
 }
 
-.form-input-grp:focus{
+.form-input-grp:focus {
   /* border-color: #007bff; */
   transform: scale(1.2);
   outline: none;
 }
 
-#view-comment-btn{
-  border-radius: 4px;
-  outline: none;
-  height: 30px;
-  border: 1px solid rgb(152, 151, 151);
-  background-color: #007bff;
-  color: white; 
-  cursor: pointer;
-}
-
-#view-comment-btn:hover{
-  background-color: #034b97ee;
-}
-
-#pass-check-box{
+#pass-check-box {
   margin-top: 10px;
   margin-left: -28px;
   margin-bottom: 30px;
   cursor: pointer;
 }
 
-#pass-show-p{
+#pass-show-p {
   margin-top: 0px;
   margin-bottom: 30px;
 }
@@ -129,13 +115,13 @@
 }
 
 
-#already-acc-id{
+#already-acc-id {
   position: absolute;
   margin-top: 40px;
   margin-left: -230px;
 }
 
-#go-login-id{
+#go-login-id {
   /* width: 120px; */
   margin-left: 160px;
   margin-top: 2px;

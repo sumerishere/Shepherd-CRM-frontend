@@ -23,9 +23,9 @@ const LeadFollowUp = () => {
   const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState({}); // Add state for managing selected checkboxes
   const [filteredLeads, setFilteredLeads] = useState([]); // Added state for filtered leads
+  const [filterOption, setFilterOption] = useState("name");
   const [searchText, setSearchText] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState(""); // State for category filter
-
+  
   //------- getting all data from backend of lead table -------//
   // Fetch leads
   const fetchLeads = async () => {
@@ -51,24 +51,59 @@ const LeadFollowUp = () => {
     fetchLeads();
   };
 
+  // const handleSearch = async (text) => {
+  //   try {
+  //     const queryParams = new URLSearchParams();
+  //     if (text) {
+  //       // Check if input is likely a mobile number (only digits and possibly spaces)
+  //       const isMobileNumber = /^\d+$/.test(text.replace(/\s/g, ""));
+  //       if (isMobileNumber) {
+  //         queryParams.append("mobile", text);
+  //       } else {
+  //         queryParams.append("name", text);
+  //       }
+  //     }
+
+  //     const response = await fetch(
+  //       `http://localhost:8080/search-lead-name?${queryParams.toString()}`
+  //     );
+  //     const data = await response.json();
+  //     setFilteredLeads(data || []);
+  //   } catch (error) {
+  //     console.error("Error searching leads:", error);
+  //   }
+  // };
+
+  // const debouncedSearch = debounce((text) => handleSearch(text), 300);
+
+  // useEffect(() => {
+  //   if (searchText.length >= 3) {
+  //     debouncedSearch(searchText);
+  //   } else {
+  //     // Reset filtered leads if search text is less than 3 characters
+  //     setFilteredLeads(leads);
+  //   }
+  // }, [searchText, leads, debouncedSearch]);
+
+
   const handleSearch = async (text) => {
     try {
       const queryParams = new URLSearchParams();
+      let url;
+
       if (text) {
-        // Check if input is likely a mobile number (only digits and possibly spaces)
-        const isMobileNumber = /^\d+$/.test(text.replace(/\s/g, ""));
-        if (isMobileNumber) {
+        if (filterOption === "mobile") {
           queryParams.append("mobile", text);
+          url = `http://localhost:8080/search-lead-mobile?${queryParams.toString()}`;
         } else {
           queryParams.append("name", text);
+          url = `http://localhost:8080/search-lead-name?${queryParams.toString()}`;
         }
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        setFilteredLeads(data || []);
       }
-
-      const response = await fetch(
-        `http://localhost:8080/search-lead-name?${queryParams.toString()}`
-      );
-      const data = await response.json();
-      setFilteredLeads(data || []);
     } catch (error) {
       console.error("Error searching leads:", error);
     }
@@ -80,24 +115,20 @@ const LeadFollowUp = () => {
     if (searchText.length >= 3) {
       debouncedSearch(searchText);
     } else {
-      // Reset filtered leads if search text is less than 3 characters
       setFilteredLeads(leads);
     }
   }, [searchText, leads, debouncedSearch]);
 
-  // ---- Handle category filter change -------//
-  const handleCategoryFilterChange = (e) => {
-    const selectedCategory = e.target.value;
-    setCategoryFilter(selectedCategory);
+  const handleFilterChange = (e) => {
+    const selectedFilter = e.target.value;
+    setFilterOption(selectedFilter);
 
-    if (selectedCategory === "") {
-      setFilteredLeads(leads); // Reset to all leads if no category is selected
-    } else {
-      setFilteredLeads(
-        leads.filter((lead) => lead.category === selectedCategory)
-      );
+    // Update input type and placeholder based on selected filter
+    if (selectedFilter === "mobile") {
+      setSearchText(""); // Clear input when changing filter
     }
   };
+
 
   const handleDelete = (uid) => {
     setLeadToDelete(uid);
@@ -278,9 +309,9 @@ const LeadFollowUp = () => {
 
       {/* search input div*/}
       <div className="lead-search-div">
-        <input
-          type="text"
-          placeholder="Search lead here"
+      <input
+          type={filterOption === "mobile" ? "number" : "text"}
+          placeholder={filterOption === "mobile" ? "Enter mobile number" : "Enter name here"}
           id="lead-search-input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -305,14 +336,15 @@ const LeadFollowUp = () => {
         <div className="filter-lead-drop">
           <select
             id="select-filter-lead"
-            value={categoryFilter}
+            value={filterOption}
+            onChange={handleFilterChange}
             style={{ cursor: "pointer" }}
-            onChange={handleCategoryFilterChange}
+    
           >
-            <option value="">Filter Lead</option>
-            <option value="hot">Hot</option>
-            <option value="warm">Warm</option>
-            <option value="cold">Cold</option>
+            <option value="">Search Filter</option>
+            <option value="name">Name</option>
+            <option value="mobile">Mobile</option>
+            
           </select>
         </div>
 

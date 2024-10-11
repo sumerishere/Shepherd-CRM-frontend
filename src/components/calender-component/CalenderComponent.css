@@ -1,22 +1,10 @@
 /* CalendarCheck.css */
 .calendar-root-div {
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f4f4f4;
-  position: relative; */
+ 
 }
 
 .calendar-div {
-  /* margin-top: -1%;
-  margin-left: -10px; 
-  height: 480px;
-  width: 585px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px; */
+
 }
 
 .notification-container {
@@ -26,7 +14,6 @@
   width: 250px;
   height: 190px;
   background-color: #fff;
-  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -123,7 +110,6 @@
 }
 
 
-
 /* table css */
 .table-container-parent {
   display: flex;
@@ -204,9 +190,10 @@
   word-wrap: break-word;
   word-break: break-all;
   white-space: normal;
-  max-width: 340px;
+  max-width: 130px;
   /* Set a maximum width to control column size */
 }
+
 
 .table-container th {
   background-color: #8f8d8d;
@@ -374,4 +361,112 @@
 
 .update-notifier-submit-btn:hover {
   background-color: #218838;
+}
+
+#comments-action-colmn{
+  position: sticky;
+  top:0;
+  right: 0;
+  z-index: 1200;
+}
+
+#view-comment-btn {
+  border-radius: 4px;
+  outline: none;
+  height: 30px;
+  border: 1px solid rgb(152, 151, 151);
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  width: 120px;
+  z-index: 100;
+}
+
+#view-comment-btn:hover {
+  background-color: #034b97ee;
+}
+
+#update-lead-btn{
+  background-color: #12ca3dd7;
+  width: 120px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  outline: none;
+  height: 25px;
+  border: 1px solid rgb(152, 151, 151);
+  cursor: pointer;
+  color: white;
+  
+}
+
+#update-lead-btn:hover{
+  background-color: #10862bdf;
+}
+
+
+.view-comment-form-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.lead-history-comments-div{
+  position: fixed;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #c3c0c0;
+  border-radius: 8px;
+  padding: 0px 25px 25px 25px;
+  width: 440px;
+  height: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  /* margin: 0px; */
+  
+}
+
+
+
+.history-close-box-btn-div{
+  display: inline-block;
+  flex: 1;
+  margin-left: 95%;
+  position: sticky;
+  top:0;
+  z-index: 100;
+}
+
+#comment-headline-p{
+  font-weight: 600;
+}
+
+.lead-comments-div{
+  margin-top: 10%;
+  height: 80%;
+  overflow-y: scroll;
+}
+
+
+.history-close-box-btn{
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Adjusted to circle */
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  z-index: 100;
+  position: absolute;
+  
+
 }
