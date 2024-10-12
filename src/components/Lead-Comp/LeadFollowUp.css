@@ -28,22 +28,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.add-lead-btn-div {
-  /* position: absolute; */
-  margin-left: 2.6%;
-  margin-top: 15px;
-}
 
-#add-lead-btn {
-  height: 30px;
-  width: 90px;
-  border: 1px solid rgb(220, 216, 216);
-  color: white;
-  cursor: pointer;
-  background-color: #007bff;
-  border-radius: 5px;
-
-}
 
 
 .add-btn-filter-lead-div {
@@ -220,28 +205,34 @@
 
 
 .add-lead-btn-div {
-  /* width: 100px; */
-  padding: 8px 8px 3px;
-
-  /* margin-bottom: 20px; */
-  /* background-color: #f44336; */
+  /* position: absolute; */
+  margin-left: 2.6%;
+  margin-top: 15px;
 }
 
 #add-lead-btn {
-  padding: 7px 14px;
+  /* padding: 7px 14px;
   background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 600; */
+
+  height: 30px;
+  width: 90px;
+  border: 1px solid rgb(220, 216, 216);
+  color: white;
+  cursor: pointer;
+  background-color: #007bff;
+  border-radius: 5px;
 }
 
 #add-lead-btn:hover {
   border: 1px solid black;
   color: white;
-  width: 100%;
-  background-color: #4caf4fc1;
+  
+  background-color: #1d65b1;
 }
 
 .lead-table-root-div {
@@ -461,160 +452,6 @@
 }
 
 
-/*-------------- css of history container ------------ */
-
-/* .history-container {
-  position: fixed;
-  top: 55%;
-  left: 55%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #c3c0c0;
-  border-radius: 8px;
-  padding: 0px 25px 25px 25px;
-  width: 600px;
-  height: 610px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  margin: 0px;
-}
-
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: white;
-  border-bottom: 1px solid #ccc;
-  padding: 15px;
-}
-
-.history-title {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.history-close-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 12%;
-  cursor: pointer;
-  padding: 5px 10px;
-  font-size: 14px;
-
-}
-
-.history-close-btn:hover {
-  background-color: #f443369a;
-}
-
-#no-chats-p-id {
-  margin-top: 100px;
-  margin-left: 32%;
-  font-weight: 500;
-} */
-
-
-
-/* -------- css of history prfile -----------*/
-
-/* .history-profile-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-  margin-left: 30px;
-}
-
-.history-profile-column {
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-}
-
-.history-profile-column p {
-  margin: 8px 0;
-} */
-
-/* Comments section styling */
-
-/* #comment-box-title {
-  margin-bottom: -10px;
-}
-
-.history-comments {
-  margin-top: 20px;
-  overflow-y: auto;
-  height: 290px;
-
-}
-
-
-.history-comment-item {
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  padding: 10px;
-  border: 1px solid #e0e0e0;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.history-comment-item:hover {
-  background-color: #f0f0f0;
-}
-
-.history-comment-date {
-  display: block;
-  font-size: 12px;
-  color: #777;
-  margin-top: 8px;
-} */
-
-
-/*--------- Styles for Edit Comment Section ---------- */
-/* .edit-comment {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.edit-comment input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.edit-comment button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-.edit-comment button:hover {
-  background: #0056b3;
-} */
-
-/* Styles for Comment Actions */
-
-/* .comment button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.comment button:hover {
-  background: #0056b3;
-} */
 
 
 /* --------- delete container css---------- */

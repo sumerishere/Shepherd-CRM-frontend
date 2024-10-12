@@ -43,7 +43,7 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             style={{ textDecoration: "none", color: "white" }}
           >
             <li id="dashboard-li" >
-              <FundProjectionScreenOutlined /> Dashboard
+              <FundProjectionScreenOutlined /> <span id="aside-icon-space">Dashboard</span> 
             </li>
           </Link>
           <Link
@@ -53,7 +53,7 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             onClick={toggleAsideBar}
           >
             <li>
-              <UserAddOutlined /> Add Client
+              <UserAddOutlined /> <span id="aside-icon-space">Add Client</span> 
             </li>
           </Link>
           <Link
@@ -61,20 +61,20 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             style={{ textDecoration: "none", color: "white" }}
           >
             <li>
-              <UsergroupAddOutlined /> Client List
+              <UsergroupAddOutlined /> <span id="aside-icon-space">Client List</span> 
             </li>
           </Link>
 
           <Link to = "/InvoiceGen" style={{textDecoration:"none", color:"white"}}>
             <li onClick={toggleAsideBar}>
-              <FileDoneOutlined /> Invoice
+              <FileDoneOutlined /> <span id="aside-icon-space">Invoice</span> 
             </li>
 
           </Link>
 
           <Link to="/SubscriptionPage" style={{ textDecoration: "none", color: "white" }} >
           <li onClick={toggleAsideBar}>
-            <SolutionOutlined /> Subscribers
+            <SolutionOutlined /> <span id="aside-icon-space">Subscription</span>
           </li>
           </Link>
           <Link
@@ -82,7 +82,7 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             style={{ textDecoration: "none", color: "white" }}
           >
             <li onClick={toggleAsideBar}>
-              <FormOutlined /> Create Template
+              <FormOutlined /> <span id="aside-icon-space">Create Template</span> 
             </li>
           </Link>
           {/* <Link
@@ -95,7 +95,7 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
           </Link> */}
 
           <li onClick={handleLogout}>
-            <LogoutOutlined /> Log-out
+            <LogoutOutlined /> <span id="aside-icon-space">Log-out</span> 
           </li>
         </ul>
         <p id="develop-text-line1">Design and developed by</p>
