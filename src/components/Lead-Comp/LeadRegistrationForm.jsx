@@ -61,7 +61,8 @@ const LeadRegistrationForm = () => {
       }
 
       case "email": {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailPattern = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
         if (!emailPattern.test(value)) {
           errorMessage = "Invalid email format.";
           isValid = false;
