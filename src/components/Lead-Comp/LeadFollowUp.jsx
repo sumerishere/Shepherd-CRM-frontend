@@ -93,7 +93,7 @@ const LeadFollowUp = () => {
 
       if (text) {
         if (filterOption === "mobile") {
-          queryParams.append("mobile", text);
+          queryParams.append("mobileNumber", text);
           url = `http://localhost:8080/search-lead-mobile?${queryParams.toString()}`;
         } else {
           queryParams.append("name", text);

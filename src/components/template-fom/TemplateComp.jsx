@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import {CheckSquareOutlined } from "@ant-design/icons";
 
 
 const DynamicForm = () => {
@@ -54,6 +54,7 @@ const DynamicForm = () => {
       },
     ]);
   };
+  
 
   const handleInputChange = (index, value) => {
     const newFields = [...fields];
@@ -188,6 +189,7 @@ const DynamicForm = () => {
                   required={field.required}
                 />
                 <select
+                  className="template-dropdown-container"
                   style={{cursor:"pointer"}}
                   value={field.selectValue}
                   onChange={(e) => handleSelectChange(index, e.target.value)}
@@ -202,7 +204,7 @@ const DynamicForm = () => {
                   <option value="Image">Image</option>
                   <option value="Pdf File">Pdf File</option>
                   <option value="Yes/No check(checkbox)">
-                  Yes/No check(checkbox)
+                  Yes/No check(checkbox)<CheckSquareOutlined/>
                   </option>
                 </select>
                 {index >= 2 && (

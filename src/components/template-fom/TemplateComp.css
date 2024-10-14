@@ -22,6 +22,11 @@
   /* background-color: white; */
 }
 
+
+.template-dropdown-container{
+
+}
+
 #heading-h1{
   top:0%;
   margin: 9px 30px 20px 22%;
@@ -160,7 +165,18 @@
 }
 
 /* Notification form container styling */
-.notification-form-div {}
+.notification-form-overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .notification-form-container {
   width: 380px;
