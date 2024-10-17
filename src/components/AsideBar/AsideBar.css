@@ -119,10 +119,6 @@ li{
 
 }
 
-/* .aside-bar ul li a {
-  text-decoration: none;
-  color: rgb(251, 251, 251);
-} */
 
 .aside-bar ul li:hover {
   background-color: rgba(232, 238, 240, 0.885);

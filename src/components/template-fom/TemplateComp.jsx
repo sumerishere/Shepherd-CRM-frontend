@@ -1,19 +1,17 @@
-import "./TemplateComp.css";
-import { useState } from "react";
+import { CheckSquareOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import {CheckSquareOutlined } from "@ant-design/icons";
+import "./TemplateComp.css";
 
-
-const DynamicForm = () => {
-
+const DynamicForm = ({ userName }) => {
   const location = useLocation();
   // const navigate = useNavigate();
-  const username = location.state?.username || '';
+  const username = location.state?.username || "";
 
-
+  const [userData, setUserData] = useState([]);
   const [fields, setFields] = useState([
     {
       type: "input",
@@ -33,12 +31,43 @@ const DynamicForm = () => {
     },
   ]);
 
-  const [showNotificationForm, setShowNotificationForm] = useState(false);
-  const [notificationFormData, setNotificationFormData] = useState({
-    formName: "",
-    createdAt: "",
-    userName: "",
-  });
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/get-user-data?username=${userName}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data);
+
+        console.log("checking user data", data);
+      } else {
+        console.log("error to fetching username data");
+      }
+    } catch (error) {
+      console.log("fetching to error of userData", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userName) {
+      fetchUserData();
+    } // Call the function here
+  }, [userName]);
+
+  function getCurrentDateTimeFormat() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    // const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAddField = () => {
@@ -54,7 +83,6 @@ const DynamicForm = () => {
       },
     ]);
   };
-  
 
   const handleInputChange = (index, value) => {
     const newFields = [...fields];
@@ -81,39 +109,23 @@ const DynamicForm = () => {
     return true;
   };
 
-  const handleInitialSubmit = () => {
-    if (validateFields()) {
-      setShowNotificationForm(true);
-    } else {
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateFields()) {
       toast.error("Please fill out all fields before submitting...", {
         position: "top-center",
         autoClose: 3000,
       });
+      return;
     }
-  };
 
-  const handleNotificationFormChange = (e) => {
-    const { name, value } = e.target;
-    setNotificationFormData({
-      ...notificationFormData,
-      [name]: value,
-    });
-  };
-
-  // Get the current date and time in the format required by the datetime-local input
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    return now.toISOString().slice(0, 16);
-  };
-
-  const handleFinalSubmit = async (e) => {
-    e.preventDefault();
     setIsLoading(true);
 
     const formTemplateDTO = {
-      formName: notificationFormData.formName,
-      createdAt: notificationFormData.createdAt,
-      userName: notificationFormData.userName,
+      formName: userData.organizationName,
+      createdAt: getCurrentDateTimeFormat(),
+      userName: userData.userName,
       fields: fields.reduce((acc, field) => {
         if (field.value) {
           acc[field.value] = field.selectValue;
@@ -141,19 +153,18 @@ const DynamicForm = () => {
         const errorMessage = await response.text();
         toast.error(errorMessage, {
           position: "bottom-right",
-          autoClose: 3000,
+          autoClose: 4000,
         });
         console.error("Error saving form template");
       }
     } catch (error) {
       toast.error(error, {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 4000,
       });
       console.error("Error:", error);
     } finally {
       setIsLoading(false);
-      setShowNotificationForm(false);
     }
   };
 
@@ -171,16 +182,22 @@ const DynamicForm = () => {
 
         <div className="check-template-btn-div">
           <button id="check-template-btn">
-            <Link to="/TemplateCreated" state={{username}} style={{textDecoration:"none",color:"white"}} >Check Template</Link>
+            <Link
+              to="/TemplateCreated"
+              state={{ username }}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Check Template
+            </Link>
           </button>
         </div>
 
         <div className="form-container">
-          <form className="form-template">
+          <form className="form-template" onSubmit={handleFinalSubmit}>
             {fields.map((field, index) => (
               <div key={index} className="field-row">
                 <input
-                    style={{marginBottom:"0px",padding:"10px"}}
+                  style={{ marginBottom: "0px", padding: "10px" }}
                   type="text"
                   placeholder={field.label || `Field ${index + 1}`}
                   value={field.value}
@@ -190,7 +207,7 @@ const DynamicForm = () => {
                 />
                 <select
                   className="template-dropdown-container"
-                  style={{cursor:"pointer"}}
+                  style={{ cursor: "pointer" }}
                   value={field.selectValue}
                   onChange={(e) => handleSelectChange(index, e.target.value)}
                   required={field.required}
@@ -204,7 +221,8 @@ const DynamicForm = () => {
                   <option value="Image">Image</option>
                   <option value="Pdf File">Pdf File</option>
                   <option value="Yes/No check(checkbox)">
-                  Yes/No check(checkbox)<CheckSquareOutlined/>
+                    Yes/No check(checkbox)
+                    <CheckSquareOutlined />
                   </option>
                 </select>
                 {index >= 2 && (
@@ -218,77 +236,29 @@ const DynamicForm = () => {
                 )}
               </div>
             ))}
-          </form>
-          <button type="button" onClick={handleAddField} className="add-button">
-            +
-          </button>
 
-          <button
-            type="button"
-            onClick={handleInitialSubmit}
-            className="template-submit-button"
-          >
-            Submit
-          </button>
-        </div>
+            <div style={{display:"inline-flex"}}>
+              <button
+                type="button"
+                onClick={handleAddField}
+                className="add-button"
+              >
+                +
+              </button>
 
-        {showNotificationForm && (
-          <div className="notification-form-overlay">
-            <div className="notification-form-container">
-              <form className="notification-form" onSubmit={handleFinalSubmit}>
-                <div className="form-row">
-                  <label>Form Name:</label>
-                  <input
-                    type="text"
-                    name="formName"
-                    value={notificationFormData.formName}
-                    onChange={handleNotificationFormChange}
-                    required={true}
-                    placeholder="Organization Name"
-                  />
-                </div>
-
-                <div className="form-row">
-                  <label>Date-Time:</label>
-                  <input
-                    type="datetime-local"
-                    name="createdAt"
-                    value={notificationFormData.createdAt}
-                    onChange={handleNotificationFormChange}
-                    min={getCurrentDateTime()} 
-                    required={true}
-                  />
-                </div>
-
-                <div className="form-row">
-                  <label>Enter Username:</label>
-                  <input
-                    type="text"
-                    name="userName"
-                    value={notificationFormData.userName}
-                    onChange={handleNotificationFormChange}
-                    required={true}
-                    placeholder="Enter Your Username"
-                  />
-                </div>
-
-                <button type="submit" className="final-submit-button">
-                  {isLoading ? <div className="spinner"></div> : "Final Submit"}
-                </button>
-                <button
-                  type="button"
-                  className="close-button"
-                  onClick={() => setShowNotificationForm(false)}
-                >
-                  Close
-                </button>
-              </form>
+              <button type="submit" className="template-submit-button">
+                {isLoading ? <div className="spinner"></div> : "Submit"}
+              </button>
             </div>
-          </div>
-        )}
+          </form>
+        </div>
       </div>
     </div>
   );
+};
+
+DynamicForm.propTypes = {
+  userName: PropTypes.string.isRequired,
 };
 
 export default DynamicForm;

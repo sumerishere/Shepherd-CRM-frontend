@@ -30,7 +30,6 @@ function App() {
     localStorage.getItem("username") || ""
   );
   const [templateId, setTemplateId] = useState(null);
-
   const [user, setUser] = useState({
     id:null,
     fullName: "",
@@ -41,7 +40,9 @@ function App() {
     userName: "",
     formTemplates: [],
     logo: null
-  });
+   });
+
+
   const toggleAsideBar = () => {
     setIsOpen(!isOpen);
   };
@@ -64,6 +65,8 @@ function App() {
         localStorage.setItem("username", username);
         localStorage.setItem("isAuthenticated", "true");
         setUser(data);
+      
+        console.log("app user data",user);
         localStorage.setItem("user", JSON.stringify(data));
         fetchTemplateData(username);
       })
@@ -149,10 +152,9 @@ function App() {
                 </>
               }
             />
-            {/* <Route path="/LeadForm" element={<LeadForm />} /> */}
             <Route path="/LeadList" element={<LeadList />} />
-            <Route path="/BusinessPanel" element={<BusinessPanel />} />
-            <Route path="/DynamicForm" element={<DynamicForm />} />
+            <Route path="/BusinessPanel" element={<BusinessPanel />} /> 
+            <Route path="/DynamicForm"  element={<DynamicForm userName = {username} />} />
             <Route
               path="/TemplateCreated"
               element={<TemplateCreated username={username} />}

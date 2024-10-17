@@ -46,6 +46,19 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
               <FundProjectionScreenOutlined /> <span id="aside-icon-space">Dashboard</span> 
             </li>
           </Link>
+
+          <Link
+            to={"/LeadRegistrationForm"}
+            state={{ username }} // Pass username here
+            style={{ textDecoration: "none", color: "white" }}
+            onClick={toggleAsideBar}
+          >
+            <li>
+              <UserAddOutlined /> <span id="aside-icon-space">Add Lead</span> 
+            </li>
+          </Link>
+
+
           <Link
             to={"/TemplateCreated"}
             state={{ username }} // Pass username here
@@ -56,6 +69,8 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
               <UserAddOutlined /> <span id="aside-icon-space">Add Client</span> 
             </li>
           </Link>
+ 
+
           <Link
             to={"/ClientDataTable"}
             style={{ textDecoration: "none", color: "white" }}
