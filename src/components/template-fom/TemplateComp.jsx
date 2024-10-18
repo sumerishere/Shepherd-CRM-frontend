@@ -12,6 +12,7 @@ const DynamicForm = ({ userName }) => {
   const username = location.state?.username || "";
 
   const [userData, setUserData] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
   const [fields, setFields] = useState([
     {
       type: "input",
@@ -148,6 +149,7 @@ const DynamicForm = ({ userName }) => {
           position: "top-center",
           autoClose: 5000,
         });
+        setShowAlert(false);
         console.log("Form template saved successfully");
       } else {
         const errorMessage = await response.text();
@@ -166,6 +168,14 @@ const DynamicForm = ({ userName }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleShowAlertOpen = () => {
+    setShowAlert(true);
+  };
+
+  const handleShowAlertCancel = () => {
+    setShowAlert(false);
   };
 
   return (
@@ -237,7 +247,7 @@ const DynamicForm = ({ userName }) => {
               </div>
             ))}
 
-            <div style={{display:"inline-flex"}}>
+            <div style={{ display: "inline-flex" }}>
               <button
                 type="button"
                 onClick={handleAddField}
@@ -246,12 +256,39 @@ const DynamicForm = ({ userName }) => {
                 +
               </button>
 
-              <button type="submit" className="template-submit-button">
+              <button
+                type="submit"
+                className="template-submit-button"
+                onClick={handleShowAlertOpen}
+              >
                 {isLoading ? <div className="spinner"></div> : "Submit"}
               </button>
             </div>
           </form>
         </div>
+
+        {showAlert && (
+          <div className="alert-confirm-container">
+            <div className="alert-confirm-content">
+              <div className="alert-symbol">&#9888;</div>{" "}
+              {/* Unicode symbol for alert */}
+              <p id="alert-note-text">
+                Are you sure you want to submit this form?
+              </p>
+              <p>{`"Note : this will consider as final submit"`}</p>
+              <div className="alert-confirm-buttons">
+                <button className="alert-confirm-btn">Yes</button>
+                <button
+                  className="alert-cancel-btn"
+                  onClick={handleShowAlertCancel}
+                >
+                  No
+                </button>
+                <button id="prev-btn">Preview</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

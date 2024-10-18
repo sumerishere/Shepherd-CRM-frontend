@@ -1,5 +1,4 @@
-
- .aside-bar {
+  .aside-bar {
   width: 300px;
   height: 100vh;
   background-color: rgb(47, 44, 44);
@@ -18,14 +17,6 @@
   margin-left: -3px;
 }
 
-/* #logo-name{
-  height: 40px;
-  width: 140px;
-  text-align: center;
-  margin-left: 53px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  text-shadow: 1px 1px 1px rgba(105, 96, 96, 0.5);
-} */
 
 #aside-icon-space{
   font-size: 17px;
@@ -94,6 +85,14 @@ li{
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-size: 15px;
   /* text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); */
+}
+
+.bottem-div-aside{
+}
+
+.ul-list-div{
+  /* overflow-y: scroll; */
+  
 }
 
 #develop-text-line2{
