@@ -24,7 +24,7 @@
   margin-bottom: 20px;
   font-size: 24px;
   color: #ffffff;
-  background-color: #70a2d7;
+  background-color: #6660c9;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid rgb(92, 92, 92);
@@ -60,7 +60,7 @@
 
 .lead-registration-form-input:focus,
 .lead-registration-form-select:focus {
-  border-color: #007bff;
+  border-color: #615ada;
   transform: scale(1.02);
   outline: none;
   width: 60%;
@@ -82,12 +82,14 @@
 }
 
 .lead-registration-form-submit {
-  background-color: #007bff;
+  border: 1px solid rgb(208, 208, 208);
+  background-color: #6962f4;
   color: #fff;
 }
 
 .lead-registration-form-submit:hover {
-  background-color: #0056b3;
+  background-color: #5752c0;
+  border: 1px solid rgb(69, 68, 68);
 }
 
 .lead-registration-form-cancel {

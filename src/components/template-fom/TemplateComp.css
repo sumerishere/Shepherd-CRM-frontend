@@ -158,70 +158,6 @@
   background-color: #554fc1f7;
 }
 
-/* Notification form container styling */
-.notification-form-overlay {
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.notification-form-container {
-  width: 380px;
-  height: 300px;
-  position: fixed;
-  top: 50%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  border: 1px solid #929191d7;
-  box-shadow: 1px 2px 3px rgb(0, 0, 0, 0.5);
-  border-radius: 10px;
-  padding: 40px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* backdrop-filter: blur(5px); */
-}
-
-/* Notification form styling */
-.notification-form {
-  width: 100%;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-
-}
-
-.form-row {
-  margin-bottom: 15px;
-}
-
-.form-row label {
-  margin-bottom: 10px;
-  display: block;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  color: black;
-  font-weight: 500;
-}
-
-.form-row input {
-  width: 100%;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  color: #161617;
-  font-size: 14px;
-}
-
 
 
 /* Add spinner styles */
@@ -251,7 +187,7 @@
 
 .alert-confirm-container {
   position: fixed;
-  z-index: 100;
+  z-index: 1000;
   top: 0;
   left: 0;
   width: 100%;
@@ -326,23 +262,23 @@
 }
 
 .alert-confirm-btn {
-  background-color: #45c91c;
+  background-color: #6c63ff;
   /* Red for confirm */
   color: white;
 }
 
 .alert-confirm-btn:hover {
-  background-color: #34a212d7;
+  background-color: #615ada;
   border: 1px solid black;
 }
 
 .alert-cancel-btn {
-  background-color: rgb(236, 28, 28);
+  background-color: rgb(158, 157, 157);
   color: white;
 }
 
 .alert-cancel-btn:hover {
-  background-color: rgb(210, 24, 24);
+  background-color: rgb(120, 120, 120);
   border: 1px solid black;
 }
 

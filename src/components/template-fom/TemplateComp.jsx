@@ -30,6 +30,22 @@ const DynamicForm = ({ userName }) => {
       readOnly: true,
       required: true,
     },
+    {
+      type:"date",
+      label:"Date",
+      value:"Select Date",
+      selectValue:"Date",
+      readOnly:true,
+      required:true
+    },
+    {
+      type:"text",
+      label:"Mobile Number",
+      value:"Mobile Number",
+      selectValue:"Mobile No.",
+      readOnly:true,
+      required:true
+    }
   ]);
 
   const fetchUserData = async () => {
@@ -234,8 +250,10 @@ const DynamicForm = ({ userName }) => {
                     Yes/No check(checkbox)
                     <CheckSquareOutlined />
                   </option>
+                  <option value="Date">Date</option>
+                  <option value="Mobile No.">Mobile No.</option>
                 </select>
-                {index >= 2 && (
+                {index >= 4 && (
                   <button
                     type="button"
                     onClick={() => handleRemoveField(index)}
@@ -255,7 +273,7 @@ const DynamicForm = ({ userName }) => {
               >
                 +
               </button>
-
+              
               <button
                 type="submit"
                 className="template-submit-button"
