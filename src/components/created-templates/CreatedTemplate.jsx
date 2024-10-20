@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 // import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "../created-templates/CreatedTemplate.css";
 
 import PropTypes from "prop-types";
 
-const TemplateCreated = ({username}) => {
-
-  
+const TemplateCreated = ({ username }) => {
   const [templateData, setTemplateData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({});
@@ -22,27 +20,22 @@ const TemplateCreated = ({username}) => {
         );
 
         if (response.ok) {
-
           const data = await response.json();
-          console.log("Fetched data:", data); 
+          console.log("Fetched data:", data);
 
           if (Array.isArray(data) && data.length > 0) {
             setTemplateData(data);
             setFormTemplateId(data[0].id); // Assuming the ID is available as `id` in the response
-          }
-           else {
+          } else {
             setTemplateData([]);
           }
-        } 
-        else {
+        } else {
           setTemplateData([]);
         }
-      } 
-      catch (error) {
+      } catch (error) {
         console.error("Fetch error:", error);
         setTemplateData([]);
-      } 
-      finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -58,14 +51,14 @@ const TemplateCreated = ({username}) => {
   //       type === "checkbox"
   //         ? checked
   //         : type === "file"
-  //         ? files[0] 
+  //         ? files[0]
   //         : value,
   //   }));
   // };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     // Special case for Yes/No checkboxes
     if (type === "checkbox" && (value === "Yes" || value === "No")) {
       setFormData((prevData) => ({
@@ -80,37 +73,40 @@ const TemplateCreated = ({username}) => {
       }));
     }
   };
-  
 
-
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Create a FormData object for all data
     const formDataObject = new FormData();
-  
+
     // Add formTemplateId
     formDataObject.append("formTemplateId", formTemplateId);
-  
+
     // Prepare the formData
     const jsonFormData = {};
     Object.keys(formData).forEach((key) => {
       if (formData[key] instanceof File) {
         // Append files directly to FormData
         formDataObject.append(key, formData[key]);
+      } else if (fields.dataType === "Multiple Options(Dropdown)") {
+        // Save the selected dropdown option with "dropdown" as columnName
+        jsonFormData["dropdown"] = fields.selectedOption;
       } else {
         // Add non-file data to jsonFormData
         jsonFormData[key] = formData[key];
       }
     });
-  
+
     // Add the JSON data as a stringified object
-    formDataObject.append("formDataRequest", JSON.stringify({
-      formTemplateId: formTemplateId,
-      formData: jsonFormData
-    }));
-  
+    formDataObject.append(
+      "formDataRequest",
+      JSON.stringify({
+        formTemplateId: formTemplateId,
+        formData: jsonFormData,
+      })
+    );
+
     try {
       // Send form data using fetch API
       const response = await fetch("http://localhost:8080/submit-form-data", {
@@ -118,7 +114,7 @@ const TemplateCreated = ({username}) => {
         body: formDataObject, // Send formDataObject directly
         // Don't set Content-Type header, let the browser set it with the boundary
       });
-  
+
       if (response.ok) {
         toast.success("Form submitted successfully!", {
           position: "top-center",
@@ -146,9 +142,11 @@ const TemplateCreated = ({username}) => {
   if (templateData.length === 0) {
     return (
       <div className="empty-text-div">
-
-
-        <img className="bg-template-img" src="/images/data-8873303_1920.png" alt="" />
+        <img
+          className="bg-template-img"
+          src="/images/data-8873303_1920.png"
+          alt=""
+        />
         <p id="empty-text">Template! not found. 🥲</p>
         <p id="alert-emoji">⚠️</p>
         <p id="empty-template-note">{`Note :" First you will have to create your own template form then you will able to see your template form here."`}</p>
@@ -168,7 +166,11 @@ const TemplateCreated = ({username}) => {
         <form className="created-template-form" onSubmit={handleSubmit}>
           {fields.map((field, index) => (
             <div key={index} className="form-group">
-              <label htmlFor={field.columnName}>{field.columnName}</label>
+              <label htmlFor={field.columnName}>
+                {field.dataType !== "Multiple Options(Dropdown)"
+                  ? field.columnName
+                  : ""}
+              </label>
 
               {field.dataType === "Yes/No button(Radio)" ? (
                 <div>
@@ -197,33 +199,32 @@ const TemplateCreated = ({username}) => {
                 </div>
               ) : field.dataType === "Yes/No check(checkbox)" ? (
                 <div>
-                <label id="template-label-checkbox">
-                  <input
-                    style={{ cursor: "pointer" }}
-                    id="template-checkbox-input"
-                    type="checkbox"
-                    name={field.columnName}
-                    value="Yes"
-                    onChange={handleChange}
-                    checked={formData[field.columnName] === "Yes"} // Handle checked state
-                  />
-                  Yes
-                </label>
-            
-                <label id="template-label-checkbox">
-                  <input
-                    style={{ cursor: "pointer" }}
-                    id="template-checkbox-input"
-                    type="checkbox"
-                    name={field.columnName}
-                    value="No"
-                    onChange={handleChange}
-                    checked={formData[field.columnName] === "No"} // Handle checked state
-                  />
-                  No
-                </label>
-              </div>
-            
+                  <label id="template-label-checkbox">
+                    <input
+                      style={{ cursor: "pointer" }}
+                      id="template-checkbox-input"
+                      type="checkbox"
+                      name={field.columnName}
+                      value="Yes"
+                      onChange={handleChange}
+                      checked={formData[field.columnName] === "Yes"} // Handle checked state
+                    />
+                    Yes
+                  </label>
+
+                  <label id="template-label-checkbox">
+                    <input
+                      style={{ cursor: "pointer" }}
+                      id="template-checkbox-input"
+                      type="checkbox"
+                      name={field.columnName}
+                      value="No"
+                      onChange={handleChange}
+                      checked={formData[field.columnName] === "No"} // Handle checked state
+                    />
+                    No
+                  </label>
+                </div>
               ) : field.dataType === "Image" ? (
                 <div>
                   <label id="label-image">
@@ -259,19 +260,51 @@ const TemplateCreated = ({username}) => {
                   </label>
                 </div>
               ) : field.dataType === "Date" ? (
-              <div>
-                <label id="label-date">
-                  <input type="date" name={field.columnName} id="date-input" onChange={handleChange} />
-                </label>
-              </div>
-
+                <div>
+                  <label id="label-date">
+                    <input
+                      type="date"
+                      name={field.columnName}
+                      id="date-input"
+                      onChange={handleChange}
+                    />
+                  </label>
+                </div>
               ) : field.dataType === "Mobile No." ? (
                 <div>
                   <label id="label-mobile">
-                    <input type="text" name={field.columnName} id="mobile-input" onChange={handleChange} />
+                    <input
+                      type="text"
+                      placeholder="Enter Mobile Number"
+                      name={field.columnName}
+                      id="mobile-input"
+                      onChange={handleChange}
+                    />
                   </label>
                 </div>
-                ):(
+              ) : field.dataType === "Multiple Options(Dropdown)" ? (
+                <select
+                  className="template-dropdown-container"
+                  name={field.columnName}
+                  value={formData[field.columnName]?.selectedOption || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [field.columnName]: {
+                        ...formData[field.columnName],
+                        selectedOption: e.target.value,
+                      },
+                    }))
+                  }
+                > 
+                  <option value="">select option</option>
+                  {field.columnName.split(",").map((option, index) => (
+                    <option key={index} value={option.trim()}>
+                      {option.trim()}
+                    </option>
+                  ))}
+                </select>
+              ) : (
                 <input
                   className="form-input"
                   placeholder={`Enter ${

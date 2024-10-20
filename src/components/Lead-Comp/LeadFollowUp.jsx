@@ -25,7 +25,7 @@ const LeadFollowUp = () => {
   const [filteredLeads, setFilteredLeads] = useState([]); // Added state for filtered leads
   const [filterOption, setFilterOption] = useState("name");
   const [searchText, setSearchText] = useState("");
-  
+
   //------- getting all data from backend of lead table -------//
   // Fetch leads
   const fetchLeads = async () => {
@@ -85,7 +85,6 @@ const LeadFollowUp = () => {
   //   }
   // }, [searchText, leads, debouncedSearch]);
 
-
   const handleSearch = async (text) => {
     try {
       const queryParams = new URLSearchParams();
@@ -99,7 +98,7 @@ const LeadFollowUp = () => {
           queryParams.append("name", text);
           url = `http://localhost:8080/search-lead-name?${queryParams.toString()}`;
         }
-        
+
         const response = await fetch(url);
         const data = await response.json();
         setFilteredLeads(data || []);
@@ -128,7 +127,6 @@ const LeadFollowUp = () => {
       setSearchText(""); // Clear input when changing filter
     }
   };
-
 
   const handleDelete = (uid) => {
     setLeadToDelete(uid);
@@ -301,24 +299,41 @@ const LeadFollowUp = () => {
   // Sort the filteredLeads array
   const sortedLeads = [...filteredLeads].sort(sortLeads);
 
-
   return (
     <div className="lead-data-root">
       <ToastContainer />
       <p id="lead-data-heading">Lead-Table</p>
-
-      {/* search input div*/}
-      <div className="lead-search-div">
-      <input
-          type={filterOption === "mobile" ? "number" : "text"}
-          placeholder={filterOption === "mobile" ? "Enter mobile number" : "Enter name here"}
-          id="lead-search-input"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <button id="lead-search-btn" onClick={handleSearch}>
-          Search
-        </button>
+      <div className="search-content-div">
+        {/* filter lead by category */}
+        <div className="filter-lead-drop">
+          <select
+            id="select-filter-lead"
+            value={filterOption}
+            onChange={handleFilterChange}
+            style={{ cursor: "pointer" }}
+          >
+            <option value="">Search Filter</option>
+            <option value="name">Name</option>
+            <option value="mobile">Mobile</option>
+          </select>
+        </div>
+        {/* search input div*/}
+        <div className="lead-search-div">
+          <input
+            type={filterOption === "mobile" ? "number" : "text"}
+            placeholder={
+              filterOption === "mobile"
+                ? "Enter mobile number"
+                : "Enter name here"
+            }
+            id="lead-search-input"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <button id="lead-search-btn" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
       </div>
 
       <hr />
@@ -330,22 +345,6 @@ const LeadFollowUp = () => {
           >
             <button id="add-lead-btn">Add Lead</button>
           </Link>
-        </div>
-
-        {/* filter lead by category */}
-        <div className="filter-lead-drop">
-          <select
-            id="select-filter-lead"
-            value={filterOption}
-            onChange={handleFilterChange}
-            style={{ cursor: "pointer" }}
-    
-          >
-            <option value="">Search Filter</option>
-            <option value="name">Name</option>
-            <option value="mobile">Mobile</option>
-            
-          </select>
         </div>
 
         <div className="lead-category-description-div">

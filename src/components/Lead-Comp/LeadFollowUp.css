@@ -38,12 +38,9 @@
 }
 
 .filter-lead-drop {
-  height: 30px;
-  margin-top: 10px;
-  margin-left: 27%;
-  padding: 5px 15px;
-  margin-right: -5%;
-  /* background-color: #088b68; */
+  height: 36px;
+  margin-left: 10px;
+  margin-right: -26px;
 }
 
 #select-filter-lead {
@@ -163,7 +160,13 @@
   margin-top: 5px;
 }
 
-
+.search-content-div{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 95%;
+  margin-left: 10px;
+}
 
 .lead-search-div {
   width: 93%;
@@ -175,7 +178,7 @@
 }
 
 #lead-search-input {
-  /* height: 40px; */
+
 }
 
 #lead-search-btn {

@@ -225,7 +225,7 @@ const DynamicForm = ({ userName }) => {
                 <input
                   style={{ marginBottom: "0px", padding: "10px" }}
                   type="text"
-                  placeholder={field.label || `Field ${index + 1}`}
+                  placeholder = {(field.label ? field.label : field.selectValue === "Multiple Options(Dropdown)" ? "Enter option1, option2, option3 ..." : ` ${index + 1}. Field Name`)}
                   value={field.value}
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   readOnly={field.readOnly}
@@ -252,6 +252,7 @@ const DynamicForm = ({ userName }) => {
                   </option>
                   <option value="Date">Date</option>
                   <option value="Mobile No.">Mobile No.</option>
+                  <option value="Multiple Options(Dropdown)">Multiple Options(Dropdown)</option>
                 </select>
                 {index >= 4 && (
                   <button
