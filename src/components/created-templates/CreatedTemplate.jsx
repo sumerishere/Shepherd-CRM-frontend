@@ -85,14 +85,17 @@ const TemplateCreated = ({ username }) => {
 
     // Prepare the formData
     const jsonFormData = {};
+
     Object.keys(formData).forEach((key) => {
       if (formData[key] instanceof File) {
         // Append files directly to FormData
         formDataObject.append(key, formData[key]);
-      } else if (fields.dataType === "Multiple Options(Dropdown)") {
-        // Save the selected dropdown option with "dropdown" as columnName
-        jsonFormData["dropdown"] = fields.selectedOption;
-      } else {
+
+      }  else if (key === "dropdown") {
+        // For dropdown, store selected option under "dropdown" key
+        jsonFormData["dropdown"] = formData[key];  // Use "dropdown" key for selected option
+
+      }  else {
         // Add non-file data to jsonFormData
         jsonFormData[key] = formData[key];
       }
@@ -285,15 +288,12 @@ const TemplateCreated = ({ username }) => {
               ) : field.dataType === "Multiple Options(Dropdown)" ? (
                 <select
                   className="template-dropdown-container"
-                  name={field.columnName}
-                  value={formData[field.columnName]?.selectedOption || ""}
+                  name="dropdown"
+                  value={formData.dropdown || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      [field.columnName]: {
-                        ...formData[field.columnName],
-                        selectedOption: e.target.value,
-                      },
+                      dropdown: e.target.value,
                     }))
                   }
                 > 

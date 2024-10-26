@@ -350,20 +350,21 @@
 
 .action-btn:hover {
   border: 1.5px solid rgb(50, 41, 41);
+  
 }
 
 .update-btn {
-  background-color: #0cb6c2;
+  background-color: #8a8989;
   color: white;
 }
 
 .delete-btn {
-  background-color: #f21f10;
+  background-color: #8a8989;
   color: white;
 }
 
 .history-btn {
-  background-color: #088b68;
+  background-color: #8a8989;
   color: white;
 }
 

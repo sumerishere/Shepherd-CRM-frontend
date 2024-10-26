@@ -9,6 +9,7 @@ import {
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
+import { BsPeople } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import "./AsideBar.css";
 
@@ -31,7 +32,8 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
           <div id="logo-name">
             <p>Shepherd</p>
           </div>
-          <p id="sub-text">by testing shastra</p>
+          <hr />
+          {/* <p id="sub-text">by testing shastra</p> */}
         </Link>
 
         <div className="ul-list-div">
@@ -51,6 +53,17 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
             >
               <li>
                 <UserAddOutlined /> <span id="aside-icon-space">Add Lead</span>
+              </li>
+            </Link>
+
+            <Link
+              to={"/BulkLeadComponent"}
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={toggleAsideBar}
+            >
+              <li>
+                <BsPeople />
+                <span id="aside-icon-space">Add Bulk Lead</span>
               </li>
             </Link>
 
@@ -95,7 +108,8 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
               </li>
             </Link>
             <Link
-              to="/DynamicForm"
+              // to="/DynamicForm"
+              to="/TemplateCustom"
               style={{ textDecoration: "none", color: "white" }}
             >
               <li onClick={toggleAsideBar}>
@@ -121,7 +135,6 @@ const AsideBar = ({ open, toggleAsideBar, username, setIsAuthenticated }) => {
           <p id="develop-text-line1">Design and developed by</p>
           <p id="develop-text-line2">Testing Shastra.</p>
         </div>
-        
       </div>
     </div>
   );

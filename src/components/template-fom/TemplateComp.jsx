@@ -196,9 +196,9 @@ const DynamicForm = ({ userName }) => {
 
   return (
     <div className="template-root-div">
-      <div>
+      {/* <div>
         <h1 id="heading-h1">Create Template</h1>
-      </div>
+      </div> */}
 
       <div className="child-template-div">
         <ToastContainer />
@@ -219,7 +219,7 @@ const DynamicForm = ({ userName }) => {
         </div>
 
         <div className="form-container">
-          <form className="form-template" onSubmit={handleFinalSubmit}>
+          <form className="form-template" >
             {fields.map((field, index) => (
               <div key={index} className="field-row">
                 <input
@@ -276,11 +276,11 @@ const DynamicForm = ({ userName }) => {
               </button>
               
               <button
-                type="submit"
+                type="button"
                 className="template-submit-button"
                 onClick={handleShowAlertOpen}
               >
-                {isLoading ? <div className="spinner"></div> : "Submit"}
+                Submit
               </button>
             </div>
           </form>
@@ -296,7 +296,12 @@ const DynamicForm = ({ userName }) => {
               </p>
               <p>{`"Note : this will consider as final submit"`}</p>
               <div className="alert-confirm-buttons">
-                <button className="alert-confirm-btn">Yes</button>
+                <button 
+                  className="alert-confirm-btn" 
+                  onClick={handleFinalSubmit}
+                  >
+                   {isLoading ? <div className="spinner"></div> : "Yes"}
+                </button>
                 <button
                   className="alert-cancel-btn"
                   onClick={handleShowAlertCancel}

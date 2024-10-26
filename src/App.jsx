@@ -1,9 +1,10 @@
-import "../src/index.css";
-import "./App.css";
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import "../src/index.css";
+import "./App.css";
 import AsideBar from "./components/AsideBar/AsideBar";
 import BackDrop from "./components/AsideBar/BackDrop";
+import BulkLeadComponent from "./components/Bulk-lead/BulkLead";
 import BusinessPanel from "./components/Business-Panel/BusinessPanel";
 import CalenderComponent from "./components/calender-component/CalenderComponent";
 import ClientDataTable from "./components/Client-data/ClientDataTable";
@@ -17,9 +18,12 @@ import LeadList from "./components/Lead-List/LeadList";
 import LoginComponent from "./components/Login-form/LoginComp";
 import Nav from "./components/Nav-Bar/Nav";
 import SignUpComp from "./components/SignUp-form/SignUpComp";
+import SubscriptionPage from "./components/Subscription-component/SubscriptionPage";
+import TemplateCustom from "./components/template-fom/TemplateCustom";
 import DynamicForm from "./components/template-fom/TemplateComp";
 import ErrorBoundary from "./ErrorBoundary";
-import SubscriptionPage from "./components/Subscription-component/SubscriptionPage";
+
+
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,17 +35,16 @@ function App() {
   );
   const [templateId, setTemplateId] = useState(null);
   const [user, setUser] = useState({
-    id:null,
+    id: null,
     fullName: "",
     address: "",
     mobileNumber: "",
     email: "",
-    organizationName:"",
+    organizationName: "",
     userName: "",
     formTemplates: [],
-    logo: null
-   });
-
+    logo: null,
+  });
 
   const toggleAsideBar = () => {
     setIsOpen(!isOpen);
@@ -53,7 +56,6 @@ function App() {
     )
       .then((response) => {
         if (response.ok) {
-
           return response.json();
         } else {
           throw new Error("Login failed");
@@ -65,8 +67,8 @@ function App() {
         localStorage.setItem("username", username);
         localStorage.setItem("isAuthenticated", "true");
         setUser(data);
-      
-        console.log("app user data",user);
+
+        console.log("app user data", user);
         localStorage.setItem("user", JSON.stringify(data));
         fetchTemplateData(username);
       })
@@ -82,8 +84,6 @@ function App() {
       setUser(JSON.parse(savedUser));
     }
   }, []);
-
-
 
   const fetchTemplateData = (username) => {
     fetch(`http://localhost:8080/get-template-username?userName=${username}`)
@@ -130,12 +130,12 @@ function App() {
               path="/"
               element={
                 <>
-                  <DashboardComponent />
-                  <LeadActivity />
                   <ErrorBoundary>
+                    <DashboardComponent />
+                    <LeadActivity />
                     <LeadFollowUp />
                   </ErrorBoundary>
-                  
+
                   <hr />
                   <div className="footer-content-root-div">
                     <div className="footer-content-div">
@@ -153,8 +153,13 @@ function App() {
               }
             />
             <Route path="/LeadList" element={<LeadList />} />
-            <Route path="/BusinessPanel" element={<BusinessPanel />} /> 
-            <Route path="/DynamicForm"  element={<DynamicForm userName = {username} />} />
+            <Route path="/BusinessPanel" element={<BusinessPanel />} />
+            <Route
+              path="/DynamicForm"
+              element={<DynamicForm userName={username} />}
+            />
+
+            <Route path = "/TemplateCustom" element={<TemplateCustom/>}/>
             <Route
               path="/TemplateCreated"
               element={<TemplateCreated username={username} />}
@@ -167,6 +172,11 @@ function App() {
               path="/LeadRegistrationForm"
               element={<LeadRegistrationForm />}
             />
+            <Route 
+              path="/BulkLeadComponent" 
+              element={<BulkLeadComponent />} 
+              />
+
             <Route
               path="/InvoiceGen"
               element={<InvoiceGen templateId={templateId} />}
@@ -174,7 +184,7 @@ function App() {
 
             <Route path="/CalenderComponent" element={<CalenderComponent />} />
 
-            <Route path ="/SubscriptionPage" element={<SubscriptionPage/>} />
+            <Route path="/SubscriptionPage" element={<SubscriptionPage />} />
           </Routes>
         </>
       ) : (
