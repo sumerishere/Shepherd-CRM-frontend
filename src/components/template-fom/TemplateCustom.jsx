@@ -7,21 +7,37 @@ const TemplateCustom = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   const [fields, setFields] = useState([
-    { id: 1, type: "text", label: "Full Name", placeholder: "Enter your full name" },
-    { id: 2, type: "text", label: "Address", placeholder: "Enter your address" },
-    { id: 3, type: "number", label: "Mobile Number", placeholder: "Enter your mobile number" },
+    {
+      id: 1,
+      type: "text",
+      label: "Full Name",
+      placeholder: "Enter your full name",
+    },
+    {
+      id: 2,
+      type: "text",
+      label: "Address",
+      placeholder: "Enter your address",
+    },
+    
+    {
+      id: 3,
+      type: "number",
+      label: "Mobile Number",
+      placeholder: "Enter your mobile number",
+    },
     { id: 4, type: "date", label: "Date", placeholder: "Select date" },
   ]);
 
   const fieldTypes = [
-    // { value: "text", label: "Select option", icon: ""},
-    { value: "text", label: "Text", icon: "📝" },
-    { value: "number", label: "Number", icon: "🔢" },
-    { value: "file", label: "File Upload", icon: "📎" },
-    { value: "date", label: "Date", icon: "📅" },
-    { value: "checkbox", label: "Checkbox", icon: "☑️" },
-    { value: "radio", label: "Radio Button", icon: "⭕" },
-    { value: "select", label: "Dropdown", icon: "▼" },
+    { id:1, value: "", label: "Select Option",icon:""},
+    { id:2, value: "text", label: "Text", icon: "📝" },
+    { id:3, value: "number", label: "Number", icon: "🔢" },
+    { id:4, value: "file", label: "File Upload", icon: "📎" },
+    { id:5, value: "date", label: "Date", icon: "📅" },
+    { id:6, value: "checkbox", label: "Checkbox", icon: "☑️" },
+    { id:7, value: "radio", label: "Radio Button", icon: "⭕" },
+    { id:8, value: "select", label: "Dropdown", icon: "▼" },
   ];
 
   const addField = () => {
@@ -47,7 +63,13 @@ const TemplateCustom = () => {
   const handleTypeChange = (id, newType) => {
     setFields(
       fields.map((field) =>
-        field.id === id ? { ...field, type: newType, options: newType === "select" ? [] : undefined } : field
+        field.id === id
+          ? {
+              ...field,
+              type: newType,
+              options: newType === "select" ? [] : undefined,
+            }
+          : field
       )
     );
   };
@@ -91,7 +113,9 @@ const TemplateCustom = () => {
         field.id === id && field.type === "select"
           ? {
               ...field,
-              options: field.options.filter((_, index) => index !== optionIndex),
+              options: field.options.filter(
+                (_, index) => index !== optionIndex
+              ),
             }
           : field
       )
@@ -109,7 +133,7 @@ const TemplateCustom = () => {
                 value={field.label}
                 onChange={(e) => handleLabelChange(field.id, e.target.value)}
                 className="custom-form-label-input"
-                readOnly = {field.id < 5}
+                readOnly={field.id < 5}
               />
               {field.id > 4 && (
                 <button
@@ -128,9 +152,10 @@ const TemplateCustom = () => {
                   value={field.type}
                   onChange={(e) => handleTypeChange(field.id, e.target.value)}
                   className="custom-form-type-select"
+                  disabled={field.id < 5}
                 >
                   {fieldTypes.map((type) => (
-                    <option key={type.value} value={type.value}>
+                    <option key={type.value} value={type.value} >
                       {type.icon} {type.label}
                     </option>
                   ))}
@@ -140,11 +165,16 @@ const TemplateCustom = () => {
               {field.type === "select" && (
                 <div className="custom-form-dropdown-options">
                   {field.options?.map((option, index) => (
-                    <div key={index} className="custom-form-dropdown-option-row">
+                    <div
+                      key={index}
+                      className="custom-form-dropdown-option-row"
+                    >
                       <input
                         type="text"
                         value={option}
-                        onChange={(e) => handleOptionChange(field.id, index, e.target.value)}
+                        onChange={(e) =>
+                          handleOptionChange(field.id, index, e.target.value)
+                        }
                         placeholder={`Option ${index + 1}`}
                         className="custom-form-dropdown-option"
                       />
@@ -253,166 +283,3 @@ const TemplateCustom = () => {
 };
 
 export default TemplateCustom;
-
-
-
-//const TemplateCustom = () => {
-  // const [fields, setFields] = useState([
-  //   {
-  //     id: 1,
-  //     type: "text",
-  //     label: "Full Name",
-  //     placeholder: "Enter your full name",
-  //   },
-  //   {
-  //     id: 2,
-  //     type: "text",
-  //     label: "Address",
-  //     placeholder: "Enter your address",
-  //   },
-  //   {
-  //     id: 3,
-  //     type: "number",
-  //     label: "Mobile Number",
-  //     placeholder: "Enter your mobile number",
-  //   },
-  //   { id: 4, type: "date", label: "Date", placeholder: "Select date" },
-  // ]);
-
-  // const [showPreview, setShowPreview] = useState(false);
-  // const [showAlert, setShowAlert] = useState(false);
-
-  // const fieldTypes = [
-  //   {
-  //     value: "text",
-  //     label: "Select option",
-  //     icon: "",
-  //   },
-  //   {
-  //     value: "text",
-  //     label: "Text",
-  //     icon: "📝",
-  //   },
-  //   {
-  //     value: "number",
-  //     label: "Number",
-  //     icon: "🔢",
-  //   },
-  //   {
-  //     value: "file",
-  //     label: "File Upload",
-  //     icon: "📎",
-  //   },
-  //   {
-  //     value: "date",
-  //     label: "Date",
-  //     icon: "📅",
-  //   },
-  //   {
-  //     value: "checkbox",
-  //     label: "Checkbox",
-  //     icon: "☑️",
-  //   },
-  //   {
-  //     value: "radio",
-  //     label: "Radio Button",
-  //     icon: "⭕",
-  //   },
-  //   {
-  //     value: "select",
-  //     label: "Dropdown",
-  //     icon: "▼",
-  //   },
-  // ];
-
-  // const addField = () => {
-  //   const newField = {
-  //     id: fields.length + 1,
-  //     type: "text",
-  //     label: `${fields.length + 1}. Enter field name here`,
-  //     placeholder: "Enter value",
-  //   };
-  //   setFields([...fields, newField]);
-  // };
-
-  // const removeField = (id) => {
-  //   setFields(fields.filter((field) => field.id !== id));
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   setShowAlert(true);
-  // };
-
-  // const handleTypeChange = (id, newType) => {
-  //   setFields(
-  //     fields.map((field) =>
-  //       field.id === id ? { ...field, type: newType } : field
-  //     )
-  //   );
-  // };
-
-  // return (
-  //   <div className="custom-form-root">
-  //     <form onSubmit={handleSubmit} className="custom-form-container">
-  //       {fields.map((field) => (
-  //         <div key={field.id} className="custom-form-field-container">
-  //           <div className="custom-form-field-header">
-  //             <input
-  //               type="text"
-  //               value={field.label}
-  //               onChange={(e) => handleTypeChange(field.id, e.target.value)}
-  //               className="custom-form-label-input"
-  //             />
-  //             {field.id > 4 && (
-  //               <button
-  //                 type="button"
-  //                 onClick={() => removeField(field.id)}
-  //                 className="custom-form-remove-btn"
-  //               >
-  //                 ✕
-  //               </button>
-  //             )}
-  //           </div>
-
-  //           <div className="custom-form-field-content">
-  //             <div className="custom-form-type-select-container">
-  //               <select
-  //                 value={field.type}
-  //                 onChange={(e) => handleTypeChange(field.id, e.target.value)}
-  //                 className="custom-form-type-select"
-  //               >
-  //                 {fieldTypes.map((type) => (
-  //                   <option
-  //                     key={type.value}
-  //                     value={type.value}
-  //                   >
-  //                    {type.icon} {type.label}
-  //                   </option>
-  
-  //                 ))}
-  //               </select>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       ))}
-
-  //       <div className="custom-form-actions">
-  //         <button
-  //           style={{ color: "black", fontWeight: "500", fontSize: "16px" }}
-  //           type="button"
-  //           onClick={addField}
-  //           className="custom-form-add-btn"
-  //         >
-  //           + Add Field
-  //         </button>
-
-  //         <button
-  //           type="submit"
-  //           style={{ fontWeight: "500", fontSize: "16px" }}
-  //           className="custom-form-submit-btn"
-  //         >
-  //           Submit Form
-  //         </button>
-  //       </div>
-  //     </form>

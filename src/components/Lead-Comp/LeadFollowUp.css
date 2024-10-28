@@ -16,9 +16,19 @@
   top:0;
   right: 0;
   background-color: #e2e2e2;
-  border: 1px solid #f5f4f4;
+  /* border: 1px solid #f5f4f4; */
 
 }
+
+.deal-done-freeze-colmn{
+  position: sticky;
+  z-index: 0;
+  top:0;
+  left: 0;
+  background-color: #ececec;
+
+}
+
 
 #lead-data-heading {
   padding-top: 1px;
@@ -27,8 +37,6 @@
   font-weight: 550;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-
 
 
 .add-btn-filter-lead-div {
@@ -213,14 +221,6 @@
 }
 
 #add-lead-btn {
-  /* padding: 7px 14px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 600; */
-
   height: 30px;
   width: 90px;
   border: 1px solid rgb(220, 216, 216);
@@ -433,13 +433,11 @@
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 10px;
-  /* Space between buttons */
   font-size: 16px;
 }
 
 .updateFormButtonCancel {
   background-color: #6c757d;
-  /* Secondary grey color for cancel button */
 }
 
 .updateFormButtonSubmit:hover,

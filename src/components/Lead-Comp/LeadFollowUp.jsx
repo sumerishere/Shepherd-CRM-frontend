@@ -363,7 +363,7 @@ const LeadFollowUp = () => {
           <table className="lead-table">
             <thead>
               <tr>
-                <th>Deal-Done</th>
+                <th className="deal-done-freeze-colmn">FollowUps-Done</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile Number</th>
@@ -391,7 +391,7 @@ const LeadFollowUp = () => {
               ) : (
                 sortedLeads.map((lead) => (
                   <tr key={lead.uid}>
-                    <td id="table-td-checkbox">
+                    <td className="deal-done-freeze-colmn" id="table-td-checkbox">
                       <input
                         style={{ cursor: "pointer" }}
                         type="checkbox"

@@ -337,6 +337,31 @@
   padding: 10px;
   border-bottom: 1px solid #ccc;
 }
+
+.invoice-search-div{
+  margin: 10px;
+}
+
+#invoice-search-id{
+  width: 90%;
+}
+
+#invoice-search-btn{
+  width: 80px;
+  height: 35px;
+  border-radius: 5px;
+  border: 1px solid rgb(204, 200, 200);
+  margin-left: 5px;
+  cursor: pointer;
+  background-color: #6c63ff;
+  color: white;
+  font-size: 14px;
+}
+
+#invoice-search-btn:hover{
+  background-color: #615ada;
+}
+
 .get-candidate-table-wrapper {
   max-height: 400px;
   overflow-y: auto;

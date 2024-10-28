@@ -1,4 +1,3 @@
-import { CheckSquareOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -70,7 +69,7 @@ const DynamicForm = ({ userName }) => {
   useEffect(() => {
     if (userName) {
       fetchUserData();
-    } // Call the function here
+    } 
   }, [userName]);
 
   function getCurrentDateTimeFormat() {
@@ -248,7 +247,6 @@ const DynamicForm = ({ userName }) => {
                   <option value="Pdf File">Pdf File</option>
                   <option value="Yes/No check(checkbox)">
                     Yes/No check(checkbox)
-                    <CheckSquareOutlined />
                   </option>
                   <option value="Date">Date</option>
                   <option value="Mobile No.">Mobile No.</option>
@@ -300,7 +298,7 @@ const DynamicForm = ({ userName }) => {
                   className="alert-confirm-btn" 
                   onClick={handleFinalSubmit}
                   >
-                   {isLoading ? <div className="spinner"></div> : "Yes"}
+                  {isLoading ? <div className="spinner"></div> : "Yes"}
                 </button>
                 <button
                   className="alert-cancel-btn"

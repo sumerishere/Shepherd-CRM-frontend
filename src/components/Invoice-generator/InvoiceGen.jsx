@@ -26,6 +26,7 @@ const InvoiceGen = ({ templateId }) => {
       }
       const data = await response.json();
       setCandidates(data);
+      console.table(data);
     } catch (error) {
       console.error("Error fetching candidates:", error);
     }
@@ -578,6 +579,11 @@ const InvoiceGen = ({ templateId }) => {
                 </button>
                 <h2 className="get-candidate-table-title">Invoice Status List</h2>
 
+                <div className="invoice-search-div">
+                  <input placeholder="search invoice here" type="text" name="" id="invoice-search-id" />
+                  <button id="invoice-search-btn">search</button>
+                </div>
+
                 {candidates.length > 0 ? (
                   <div className="get-candidate-table-wrapper">
                     <table className="get-candidate-table">
@@ -587,17 +593,19 @@ const InvoiceGen = ({ templateId }) => {
                           <th>Name</th>
                           <th>Mobile</th>
                           <th>Email</th>
-                          {/* <th>Organization</th> */}
+                          <th>Date & Time</th>
                           <th>Invoice Status</th>
+
                         </tr>
                       </thead>
                       <tbody>
                         {candidates.map((candidate) => (
                           <tr key={candidate.id}>
-                            <td>{candidate.id}</td>
-                            <td>{candidate.candidateName}</td>
-                            <td>{candidate.candidateMobile}</td>
-                            <td>{candidate.candidateMail}</td>
+                            <td>{candidate.id || "N/A"}</td>
+                            <td>{candidate.candidateName || "N/A"}</td>
+                            <td>{candidate.candidateMobile || "N/A"}</td>
+                            <td>{candidate.candidateMail || "N/A"}</td>
+                            <td>{candidate.invoiceCreatedAt || "N/A"}</td>
                             {/* <td>{candidate.organizationName}</td> */}
                             <td>
                               <span className="get-candidate-invoice-status">
