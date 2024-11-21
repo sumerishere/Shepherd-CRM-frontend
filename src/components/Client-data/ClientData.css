@@ -397,9 +397,10 @@ tr:nth-child(even) {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 400px;
+  width: 500px;
   max-width: 90%;
   overflow-y: scroll;
+  height: 650px;
 }
 
 .form-group {
@@ -439,9 +440,9 @@ tr:nth-child(even) {
 
 #form-cancel-btn{
   margin-top: 1px;
-  position: absolute;
-  padding: 9.7px 15px;
-  padding-bottom: 7.8px;
+  /* position: absolute; */
+  padding: 9px 15px;
+  padding-bottom: 10px;
   font-size: 16px;
   font-weight: 550;
 }

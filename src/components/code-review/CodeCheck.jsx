@@ -1,3 +1,172 @@
+import React, { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
+const TemplateCustom = () => {
+  const [showPreview, setShowPreview] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  // ---- default fields of template form ------//
+  const [fields, setFields] = useState([
+    {
+      id: 1,
+      type: "text",
+      label: "Full Name",
+      placeholder: "Enter your full name",
+    },
+    {
+      id: 2,
+      type: "text",
+      label: "Address",
+      placeholder: "Enter your address",
+    },
+    {
+      id: 3,
+      type: "number",
+      label: "Mobile Number",
+      placeholder: "Enter your mobile number",
+    },
+    { id: 4, type: "date", label: "Date", placeholder: "Select date" },
+  ]);
+
+  // Maintain form name state for submission
+  const [formName, setFormName] = useState('Sample Organization Form');
+
+  //---------- dropdown options -----------//
+  const fieldTypes = [
+    { id: 1, value: "", label: "Select Option", icon: "" },
+    { id: 2, value: "text", label: "Text", icon: "📝" },
+    { id: 3, value: "number", label: "Number", icon: "🔢" },
+    { id: 4, value: "file", label: "File Upload", icon: "📎" },
+    { id: 5, value: "date", label: "Date", icon: "📅" },
+    { id: 6, value: "checkbox", label: "Checkbox", icon: "☑️" },
+    { id: 7, value: "radio", label: "Radio Button", icon: "⭕" },
+    { id: 8, value: "select", label: "Dropdown", icon: "▼" },
+  ];
+
+  // Rest of the existing methods remain the same...
+
+  // New method to handle form submission to backend
+  const submitFormToBackend = async () => {
+    try {
+      // Prepare payload according to backend requirements
+      const payload = {
+        formName: formName,
+        createdAt: new Date().toISOString(),
+        userName: "sam@12", // This can be dynamically set later
+        fields: {},
+        dropdowns: []
+      };
+
+      // Convert fields to backend expected format
+      fields.forEach(field => {
+        // Map field types to backend type specifications
+        const typeMapping = {
+          'text': 'Text(String)',
+          'number': 'Mobile No.',
+          'date': 'Date'
+        };
+
+        payload.fields[field.label] = typeMapping[field.type] || 'Text(String)';
+
+        // If field is a dropdown, add to dropdowns array
+        if (field.type === 'select' && field.options) {
+          payload.dropdowns.push({
+            dropdownName: field.label,
+            options: field.options
+          });
+        }
+      });
+
+      // Perform axios POST request
+      const response = await axios.post('http://localhost:8080/create-template', payload);
+      
+      // Show success toast
+      toast.success('Form submitted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      // Reset alert and preview states
+      setShowAlert(false);
+      setShowPreview(false);
+
+    } catch (error) {
+      // Show error toast
+      toast.error('Form submission failed. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      console.error('Submission error:', error);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    setShowAlert(true);
+    e.preventDefault();
+  };
+
+  return (
+    <div className="custom-form-root">
+      {/* Existing form code remains the same */}
+      <form onSubmit={handleSubmit} className="custom-form-container">
+        {/* ... existing form rendering code ... */}
+      </form>
+
+      {/* Existing alert and preview modals remain the same */}
+      {showAlert && (
+        <div className="custom-form-alert">
+          <div className="custom-form-alert-content">
+            <h3 id="custom-form-h3">Confirm Submission</h3>
+            <div className="custom-form-alert-buttons">
+              <button
+                id="border-btn"
+                onClick={() => setShowPreview(true)}
+                className="custom-form-preview-btn"
+              >
+                Preview
+              </button>
+              <button
+                id="border-btn"
+                onClick={submitFormToBackend}  // Changed to new submission method
+                className="custom-form-confirm-btn"
+              >
+                Yes, Submit
+              </button>
+              <button
+                id="border-btn"
+                onClick={() => setShowAlert(false)}
+                className="custom-form-cancel-btn"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing preview modal remains the same */}
+      
+      {/* Add Toastify Container for notifications */}
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default TemplateCustom;
+
+
+
 
 
 

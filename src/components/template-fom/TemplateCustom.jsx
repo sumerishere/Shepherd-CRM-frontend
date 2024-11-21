@@ -1,49 +1,54 @@
+import axios from "axios";
+import PropTypes from "prop-types";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./TemplateCustom.css";
 
-const TemplateCustom = () => {
-
+const TemplateCustom = ({ username, organizationName }) => {
   const [showPreview, setShowPreview] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
+  //---- default fields of template form ------//
   const [fields, setFields] = useState([
     {
       id: 1,
-      type: "text",
+      type: "Text(String)",
       label: "Full Name",
       placeholder: "Enter your full name",
     },
     {
       id: 2,
-      type: "text",
+      type: "Text(String)",
       label: "Address",
       placeholder: "Enter your address",
     },
-    
+
     {
       id: 3,
-      type: "number",
+      type: "Number(int)",
       label: "Mobile Number",
       placeholder: "Enter your mobile number",
     },
-    { id: 4, type: "date", label: "Date", placeholder: "Select date" },
+    { id: 4, type: "Date", label: "date", placeholder: "Select date" },
   ]);
 
+  //---------- dropdown options -----------//
   const fieldTypes = [
-    { id:1, value: "", label: "Select Option",icon:""},
-    { id:2, value: "text", label: "Text", icon: "📝" },
-    { id:3, value: "number", label: "Number", icon: "🔢" },
-    { id:4, value: "file", label: "File Upload", icon: "📎" },
-    { id:5, value: "date", label: "Date", icon: "📅" },
-    { id:6, value: "checkbox", label: "Checkbox", icon: "☑️" },
-    { id:7, value: "radio", label: "Radio Button", icon: "⭕" },
-    { id:8, value: "select", label: "Dropdown", icon: "▼" },
+    { id: 1, value: "", label: "Select Option", icon: "" },
+    { id: 2, value: "Text(String)", label: "text", icon: "📝" },
+    { id: 3, value: "Number(int)", label: "Number", icon: "🔢" },
+    { id: 4, value: "file", label: "File Upload", icon: "📎" },
+    { id: 5, value: "Date", label: "Date", icon: "📅" },
+    { id: 6, value: "Yes/No check(checkbox)", label: "Checkbox", icon: "☑️" },
+    { id: 7, value: "Yes/No button(Radio)", label: "Radio Button", icon: "⭕" },
+    { id: 8, value: "select", label: "Dropdown", icon: "▼" },
   ];
 
   const addField = () => {
     const newField = {
       id: fields.length + 1,
-      type: "text",
+      type: "Text(String)",
       label: `${fields.length + 1}. Enter field name here`,
       placeholder: "Enter value",
       options: [],
@@ -53,6 +58,93 @@ const TemplateCustom = () => {
 
   const removeField = (id) => {
     setFields(fields.filter((field) => field.id !== id));
+  };
+
+  // New method to handle form submission to backend
+  const submitFormToBackend = async () => {
+    try {
+      // Prepare payload according to backend requirements
+      const payload = {
+        formName: organizationName,
+        createdAt: new Date().toISOString(),
+        userName: username, // This can be dynamically set later
+        fields: {},
+        dropdowns: [],
+      };
+
+      // Convert fields to backend expected format
+      fields.forEach((field) => {
+        // Directly use the field type from dropdown
+        payload.fields[field.label] = field.type;
+
+        // If field is a dropdown, add to dropdowns array
+        if (field.type === "select" && field.options) {
+          payload.dropdowns.push({
+            dropdownName: field.label,
+            options: field.options,
+          });
+        }
+      });
+
+      // Perform axios POST request
+      const response = await axios.post(
+        "http://localhost:8080/create-template",
+        payload
+      );
+
+      // Log the entire response for debugging
+      console.log("Full Server Response:", response);
+
+      // Check if response has data and log it
+      if (response.data) {
+        console.log("Response Data:", response.data);
+
+        // You can add specific handling based on response
+        // For example, if the response contains a specific success message or ID
+        const responseId = response.data.id || "N/A";
+        const responseMessage =
+          response.data.message || "Template created successfully";
+
+        // Show success toast with additional info
+        toast.success(`${responseMessage} (ID: ${responseId})`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+
+      // Reset alert and preview states
+      setShowAlert(false);
+      setShowPreview(false);
+    } catch (error) {
+      // Comprehensive error logging
+      console.error("Submission Error Details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers,
+      });
+
+      // Show detailed error toast
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Form submission failed. Please try again.";
+
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      console.error("Submission error:", error);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -155,7 +247,7 @@ const TemplateCustom = () => {
                   disabled={field.id < 5}
                 >
                   {fieldTypes.map((type) => (
-                    <option key={type.value} value={type.value} >
+                    <option key={type.value} value={type.value}>
                       {type.icon} {type.label}
                     </option>
                   ))}
@@ -234,10 +326,11 @@ const TemplateCustom = () => {
               </button>
               <button
                 id="border-btn"
-                onClick={() => {
-                  // Handle form submission
-                  setShowAlert(false);
-                }}
+                // onClick={() => {
+                //   // Handle form submission
+                //   setShowAlert(false);
+                // }}
+                onClick={submitFormToBackend}
                 className="custom-form-confirm-btn"
               >
                 Yes, Submit
@@ -278,8 +371,13 @@ const TemplateCustom = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
+};
+TemplateCustom.propTypes = {
+  username: PropTypes.string.isRequired,
+  organizationName: PropTypes.string.isRequired,
 };
 
 export default TemplateCustom;

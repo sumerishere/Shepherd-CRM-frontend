@@ -24,8 +24,8 @@ import DynamicForm from "./components/template-fom/TemplateComp";
 import ErrorBoundary from "./ErrorBoundary";
 
 
-
 function App() {
+
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
@@ -33,7 +33,12 @@ function App() {
   const [username, setUsername] = useState(
     localStorage.getItem("username") || ""
   );
+  const [organizationName, setOrganizationName] = useState(
+    localStorage.getItem("organizationName") || ""
+  )
+
   const [templateId, setTemplateId] = useState(null);
+
   const [user, setUser] = useState({
     id: null,
     fullName: "",
@@ -64,11 +69,17 @@ function App() {
       .then((data) => {
         setIsAuthenticated(true);
         setUsername(username);
+        setOrganizationName(organizationName);
+
         localStorage.setItem("username", username);
+        localStorage.setItem("organizationName", organizationName);
+        
         localStorage.setItem("isAuthenticated", "true");
         setUser(data);
 
         console.log("app user data", user);
+        console.log("getting organizationName---->",organizationName);
+        console.log("username ---->",username);
         localStorage.setItem("user", JSON.stringify(data));
         fetchTemplateData(username);
       })
@@ -102,8 +113,10 @@ function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setUsername("");
+    setOrganizationName("")
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("username");
+    localStorage.removeItem("organizationName");
   };
 
   useEffect(() => {
@@ -159,7 +172,7 @@ function App() {
               element={<DynamicForm userName={username} />}
             />
 
-            <Route path = "/TemplateCustom" element={<TemplateCustom/>}/>
+            <Route path = "/TemplateCustom" element={<TemplateCustom  username={username} organizationName={organizationName}/>}/>
             <Route
               path="/TemplateCreated"
               element={<TemplateCreated username={username} />}
