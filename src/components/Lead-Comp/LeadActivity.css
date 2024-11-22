@@ -15,106 +15,107 @@
   flex-wrap: wrap;
 }
 
-.lead-container-1{
+.lead-container-1 {
   background-color: rgba(255, 255, 255, 0.775);
   width: 160px;
-  height:145px;
+  height: 145px;
+  border-radius: 22px;
   border: 1px solid rgba(176, 173, 173, 0.799);
 }
 
-.lead-container-2{
+.lead-container-2 {
   background-color: rgba(255, 255, 255, 0.775);
   width: 160px;
-  height:145px;
-   border  : 1px solid rgba(176, 173, 173, 0.799);
-  
+  height: 145px;
+  border: 1px solid rgba(176, 173, 173, 0.799);
+  border-radius: 22px;
 }
 
-.lead-container-3{
+.lead-container-3 {
   background-color: rgba(255, 255, 255, 0.775);
   width: 160px;
-  height:  145px;
-   border: 1px solid rgba(176, 173, 173, 0.799);
-  
+  height: 145px;
+  border: 1px solid rgba(176, 173, 173, 0.799);
+  border-radius: 22px;
 }
 
-.lead-container-4{
-  background-color:rgba(255, 255, 255, 0.775);
+.lead-container-4 {
+  background-color: rgba(255, 255, 255, 0.775);
   width: 160px;
-  height:  145px;
-   border: 1px solid rgba(176, 173, 173, 0.799);
-
+  height: 145px;
+  border: 1px solid rgba(176, 173, 173, 0.799);
+  border-radius: 22px;
 }
 
 
-#lead-container-1-p{
+#lead-container-1-p {
   text-align: center;
   margin-top: 30px;
   font-size: 40px;
   height: 20px;
-  
+
 }
 
-#lead-container-2-p{
+#lead-container-2-p {
   text-align: center;
   margin-top: 30px;
   height: 20px;
   font-size: 40px;
 }
 
-#lead-container-3-p{
+#lead-container-3-p {
   text-align: center;
   margin-top: 30px;
   height: 20px;
   font-size: 40px;
-  
+
 }
 
-#lead-container-4-p{
+#lead-container-4-p {
   text-align: center;
   margin-top: 30px;
   height: 20px;
   font-size: 40px;
-  
+
 }
 
-#total-lead-count-p{
+#total-lead-count-p {
   /* margin-top: 10px; */
   margin-left: 6px;
   font-size: 18px;
 }
 
-#deal-done-p{
+#deal-done-p {
   margin-left: 6px;
   font-size: 18px;
 }
 
-#miss-out-p{
+#miss-out-p {
   margin-left: 6px;
   font-size: 18px;
 }
 
-#open-lead-p{
+#open-lead-p {
   margin-left: 6px;
   font-size: 18px;
 }
 
-#total-lead-count-span{
+#total-lead-count-span {
   padding-left: 26px;
   font-weight: 600;
 }
 
-#deal-done-span{
+#deal-done-span {
   padding-left: 26px;
   font-weight: 600;
 }
 
-#miss-out-span{
+#miss-out-span {
   padding-left: 26px;
   font-weight: 600;
 }
 
-#open-lead-span{
+#open-lead-span {
   padding-left: 26px;
   font-weight: 600;
 }
