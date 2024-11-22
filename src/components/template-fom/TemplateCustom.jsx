@@ -40,9 +40,10 @@ const TemplateCustom = ({ username, organizationName }) => {
     { id: 3, value: "Number(int)", label: "Number", icon: "🔢" },
     { id: 4, value: "file", label: "File Upload", icon: "📎" },
     { id: 5, value: "Date", label: "Date", icon: "📅" },
-    { id: 6, value: "Yes/No check(checkbox)", label: "Checkbox", icon: "☑️" },
-    { id: 7, value: "Yes/No button(Radio)", label: "Radio Button", icon: "⭕" },
-    { id: 8, value: "select", label: "Dropdown", icon: "▼" },
+    { id: 6, value: "Yes/No check(checkbox)", label: "Yes/No (Checkbox)", icon: "☑️" },
+    { id: 7, value: "Yes/No button(Radio)", label: "Yes/No (Radio Button)", icon: "⭕" },
+    { id: 8, value: "Image", label:"Image/Photo", icon:"🖼️"},
+    { id: 9, value: "select(dropdown)", label: "Dropdown", icon: "▼" },
   ];
 
   const addField = () => {
@@ -78,7 +79,7 @@ const TemplateCustom = ({ username, organizationName }) => {
         payload.fields[field.label] = field.type;
 
         // If field is a dropdown, add to dropdowns array
-        if (field.type === "select" && field.options) {
+        if (field.type === "select(dropdown)" && field.options) {
           payload.dropdowns.push({
             dropdownName: field.label,
             options: field.options,
@@ -101,18 +102,27 @@ const TemplateCustom = ({ username, organizationName }) => {
 
         // You can add specific handling based on response
         // For example, if the response contains a specific success message or ID
-        const responseId = response.data.id || "N/A";
+        // const responseId = response.data.id || "N/A";
         const responseMessage =
           response.data.message || "Template created successfully";
 
         // Show success toast with additional info
-        toast.success(`${responseMessage} (ID: ${responseId})`, {
+        toast.success(`${responseMessage} `, {
           position: "top-right",
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
+          // hideProgressBar: false,
+          // closeOnClick: true,
+          // pauseOnHover: true,
+          // draggable: true,
+        });
+      }
+      else{
+        const errorMessage = await response.text();
+        console.log("error got during template submission",errorMessage)
+        // Show success toast with additional info
+        toast.error(`${errorMessage} `, {
+          position: "top-right",
+          autoClose: 3000,
         });
       }
 
@@ -137,10 +147,6 @@ const TemplateCustom = ({ username, organizationName }) => {
       toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       });
 
       console.error("Submission error:", error);
@@ -159,7 +165,7 @@ const TemplateCustom = ({ username, organizationName }) => {
           ? {
               ...field,
               type: newType,
-              options: newType === "select" ? [] : undefined,
+              options: newType === "select(dropdown)" ? [] : undefined,
             }
           : field
       )
@@ -177,7 +183,7 @@ const TemplateCustom = ({ username, organizationName }) => {
   const addDropdownOption = (id, optionValue) => {
     setFields(
       fields.map((field) =>
-        field.id === id && field.type === "select"
+        field.id === id && field.type === "select(dropdown)"
           ? { ...field, options: [...(field.options || []), optionValue] }
           : field
       )
@@ -187,7 +193,7 @@ const TemplateCustom = ({ username, organizationName }) => {
   const handleOptionChange = (id, optionIndex, newValue) => {
     setFields(
       fields.map((field) =>
-        field.id === id && field.type === "select"
+        field.id === id && field.type === "select(dropdown)"
           ? {
               ...field,
               options: field.options.map((opt, index) =>
@@ -202,7 +208,7 @@ const TemplateCustom = ({ username, organizationName }) => {
   const removeDropdownOption = (id, optionIndex) => {
     setFields(
       fields.map((field) =>
-        field.id === id && field.type === "select"
+        field.id === id && field.type === "select(dropdown)"
           ? {
               ...field,
               options: field.options.filter(
@@ -254,7 +260,7 @@ const TemplateCustom = ({ username, organizationName }) => {
                 </select>
               </div>
 
-              {field.type === "select" && (
+              {field.type === "select(dropdown)" && (
                 <div className="custom-form-dropdown-options">
                   {field.options?.map((option, index) => (
                     <div
@@ -315,6 +321,9 @@ const TemplateCustom = ({ username, organizationName }) => {
       {showAlert && (
         <div className="custom-form-alert">
           <div className="custom-form-alert-content">
+            <div>
+              <p style={{fontWeight:"450"}}>{`Note: "once you submit, It will be consider as permanent template form."`}</p>
+            </div>
             <h3 id="custom-form-h3">Confirm Submission</h3>
             <div className="custom-form-alert-buttons">
               <button

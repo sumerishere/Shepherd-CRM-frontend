@@ -69,16 +69,16 @@ function App() {
       .then((data) => {
         setIsAuthenticated(true);
         setUsername(username);
-        setOrganizationName(organizationName);
+        setOrganizationName(data.organizationName);
 
         localStorage.setItem("username", username);
-        localStorage.setItem("organizationName", organizationName);
+        localStorage.setItem("organizationName", data.organizationName);
         
         localStorage.setItem("isAuthenticated", "true");
         setUser(data);
 
         console.log("app user data", user);
-        console.log("getting organizationName---->",organizationName);
+        console.log("getting organizationName---->",data.organizationName);
         console.log("username ---->",username);
         localStorage.setItem("user", JSON.stringify(data));
         fetchTemplateData(username);

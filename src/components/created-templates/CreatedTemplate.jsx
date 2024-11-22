@@ -245,7 +245,7 @@ const TemplateCreated = ({ username }) => {
                     Upload Image
                   </label>
                 </div>
-              ) : field.dataType === "Pdf File" ? (
+              ) : field.dataType === "file" ? (
                 <div>
                   <label id="label-pdf">
                     <input
