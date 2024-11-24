@@ -61,7 +61,7 @@ const TemplateCustom = ({ username, organizationName }) => {
     setFields(fields.filter((field) => field.id !== id));
   };
 
-  // New method to handle form submission to backend
+  // method to handle form submission to backend
   const submitFormToBackend = async () => {
     try {
       // Prepare payload according to backend requirements
@@ -100,9 +100,6 @@ const TemplateCustom = ({ username, organizationName }) => {
       if (response.data) {
         console.log("Response Data:", response.data);
 
-        // You can add specific handling based on response
-        // For example, if the response contains a specific success message or ID
-        // const responseId = response.data.id || "N/A";
         const responseMessage =
           response.data.message || "Template created successfully";
 
@@ -117,9 +114,10 @@ const TemplateCustom = ({ username, organizationName }) => {
         });
       }
       else{
-        const errorMessage = await response.text();
+
+        const errorMessage = await response.data.text();
         console.log("error got during template submission",errorMessage)
-        // Show success toast with additional info
+
         toast.error(`${errorMessage} `, {
           position: "top-right",
           autoClose: 3000,
@@ -140,7 +138,7 @@ const TemplateCustom = ({ username, organizationName }) => {
 
       // Show detailed error toast
       const errorMessage =
-        error.response?.data?.message ||
+        error.response?.data ||
         error.message ||
         "Form submission failed. Please try again.";
 

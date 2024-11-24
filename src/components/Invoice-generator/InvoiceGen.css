@@ -6,6 +6,7 @@
     margin-left: 30%;
   }
 
+  
   .select-candidate-btn-div{
     text-align: end;
     display: flex;
@@ -16,7 +17,7 @@
   }
 
   .select-candidate-btn{
-    background-color: #6c63ff;
+    background-color: #6b63ff;
     color: #fff;
     margin-left: 5px;
     border: none;

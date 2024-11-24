@@ -12,6 +12,7 @@ const LineChartComp = () => {
               data: [2, 5.5, 2, 8.5, 1.5, 5],
               area: true,
               border: "black",
+              color:"#7673ba"
             },
           ]}
           width={550}

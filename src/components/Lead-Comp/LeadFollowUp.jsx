@@ -21,15 +21,15 @@ const LeadFollowUp = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
   const [noHistoryAvailable, setNoHistoryAvailable] = useState(false);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState({}); // Add state for managing selected checkboxes
-  const [filteredLeads, setFilteredLeads] = useState([]); // Added state for filtered leads
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState({});
+  const [filteredLeads, setFilteredLeads] = useState([]);
   const [filterOption, setFilterOption] = useState("name");
   const [searchText, setSearchText] = useState("");
 
   //------- getting all data from backend of lead table -------//
-  // Fetch leads
+
   const fetchLeads = async () => {
-    setLoading(true); // Set loading to true when starting to fetch
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:8080/get-all-lead");
       const data = await response.json();
@@ -41,7 +41,6 @@ const LeadFollowUp = () => {
       setLoading(false);
     }
   };
-
   // Function to force re-render by changing the key
   useEffect(() => {
     fetchLeads();
@@ -50,40 +49,6 @@ const LeadFollowUp = () => {
   const handleRefresh = () => {
     fetchLeads();
   };
-
-  // const handleSearch = async (text) => {
-  //   try {
-  //     const queryParams = new URLSearchParams();
-  //     if (text) {
-  //       // Check if input is likely a mobile number (only digits and possibly spaces)
-  //       const isMobileNumber = /^\d+$/.test(text.replace(/\s/g, ""));
-  //       if (isMobileNumber) {
-  //         queryParams.append("mobile", text);
-  //       } else {
-  //         queryParams.append("name", text);
-  //       }
-  //     }
-
-  //     const response = await fetch(
-  //       `http://localhost:8080/search-lead-name?${queryParams.toString()}`
-  //     );
-  //     const data = await response.json();
-  //     setFilteredLeads(data || []);
-  //   } catch (error) {
-  //     console.error("Error searching leads:", error);
-  //   }
-  // };
-
-  // const debouncedSearch = debounce((text) => handleSearch(text), 300);
-
-  // useEffect(() => {
-  //   if (searchText.length >= 3) {
-  //     debouncedSearch(searchText);
-  //   } else {
-  //     // Reset filtered leads if search text is less than 3 characters
-  //     setFilteredLeads(leads);
-  //   }
-  // }, [searchText, leads, debouncedSearch]);
 
   const handleSearch = async (text) => {
     try {
@@ -94,7 +59,8 @@ const LeadFollowUp = () => {
         if (filterOption === "mobile") {
           queryParams.append("mobileNumber", text);
           url = `http://localhost:8080/search-lead-mobile?${queryParams.toString()}`;
-        } else {
+        } 
+        else {
           queryParams.append("name", text);
           url = `http://localhost:8080/search-lead-name?${queryParams.toString()}`;
         }
@@ -391,7 +357,10 @@ const LeadFollowUp = () => {
               ) : (
                 sortedLeads.map((lead) => (
                   <tr key={lead.uid}>
-                    <td className="deal-done-freeze-colmn" id="table-td-checkbox">
+                    <td
+                      className="deal-done-freeze-colmn"
+                      id="table-td-checkbox"
+                    >
                       <input
                         style={{ cursor: "pointer" }}
                         type="checkbox"

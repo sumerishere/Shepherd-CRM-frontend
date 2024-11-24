@@ -1,7 +1,9 @@
 import { HistoryOutlined } from "@ant-design/icons";
+
 import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import debounce from "lodash/debounce";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -10,13 +12,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "./InvoiceGen.css";
 
 const InvoiceGen = ({ templateId }) => {
-  const [loading, setLoading] = useState(false); // State to control loading spinner
-
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [showCandidateModal, setShowCandidateModal] = useState(false);
-
   const [isTableVisible, setIsTableVisible] = useState(false);
   const [candidates, setCandidates] = useState([]);
+  const [filteredInvoice, setFilteredInvoice] = useState([]);
+  const [searchMobile, setSearchMobile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchCandidates = async () => {
     try {
@@ -26,7 +29,7 @@ const InvoiceGen = ({ templateId }) => {
       }
       const data = await response.json();
       setCandidates(data);
-      console.table(data);
+      console.log("get all candidates", data);
     } catch (error) {
       console.error("Error fetching candidates:", error);
     }
@@ -71,6 +74,87 @@ const InvoiceGen = ({ templateId }) => {
     billedToName: "",
     billedToAddress: "",
   });
+
+  // Validate mobile number
+  const isValidMobileNumber = (number) => {
+    const mobileRegex = /^[0-9]{10}$/;
+    return mobileRegex.test(number);
+  };
+
+  // Handle input change with validation
+  const handleInputSearchChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    if (value.length <= 10) {
+      setSearchMobile(value);
+    }
+  };
+
+  // Handle invoice search
+  const handleInvoiceSearch = async (text) => {
+    try {
+      if (!text) {
+        setFilteredInvoice([]);
+        return;
+      }
+      setIsLoading(true);
+      const queryParams = new URLSearchParams();
+      queryParams.append("mobileNumber", text);
+      const url = `http://localhost:8080/search-invoice?${queryParams.toString()}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setFilteredInvoice(data || []);
+    } catch (error) {
+      console.error("Error searching invoice:", error);
+      setFilteredInvoice([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Debounced search
+  const debouncedSearch = debounce((text) => handleInvoiceSearch(text), 300);
+
+  // Initial data fetch
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch("http://localhost:8080/all-invoices");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCandidates(data || []);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+        // setError("Error loading data. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  // Handle search effects
+  useEffect(() => {
+    if (searchMobile.length >= 3) {
+      debouncedSearch(searchMobile);
+    } else {
+      setFilteredInvoice([]); // Clear filtered results
+    }
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchMobile]);
+
+  // Determine which data to display
+  const displayData = searchMobile.length >= 3 ? filteredInvoice : candidates;
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -577,14 +661,32 @@ const InvoiceGen = ({ templateId }) => {
                 >
                   &times;
                 </button>
-                <h2 className="get-candidate-table-title">Invoice Status List</h2>
+                <h2 className="get-candidate-table-title">
+                  Invoice Status List
+                </h2>
 
                 <div className="invoice-search-div">
-                  <input placeholder="search invoice here" type="text" name="" id="invoice-search-id" />
-                  <button id="invoice-search-btn">search</button>
+                  <input
+                    placeholder="Search invoice by mobile number"
+                    type="text"
+                    name=""
+                    id="invoice-search-id"
+                    value={searchMobile}
+                    onChange={handleInputSearchChange}
+                    maxLength={10}
+                  />
+                  <button
+                    id="invoice-search-btn"
+                    onClick={() => handleInvoiceSearch(searchMobile)}
+                    disabled={!isValidMobileNumber(searchMobile) || isLoading}
+                  >
+                    {isLoading ? "Searching..." : "Search"}
+                  </button>
                 </div>
 
-                {candidates.length > 0 ? (
+                {isLoading ? (
+                  <div className="text-center p-4">Searching...</div>
+                ) : displayData.length > 0 ? (
                   <div className="get-candidate-table-wrapper">
                     <table className="get-candidate-table">
                       <thead>
@@ -595,18 +697,16 @@ const InvoiceGen = ({ templateId }) => {
                           <th>Email</th>
                           <th>Date & Time</th>
                           <th>Invoice Status</th>
-
                         </tr>
                       </thead>
                       <tbody>
-                        {candidates.map((candidate) => (
+                        {displayData.map((candidate) => (
                           <tr key={candidate.id}>
                             <td>{candidate.id || "N/A"}</td>
                             <td>{candidate.candidateName || "N/A"}</td>
                             <td>{candidate.candidateMobile || "N/A"}</td>
                             <td>{candidate.candidateMail || "N/A"}</td>
                             <td>{candidate.invoiceCreatedAt || "N/A"}</td>
-                            {/* <td>{candidate.organizationName}</td> */}
                             <td>
                               <span className="get-candidate-invoice-status">
                                 Done
@@ -618,7 +718,7 @@ const InvoiceGen = ({ templateId }) => {
                     </table>
                   </div>
                 ) : (
-                  <div className="no-client-message">No Invoice Status 🙃</div>
+                  <div className="text-center p-4">No Invoice Status 🙃</div>
                 )}
               </div>
             </div>

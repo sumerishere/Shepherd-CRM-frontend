@@ -10,10 +10,11 @@ const PieChartComp = () => {
           series={[
             {
               data: [
-                { id: 0, value: 15, label: "Out" },
-                { id: 1, value: 13, label: "Cold" },
-                { id: 2, value: 20, label: "Hot" },
+                { id: 0, value: 15, label: "Out" ,color:"	#9B82D0"},
+                { id: 1, value: 13, label: "Cold",color:"#7673bb" },
+                { id: 2, value: 20, label: "Hot",color:"#8E8DB6" },
               ],
+              
             
             },
           ]}

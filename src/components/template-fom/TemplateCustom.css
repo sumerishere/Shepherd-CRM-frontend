@@ -1,6 +1,6 @@
 /* Variables */
 :root {
-  --purple-primary: #5e57eb;;
+  --purple-primary: #5e57eb;
   --purple-light: #d9cdf8;
   --purple-dark: #553C9A;
   --purple-hover: #4e49b0;;
@@ -35,7 +35,7 @@
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
-  border-left: 6px solid #8f7ac7;;
+  border-left: 6px solid #5b55c8;;
   border-radius: 10px;
 }
 
