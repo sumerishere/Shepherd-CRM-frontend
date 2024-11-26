@@ -25,6 +25,7 @@ const TemplateCreated = ({ username }) => {
 
           if (Array.isArray(data) && data.length > 0) {
             setTemplateData(data);
+            console.log("templateData : ----> ", templateData);
             setFormTemplateId(data[0].id); // Assuming the ID is available as `id` in the response
           } else {
             setTemplateData([]);
@@ -43,6 +44,15 @@ const TemplateCreated = ({ username }) => {
     fetchTemplateData();
   }, [username]);
 
+  const getDropdownOptions = (columnName) => {
+    if (!templateData[0]?.dropdowns) return [];
+
+    const dropdown = templateData[0].dropdowns.find(
+      (d) => d.dropdownName === columnName
+    );
+
+    return dropdown?.options || [];
+  };
   // const handleChange = (e) => {
   //   const { name, value, type, checked, files } = e.target;
   //   setFormData((prevData) => ({
@@ -90,12 +100,7 @@ const TemplateCreated = ({ username }) => {
       if (formData[key] instanceof File) {
         // Append files directly to FormData
         formDataObject.append(key, formData[key]);
-
-      }  else if (key === "dropdown") {
-        // For dropdown, store selected option under "dropdown" key
-        jsonFormData["dropdown"] = formData[key];  // Use "dropdown" key for selected option
-
-      }  else {
+      } else {
         // Add non-file data to jsonFormData
         jsonFormData[key] = formData[key];
       }
@@ -285,22 +290,22 @@ const TemplateCreated = ({ username }) => {
                     />
                   </label>
                 </div>
-              ) : field.dataType === "Multiple Options(Dropdown)" ? (
+              ) : field.dataType === "select(dropdown)" ? (
                 <select
                   className="template-dropdown-container"
-                  name="dropdown"
-                  value={formData.dropdown || ""}
+                  name={field.columnName}
+                  value={formData[field.columnName] || ""}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      dropdown: e.target.value,
+                      [field.columnName]: e.target.value, // Use field name when updating
                     }))
                   }
-                > 
+                >
                   <option value="">select option</option>
-                  {field.columnName.split(",").map((option, index) => (
-                    <option key={index} value={option.trim()}>
-                      {option.trim()}
+                  {getDropdownOptions(field.columnName).map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
                     </option>
                   ))}
                 </select>
