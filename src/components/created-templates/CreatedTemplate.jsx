@@ -292,6 +292,7 @@ const TemplateCreated = ({ username }) => {
                 </div>
               ) : field.dataType === "select(dropdown)" ? (
                 <select
+                  required
                   className="template-dropdown-container"
                   name={field.columnName}
                   value={formData[field.columnName] || ""}
@@ -304,7 +305,7 @@ const TemplateCreated = ({ username }) => {
                 >
                   <option value="">select option</option>
                   {getDropdownOptions(field.columnName).map((option, index) => (
-                    <option key={index} value={option}>
+                    <option  key={index} value={option}>
                       {option}
                     </option>
                   ))}
