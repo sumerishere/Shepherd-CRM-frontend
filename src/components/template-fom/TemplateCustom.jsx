@@ -50,7 +50,7 @@ const TemplateCustom = ({ username, organizationName }) => {
     const newField = {
       id: fields.length + 1,
       type: "Text(String)",
-      label: `${fields.length + 1}. Enter field name here`,
+      // label: `${fields.length + 1}. Enter field name here`,
       placeholder: "Enter value",
       options: [],
     };
@@ -227,6 +227,8 @@ const TemplateCustom = ({ username, organizationName }) => {
               <input
                 type="text"
                 value={field.label}
+                required
+                placeholder="Enter field name here"
                 onChange={(e) => handleLabelChange(field.id, e.target.value)}
                 className="custom-form-label-input"
                 readOnly={field.id < 5}
