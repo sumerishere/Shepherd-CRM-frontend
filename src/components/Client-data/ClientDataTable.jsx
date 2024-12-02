@@ -33,7 +33,7 @@ const ClientDataTable = ({ templateId }) => {
         <div className="data-not-found-div">
           <img
             className="data-not-found-img"
-            src="/images/data-not-found.jpg"
+            src="/images/undraw_File_searching_.png"
             alt="Data not found"
           />
           <p id="data-not-found-p">Oops...Data Not Found!!!</p>
